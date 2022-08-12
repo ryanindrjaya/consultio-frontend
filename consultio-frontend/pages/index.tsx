@@ -11,7 +11,7 @@ const Home: NextPage = () => {
       </Head>
 
       <main className="flex w-full flex-1 flex-col items-center justify-center px-20 text-center">
-        <h1>Consultio</h1>
+        <h1 className="font-poppins font-bold">Consultio</h1>
         <p>Selesaikan keluh kesahmu dengan berbagi.</p>
       </main>
     </div>
