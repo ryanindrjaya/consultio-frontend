@@ -18,7 +18,7 @@ function InputText({ type, label, value, handleChange, icon }) {
         }}
         InputProps={{
           style: {
-            height: 48,
+            height: 52,
             borderRadius: 9,
             fontSize: 13,
           },
