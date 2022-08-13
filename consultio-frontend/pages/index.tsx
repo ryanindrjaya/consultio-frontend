@@ -3,6 +3,7 @@ import Head from "next/head";
 import Link from "next/link";
 
 import { Button } from "@mui/material";
+import { Toaster } from "react-hot-toast";
 
 const Home: NextPage = () => {
   return (
@@ -11,6 +12,7 @@ const Home: NextPage = () => {
         <title>Consultio</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
+      <Toaster />
 
       <main className="flex w-full flex-1 flex-col items-center justify-center px-20 text-center">
         <h1 className="font-poppins font-bold">Consultio</h1>

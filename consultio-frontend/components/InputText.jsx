@@ -3,7 +3,15 @@ import React from "react";
 import { TextField } from "@mui/material";
 import { inputLabelClasses } from "@mui/material/InputLabel";
 
-function InputText({ type, label, value, handleChange, icon }) {
+function InputText({
+  type,
+  helperText,
+  invalid,
+  label,
+  value,
+  handleChange,
+  icon,
+}) {
   return (
     <div className="relative">
       <TextField
@@ -37,6 +45,8 @@ function InputText({ type, label, value, handleChange, icon }) {
             },
           },
         }}
+        error={invalid ? true : false}
+        helperText={helperText}
         fullWidth
         type={type}
         variant="outlined"
