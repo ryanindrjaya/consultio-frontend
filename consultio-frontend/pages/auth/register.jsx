@@ -21,12 +21,13 @@ function register() {
   const [passConfirmVisibility, setPassConfirmVisibility] = useState(false);
   const [fullName, setFullName] = useState("");
   const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
   const [email, setEmail] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const router = useRouter();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     if (password !== confirmPassword) {
       setPasswordError(true);
     }
@@ -38,25 +39,29 @@ function register() {
 
     setLoading(true);
 
-    const endpoint = "http://localhost:5000";
+    const endpoint = process.env.API_URL + "/register/user";
 
     try {
-      await axios.post(`${endpoint}/register/user`, {
+      const req = await axios.post(endpoint, {
         fullname: fullName,
         email: email,
         password: password,
       });
-      setLoading(false);
-      router.push("/auth/login");
-    } catch (error) {
-      if (error.response) {
-        console.log(error.response.data);
-        setLoading(false);
+
+      if (req.status == 201) {
+        router.push("/auth/login");
         setFullName("");
         setEmail("");
         setPassword("");
       }
+      console.log(req);
+    } catch (error) {
+      if (error.response) {
+        console.log(error.response.data);
+      }
     }
+
+    setLoading(false);
   };
 
   const handleNameInput = (e) => {
@@ -174,7 +179,7 @@ function register() {
               >
                 <svg
                   aria-hidden="true"
-                  class="mr-2 w-5 h-5 text-gray-200 animate-spin dark:text-white fill-blue-600"
+                  className="mr-2 w-5 h-5 text-gray-200 animate-spin dark:text-white fill-blue-600"
                   viewBox="0 0 100 101"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"

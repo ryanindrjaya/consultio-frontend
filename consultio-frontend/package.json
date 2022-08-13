@@ -1,7 +1,7 @@
 {
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev -p 3002",
     "build": "next build",
     "start": "next start"
   },
@@ -12,6 +12,7 @@
     "@mui/material": "^5.10.0",
     "axios": "^0.27.2",
     "next": "latest",
+    "nookies": "^2.5.2",
     "react": "18.1.0",
     "react-dom": "18.1.0",
     "react-hot-toast": "^2.3.0"
