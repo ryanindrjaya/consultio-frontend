@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/router";
-import toast from "react-hot-toast";
 import Link from "next/link";
 
 // Components
@@ -12,6 +11,7 @@ import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined
 import AlternateEmailOutlinedIcon from "@mui/icons-material/AlternateEmailOutlined";
 import VisibilityOffOutlinedIcon from "@mui/icons-material/VisibilityOffOutlined";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
+import toast from "react-hot-toast";
 
 function register() {
   const [nameError, setNameError] = useState(false);
@@ -49,6 +49,10 @@ function register() {
       });
 
       if (req.status == 201) {
+        toast.success("Akun mu udah dibuat", {
+          icon: "👌",
+          duration: 3000,
+        });
         router.push("/auth/login");
         setFullName("");
         setEmail("");
