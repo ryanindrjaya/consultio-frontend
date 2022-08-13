@@ -3,7 +3,7 @@ import React from "react";
 import { TextField } from "@mui/material";
 import { inputLabelClasses } from "@mui/material/InputLabel";
 
-function InputText({
+function FormInput({
   type,
   helperText,
   invalid,
@@ -61,4 +61,4 @@ function InputText({
   );
 }
 
-export default InputText;
+export default FormInput;

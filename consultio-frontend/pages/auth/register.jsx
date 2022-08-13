@@ -5,7 +5,7 @@ import toast from "react-hot-toast";
 import Link from "next/link";
 
 // Components
-import InputText from "../../components/InputText";
+import FormInput from "../../components/Inputs/FormInput";
 
 // Icons
 import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
@@ -100,7 +100,7 @@ function register() {
         </div>
         <form className="w-full" onSubmit={handleSubmit}>
           <div className="mt-4 flex-1">
-            <InputText
+            <FormInput
               helperText={nameError ? "Harap masukkan nama yang valid" : ""}
               type="text"
               invalid={nameError ? true : false}
@@ -111,7 +111,7 @@ function register() {
             />
           </div>
           <div className="mt-4">
-            <InputText
+            <FormInput
               type="email"
               label="Email"
               handleChange={handleEmailInput}
@@ -122,7 +122,7 @@ function register() {
             />
           </div>
           <div className="my-4">
-            <InputText
+            <FormInput
               helperText={passwordError ? "Password tidak sama!" : ""}
               invalid={passwordError ? true : false}
               type={passVisibility ? "text" : "password"}
@@ -144,7 +144,7 @@ function register() {
             />
           </div>
           <div className="my-4">
-            <InputText
+            <FormInput
               invalid={passwordError ? true : false}
               type={passConfirmVisibility ? "text" : "password"}
               label="Konfirmasi password"
