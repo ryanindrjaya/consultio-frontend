@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import Link from "next/link";
-import axios from "axios";
-import nookies from "nookies";
 import { useRouter } from "next/dist/client/router";
+import { useDispatch, useSelector } from "react-redux";
+import { userLogin } from "../../features/user/userAction";
 
 // Components
 import FormInput from "../../components/Inputs/FormInput";
@@ -11,80 +11,38 @@ import FormInput from "../../components/Inputs/FormInput";
 import AlternateEmailOutlinedIcon from "@mui/icons-material/AlternateEmailOutlined";
 import VisibilityOffOutlinedIcon from "@mui/icons-material/VisibilityOffOutlined";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
+import { useEffect } from "react";
 
 function login() {
+  // controlled form hooks
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const [passVisibility, setPassVisibility] = useState(false);
-  const [loading, setLoading] = useState(false);
 
-  const [isError, setIsError] = useState(false);
-  const [error, setError] = useState("");
+  // ambil data yang dibutuhkan dari redux
+  const { loading, error, userInfo } = useSelector((state) => state.user);
 
+  const dispatch = useDispatch();
   const router = useRouter();
 
-  const handleSubmit = async (e) => {
-    setError("");
-    setLoading(true);
-    e.preventDefault();
-
-    const credentials = {
-      email: email,
-      password: password,
-    };
-
-    const endpoint = process.env.API_URL + "/login";
-    console.log("endpoint : " + endpoint);
-    console.log("credentials : " + credentials);
-
-    try {
-      const req = await axios.post(endpoint, credentials);
-      const user = req.data.data;
-
-      console.log(user);
-
-      if (user.token) {
-        // set new token
-        nookies.set(null, "token", user.token, {
-          maxAge: 30 * 24 * 60 * 60,
-          path: "/",
-          secure: process.env.NODE_ENV !== "development",
-          sameSite: "strict",
-        });
-
-        const role = user.profile.role;
-
-        // set role token
-        nookies.set(null, "role", role, {
-          maxAge: 30 * 24 * 60 * 60,
-          path: "/",
-          secure: process.env.NODE_ENV !== "development",
-          sameSite: "strict",
-        });
-
-        // redirect based on role
-        if (role.includes("user") || role.includes("USER")) {
-          router.replace("/home");
-        }
-      }
-      setPassword("");
-      setEmail("");
-    } catch (error) {
-      setIsError(true);
-      setError("Email atau password kamu salah");
+  // redirect user yang sudah login ke halaman /home
+  useEffect(() => {
+    if (userInfo) {
+      router.replace("/home");
     }
+  }, [router, userInfo]);
 
-    setLoading(false);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    dispatch(userLogin, { email, password });
   };
 
   const handleEmailInput = (e) => {
     setEmail(e.target.value);
-    setIsError(false);
   };
 
   const handlePasswordInput = (e) => {
     setPassword(e.target.value);
-    setIsError(false);
   };
 
   return (
@@ -97,8 +55,10 @@ function login() {
           alt=""
         />
       </div>
-      <div className="bg-white rounded-xl max-w-xl h-auto p-6 shadow-lg">
-        <span className="bg-gray-400 text-white px-10 py-2">logo</span>
+      <div className="flex flex-col justify-center bg-white rounded-xl max-w-xl h-3/4 p-6 shadow-lg">
+        <span className="bg-gray-400 w-fit text-left text-white px-10 py-2">
+          logo
+        </span>
         <div className="mt-3">
           <h1 className="font-bold font-poppins text-2xl">
             Selamat datang di Consultio
@@ -121,8 +81,6 @@ function login() {
           </div>
           <div className="my-4">
             <FormInput
-              helperText={""}
-              invalid={false}
               type={passVisibility ? "text" : "password"}
               label="Password"
               handleChange={handlePasswordInput}
@@ -141,7 +99,7 @@ function login() {
               }
             />
           </div>
-          {isError && (
+          {error && (
             <div className="text-center  text-red-600 font-bold text-xs my-1">
               {error}
             </div>

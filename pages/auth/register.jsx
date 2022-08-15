@@ -1,7 +1,8 @@
-import React, { useState } from "react";
-import axios from "axios";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
+import { useDispatch, useSelector } from "react-redux";
+import { registerUser } from "../../features/user/userAction";
 
 // Components
 import FormInput from "../../components/Inputs/FormInput";
@@ -14,63 +15,48 @@ import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import toast from "react-hot-toast";
 
 function register() {
-  const [nameError, setNameError] = useState(false);
-  const [passwordError, setPasswordError] = useState(false);
-  const [loading, setLoading] = useState(false);
+  // controlled form hooks
   const [passVisibility, setPassVisibility] = useState(false);
   const [passConfirmVisibility, setPassConfirmVisibility] = useState(false);
   const [fullName, setFullName] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+
+  // ambil data yang dibutuhkan di dalam redux
+  const { loading, userInfo, error, success } = useSelector(
+    (state) => state.user
+  );
+
+  const dispatch = useDispatch();
   const router = useRouter();
+
+  useEffect(() => {
+    // redirect user yang berhasil registrasi ke halaman login
+    if (success) router.replace("/auth/login");
+
+    // redirect user yang sudah login ke halaman home
+    if (userInfo) router.replace("/home");
+  }, [router, userInfo, success]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (password !== confirmPassword) {
-      setPasswordError(true);
-    }
-
-    if (fullName.length <= 8) {
-      setNameError(true);
+      toast.error("Password tidak sama!");
       return;
     }
 
-    setLoading(true);
-
-    const endpoint = process.env.API_URL + "/register/user";
-
-    try {
-      const req = await axios.post(endpoint, {
-        fullname: fullName,
-        email: email,
-        password: password,
-      });
-
-      if (req.status == 201) {
-        toast.success("Akun mu udah dibuat", {
-          icon: "👌",
-          duration: 3000,
-        });
-        router.push("/auth/login");
-        setFullName("");
-        setEmail("");
-        setPassword("");
-      }
-      console.log(req);
-    } catch (error) {
-      if (error.response) {
-        console.log(error.response.data);
-      }
+    if (fullName.length <= 8) {
+      toast.error("Harap masukkan nama yang valid.");
+      return;
     }
 
-    setLoading(false);
+    dispatch(registerUser({ fullName, email, password }));
   };
 
   const handleNameInput = (e) => {
     setFullName(e.target.value);
-    setNameError(false);
   };
 
   const handleEmailInput = (e) => {
@@ -79,12 +65,10 @@ function register() {
 
   const handlePasswordInput = (e) => {
     setPassword(e.target.value);
-    setPasswordError(false);
   };
 
   const handleConfirmPasswordInput = (e) => {
     setConfirmPassword(e.target.value);
-    setPasswordError(false);
   };
 
   return (
@@ -110,9 +94,7 @@ function register() {
         <form className="w-full" onSubmit={handleSubmit}>
           <div className="mt-4 flex-1">
             <FormInput
-              helperText={nameError ? "Harap masukkan nama yang valid" : ""}
               type="text"
-              invalid={nameError ? true : false}
               label="Full Name"
               handleChange={handleNameInput}
               value={fullName}
@@ -132,8 +114,6 @@ function register() {
           </div>
           <div className="my-4">
             <FormInput
-              helperText={passwordError ? "Password tidak sama!" : ""}
-              invalid={passwordError ? true : false}
               type={passVisibility ? "text" : "password"}
               label="Password"
               handleChange={handlePasswordInput}
@@ -152,9 +132,13 @@ function register() {
               }
             />
           </div>
+          {error && (
+            <div className="text-center  text-red-600 font-bold text-xs my-1">
+              {error}
+            </div>
+          )}
           <div className="my-4">
             <FormInput
-              invalid={passwordError ? true : false}
               type={passConfirmVisibility ? "text" : "password"}
               label="Konfirmasi password"
               handleChange={handleConfirmPasswordInput}
@@ -203,6 +187,7 @@ function register() {
               <button
                 type="submit"
                 className="bg-primary w-3/4 text-white font-normal py-3 text-sm rounded-lg text-center"
+                disabled={loading}
               >
                 Register
               </button>
