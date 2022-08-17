@@ -1,7 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { registerUser, userLogin } from "./userAction";
+import { cookieCutter } from "cookie-cutter";
 
-const userToken = cookieCutter.get("token") ? cookieCutter.get("token") : null;
+const userToken =
+  cookieCutter?.get("token") === undefined ? null : cookieCutter.get("token");
 
 const initialState = {
   loading: false,

@@ -18,7 +18,7 @@ function register() {
   // controlled form hooks
   const [passVisibility, setPassVisibility] = useState(false);
   const [passConfirmVisibility, setPassConfirmVisibility] = useState(false);
-  const [fullName, setFullName] = useState("");
+  const [fullname, setFullname] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -27,6 +27,8 @@ function register() {
   const { loading, userInfo, error, success } = useSelector(
     (state) => state.user
   );
+
+  console.log(error);
 
   const dispatch = useDispatch();
   const router = useRouter();
@@ -37,26 +39,16 @@ function register() {
 
     // redirect user yang sudah login ke halaman home
     if (userInfo) router.replace("/home");
-  }, [router, userInfo, success]);
+  }, [router, success]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (password !== confirmPassword) {
-      toast.error("Password tidak sama!");
-      return;
-    }
-
-    if (fullName.length <= 8) {
-      toast.error("Harap masukkan nama yang valid.");
-      return;
-    }
-
-    dispatch(registerUser({ fullName, email, password }));
+    dispatch(registerUser({ fullname, email, password }));
   };
 
   const handleNameInput = (e) => {
-    setFullName(e.target.value);
+    setFullname(e.target.value);
   };
 
   const handleEmailInput = (e) => {
@@ -97,7 +89,7 @@ function register() {
               type="text"
               label="Full Name"
               handleChange={handleNameInput}
-              value={fullName}
+              value={fullname}
               icon={<PersonOutlineOutlinedIcon className="text-gray-400 w-5" />}
             />
           </div>
@@ -132,12 +124,7 @@ function register() {
               }
             />
           </div>
-          {error && (
-            <div className="text-center  text-red-600 font-bold text-xs my-1">
-              {error}
-            </div>
-          )}
-          <div className="my-4">
+          <div className="mt-4 mb-1">
             <FormInput
               type={passConfirmVisibility ? "text" : "password"}
               label="Konfirmasi password"
@@ -150,7 +137,7 @@ function register() {
                     setPassConfirmVisibility(!passConfirmVisibility)
                   }
                 >
-                  {passVisibility ? (
+                  {passConfirmVisibility ? (
                     <VisibilityOutlinedIcon className="text-gray-400 w-4" />
                   ) : (
                     <VisibilityOffOutlinedIcon className="text-gray-400 w-4" />
@@ -159,6 +146,11 @@ function register() {
               }
             />
           </div>
+          {error?.map((errorMsg) => (
+            <div className="text-center  text-red-600 font-bold text-xs my-1">
+              {Object.values(errorMsg)}
+            </div>
+          ))}
           <div className="flex w-full flex-col justify-center items-center ">
             {loading ? (
               <button

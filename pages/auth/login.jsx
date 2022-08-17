@@ -27,14 +27,12 @@ function login() {
 
   // redirect user yang sudah login ke halaman /home
   useEffect(() => {
-    if (userInfo) {
-      router.replace("/home");
-    }
+    if (userInfo) router.replace("/home");
   }, [router, userInfo]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    dispatch(userLogin, { email, password });
+    dispatch(userLogin({ email, password }));
   };
 
   const handleEmailInput = (e) => {
@@ -99,11 +97,11 @@ function login() {
               }
             />
           </div>
-          {error && (
+          {error?.map((errorMsg) => (
             <div className="text-center  text-red-600 font-bold text-xs my-1">
-              {error}
+              {Object.values(errorMsg)}
             </div>
-          )}
+          ))}
           <div className="flex w-full flex-col justify-center items-center ">
             {loading ? (
               <button

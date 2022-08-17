@@ -1,5 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import nookies from "nookies";
 
 export const registerUser = createAsyncThunk(
   "user/register",
@@ -40,8 +41,6 @@ export const userLogin = createAsyncThunk(
 
       const user = req.data.data;
 
-      console.log(user);
-
       if (user.token) {
         // set new token
         nookies.set(null, "token", user.token, {
@@ -61,12 +60,10 @@ export const userLogin = createAsyncThunk(
           sameSite: "strict",
         });
       }
+
+      return user;
     } catch (error) {
-      if (error.response && error.response.data.message) {
-        return rejectWithValue(error.response.data.message);
-      } else {
-        return rejectWithValue(error.message);
-      }
+      return rejectWithValue("Email atau password kamu salah!");
     }
   }
 );
