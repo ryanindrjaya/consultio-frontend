@@ -3,8 +3,9 @@ import Head from "next/head";
 import Link from "next/link";
 
 import { Button } from "@mui/material";
+import LandingPage from "../layouts/LandingPage";
 
-const Home: NextPage = () => {
+export default function Home() {
   return (
     <div className="flex min-h-screen flex-col items-center justify-center py-2">
       <Head>
@@ -24,6 +25,6 @@ const Home: NextPage = () => {
       </main>
     </div>
   );
-};
+}
 
-export default Home;
+Home.layout = LandingPage;

@@ -12,8 +12,9 @@ import AlternateEmailOutlinedIcon from "@mui/icons-material/AlternateEmailOutlin
 import VisibilityOffOutlinedIcon from "@mui/icons-material/VisibilityOffOutlined";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import { useEffect } from "react";
+import Auth from "../../layouts/Auth";
 
-function login() {
+export default function login() {
   // controlled form hooks
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
@@ -33,6 +34,8 @@ function login() {
       console.log(userInfo);
       router.replace("/home");
     }
+
+    if (userInfo) router.replace("/home");
   }, [router, userInfo]);
 
   const handleSubmit = async (e) => {
@@ -154,4 +157,4 @@ function login() {
   );
 }
 
-export default login;
+login.layout = Auth;

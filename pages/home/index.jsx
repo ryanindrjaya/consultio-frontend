@@ -1,18 +1,22 @@
 import React from "react";
-import { useEffect } from "react";
 import { useRouter } from "next/dist/client/router";
 import { useDispatch, useSelector } from "react-redux";
+import nookies from "nookies";
 
 import { logout } from "../../features/user/userSlice";
+import Home from "../../layouts/Home";
 
-function index() {
+export default function index() {
   const { userInfo, userToken } = useSelector((state) => state.user);
+
   const dispatch = useDispatch();
   const router = useRouter();
 
+  console.log("user : ", userInfo);
+
   return (
     <div>
-      {userToken ? (
+      {userInfo ? (
         <button
           type="button"
           onClick={(e) => {
@@ -31,4 +35,4 @@ function index() {
   );
 }
 
-export default index;
+index.layout = Home;

@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import FormInput from "../../components/Inputs/FormInput";
+import Auth from "../../layouts/Auth";
 
-function emailVerification() {
+export default function emailVerification() {
   const [code, setCode] = useState("");
   const [error, setError] = useState("");
   const [isError, setIsError] = useState(false);
@@ -95,4 +96,4 @@ function emailVerification() {
   );
 }
 
-export default emailVerification;
+emailVerification.layout = Auth;

@@ -14,7 +14,10 @@ import VisibilityOffOutlinedIcon from "@mui/icons-material/VisibilityOffOutlined
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import toast from "react-hot-toast";
 
-function register() {
+// layout
+import Auth from "../../layouts/Auth";
+
+export default function register() {
   // controlled form hooks
   const [passVisibility, setPassVisibility] = useState(false);
   const [passConfirmVisibility, setPassConfirmVisibility] = useState(false);
@@ -24,9 +27,9 @@ function register() {
   const [confirmPassword, setConfirmPassword] = useState("");
 
   // ambil data yang dibutuhkan di dalam redux
-  const { loading, error, success } = useSelector((state) => state.user);
-
-  console.log(error);
+  const { loading, userInfo, error, success } = useSelector(
+    (state) => state.user
+  );
 
   const dispatch = useDispatch();
   const router = useRouter();
@@ -34,6 +37,8 @@ function register() {
   useEffect(() => {
     // redirect user yang berhasil registrasi ke halaman login
     if (success) router.replace("/auth/login");
+
+    if (userInfo) router.replace("/home");
   }, [router, success]);
 
   const handleSubmit = async (e) => {
@@ -192,4 +197,4 @@ function register() {
   );
 }
 
-export default register;
+register.layout = Auth;
