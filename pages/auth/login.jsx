@@ -19,15 +19,20 @@ function login() {
   const [email, setEmail] = useState("");
   const [passVisibility, setPassVisibility] = useState(false);
 
-  // ambil data yang dibutuhkan dari redux
-  const { loading, error, userInfo } = useSelector((state) => state.user);
+  // ambil data dari global state
+  const { loading, error, userInfo, success } = useSelector(
+    (state) => state.user
+  );
 
   const dispatch = useDispatch();
   const router = useRouter();
 
   // redirect user yang sudah login ke halaman /home
   useEffect(() => {
-    if (userInfo) router.replace("/home");
+    if (success) {
+      console.log(userInfo);
+      router.replace("/home");
+    }
   }, [router, userInfo]);
 
   const handleSubmit = async (e) => {
@@ -97,11 +102,11 @@ function login() {
               }
             />
           </div>
-          {error?.map((errorMsg) => (
-            <div className="text-center  text-red-600 font-bold text-xs my-1">
-              {Object.values(errorMsg)}
+          {error && (
+            <div className="text-center  text-red-600 font-bold text-xs my-3">
+              {error}
             </div>
-          ))}
+          )}
           <div className="flex w-full flex-col justify-center items-center ">
             {loading ? (
               <button
@@ -129,7 +134,7 @@ function login() {
             ) : (
               <button
                 type="submit"
-                className="bg-primary w-3/4 text-white font-normal py-3 text-sm rounded-lg text-center"
+                className="bg-primary w-3/4 text-white font-normal mt-2 py-3 text-sm rounded-lg text-center"
               >
                 Login
               </button>

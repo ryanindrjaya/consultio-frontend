@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { registerUser, userLogin } from "./userAction";
 import { cookieCutter } from "cookie-cutter";
+import nookies from "nookies";
 
 const userToken =
   cookieCutter?.get("token") === undefined ? null : cookieCutter.get("token");
@@ -16,7 +17,20 @@ const initialState = {
 const userSlice = createSlice({
   name: "user",
   initialState,
-  reducers: {},
+  reducers: {
+    logout: (state) => {
+      nookies.destroy(null, "token", {
+        path: "/",
+      });
+      nookies.destroy(null, "role", {
+        path: "/",
+      });
+      state.loading = false;
+      state.userInfo = null;
+      state.userToken = null;
+      state.success = false;
+    },
+  },
   extraReducers: {
     // login user
     [userLogin.pending]: (state) => {
@@ -27,6 +41,7 @@ const userSlice = createSlice({
       state.loading = false;
       state.userInfo = payload;
       state.userToken = payload.token;
+      state.success = true;
     },
     [userLogin.rejected]: (state, { payload }) => {
       state.loading = false;
@@ -49,4 +64,5 @@ const userSlice = createSlice({
   },
 });
 
+export const { logout } = userSlice.actions;
 export default userSlice.reducer;

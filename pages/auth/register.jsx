@@ -24,9 +24,7 @@ function register() {
   const [confirmPassword, setConfirmPassword] = useState("");
 
   // ambil data yang dibutuhkan di dalam redux
-  const { loading, userInfo, error, success } = useSelector(
-    (state) => state.user
-  );
+  const { loading, error, success } = useSelector((state) => state.user);
 
   console.log(error);
 
@@ -36,15 +34,12 @@ function register() {
   useEffect(() => {
     // redirect user yang berhasil registrasi ke halaman login
     if (success) router.replace("/auth/login");
-
-    // redirect user yang sudah login ke halaman home
-    if (userInfo) router.replace("/home");
   }, [router, success]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    dispatch(registerUser({ fullname, email, password }));
+    dispatch(registerUser({ fullname, email, password, confirmPassword }));
   };
 
   const handleNameInput = (e) => {
@@ -146,11 +141,11 @@ function register() {
               }
             />
           </div>
-          {error?.map((errorMsg) => (
-            <div className="text-center  text-red-600 font-bold text-xs my-1">
-              {Object.values(errorMsg)}
+          {error && (
+            <div className="text-center  text-red-600 font-bold text-xs my-3">
+              {error}
             </div>
-          ))}
+          )}
           <div className="flex w-full flex-col justify-center items-center ">
             {loading ? (
               <button
@@ -178,7 +173,7 @@ function register() {
             ) : (
               <button
                 type="submit"
-                className="bg-primary w-3/4 text-white font-normal py-3 text-sm rounded-lg text-center"
+                className="bg-primary w-3/4 text-white font-normal py-3 mt-3 text-sm rounded-lg text-center"
                 disabled={loading}
               >
                 Register

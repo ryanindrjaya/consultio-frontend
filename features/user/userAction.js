@@ -4,7 +4,14 @@ import nookies from "nookies";
 
 export const registerUser = createAsyncThunk(
   "user/register",
-  async ({ fullname, email, password }, { rejectWithValue }) => {
+  async (
+    { fullname, email, password, confirmPassword },
+    { rejectWithValue }
+  ) => {
+    if (password !== confirmPassword) {
+      return rejectWithValue("Password tidak sama!");
+    }
+
     try {
       const config = {
         headers: {
