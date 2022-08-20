@@ -3,11 +3,12 @@ module.exports = {
   content: [
     "./pages/**/*.{js,ts,jsx,tsx}",
     "./components/**/*.{js,ts,jsx,tsx}",
+    "./layouts/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
     extend: {
       fontFamily: {
-        poppins: ["Poppins", "sans-serif"],
+        inter: ["Inter", "sans-serif"],
         sans: ['"Work Sans"', "sans-serif"],
       },
       colors: {
@@ -15,5 +16,6 @@ module.exports = {
       },
     },
   },
-  plugins: [],
+  optimizeFonts: false,
+  plugins: [require("tailwind-scrollbar-hide")],
 };

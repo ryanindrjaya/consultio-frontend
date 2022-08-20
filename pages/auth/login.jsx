@@ -1,20 +1,20 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/dist/client/router";
 import { useDispatch, useSelector } from "react-redux";
 import { userLogin } from "../../features/user/userAction";
+import nookies from "nookies";
+import Auth from "../../layouts/Auth";
 
 // Components
 import FormInput from "../../components/Inputs/FormInput";
+import { Eye, EyeSlash, User } from "iconsax-react";
 
 // Icons
-import AlternateEmailOutlinedIcon from "@mui/icons-material/AlternateEmailOutlined";
-import VisibilityOffOutlinedIcon from "@mui/icons-material/VisibilityOffOutlined";
-import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
-import { useEffect } from "react";
-import Auth from "../../layouts/Auth";
 
 export default function login() {
+  const token = nookies.get("token");
+
   // controlled form hooks
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
@@ -28,19 +28,15 @@ export default function login() {
   const dispatch = useDispatch();
   const router = useRouter();
 
-  // redirect user yang sudah login ke halaman /home
-  useEffect(() => {
-    if (success) {
-      console.log(userInfo);
-      router.replace("/home");
-    }
-
-    if (userInfo) router.replace("/home");
-  }, [router, userInfo]);
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     dispatch(userLogin({ email, password }));
+
+    console.log(success);
+
+    if (success) {
+      router.replace("/home");
+    }
   };
 
   const handleEmailInput = (e) => {
@@ -66,7 +62,7 @@ export default function login() {
           logo
         </span>
         <div className="mt-3">
-          <h1 className="font-bold font-poppins text-2xl">
+          <h1 className="font-bold font-inter text-2xl">
             Selamat datang di Consultio
           </h1>
           <p className="text-md text-gray-400">
@@ -80,9 +76,7 @@ export default function login() {
               label="Email"
               handleChange={handleEmailInput}
               value={email}
-              icon={
-                <AlternateEmailOutlinedIcon className="text-gray-400 w-4" />
-              }
+              icon={<User className="text-gray-400 w-4" />}
             />
           </div>
           <div className="my-4">
@@ -97,9 +91,9 @@ export default function login() {
                   onClick={() => setPassVisibility(!passVisibility)}
                 >
                   {passVisibility ? (
-                    <VisibilityOutlinedIcon className="text-gray-400 w-4" />
+                    <Eye className="text-gray-400 w-4" />
                   ) : (
-                    <VisibilityOffOutlinedIcon className="text-gray-400 w-4" />
+                    <EyeSlash className="text-gray-400 w-4" />
                   )}
                 </button>
               }

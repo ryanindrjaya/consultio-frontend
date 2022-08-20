@@ -14,7 +14,7 @@ export default function Home() {
       </Head>
 
       <main className="flex w-full flex-1 flex-col items-center justify-center px-20 text-center">
-        <h1 className="font-poppins font-bold">Consultio</h1>
+        <h1 className="font-inter font-bold">Consultio</h1>
         <p>Selesaikan keluh kesahmu dengan berbagi.</p>
 
         <div className="mt-3">

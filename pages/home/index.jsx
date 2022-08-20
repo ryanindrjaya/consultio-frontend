@@ -3,34 +3,26 @@ import { useRouter } from "next/dist/client/router";
 import { useDispatch, useSelector } from "react-redux";
 import nookies from "nookies";
 
-import { logout } from "../../features/user/userSlice";
 import Home from "../../layouts/Home";
+import Fitur from "../../components/HomeLayout/Fitur";
+import ProfileCard from "../../components/HomeLayout/ProfileCard";
+import Feeds from "../../components/HomeLayout/Feeds";
 
 export default function index() {
   const { userInfo, userToken } = useSelector((state) => state.user);
 
+  console.log(userInfo);
+
   const dispatch = useDispatch();
   const router = useRouter();
 
-  console.log("user : ", userInfo);
-
   return (
-    <div>
-      {userInfo ? (
-        <button
-          type="button"
-          onClick={(e) => {
-            dispatch(logout());
-            window.location.reload(false);
-          }}
-        >
-          logout
-        </button>
-      ) : (
-        <button type="button" onClick={() => router.replace("/auth/login")}>
-          login
-        </button>
-      )}
+    <div className="">
+      {/* feeds */}
+      <Feeds />
+
+      {/* profil */}
+      <ProfileCard />
     </div>
   );
 }

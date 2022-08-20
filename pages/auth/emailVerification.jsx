@@ -28,7 +28,7 @@ export default function emailVerification() {
       <div className="bg-white flex flex-col justify-start rounded-xl max-w-xl h-3/4 p-6 shadow-lg">
         <span className="bg-gray-400 w-fit text-white px-10 py-2">logo</span>
         <div className="mt-3">
-          <h1 className="font-bold font-poppins text-2xl">
+          <h1 className="font-bold font-inter text-2xl">
             Konfirmasi Email Anda
           </h1>
           <p className="text-md text-gray-400">
@@ -48,7 +48,7 @@ export default function emailVerification() {
             />
           </div>
           <div className="flex justify-between mb-4">
-            <p className="underline-offset-4 underline text-xs font-medium font-poppins">
+            <p className="underline-offset-4 underline text-xs font-medium font-inter">
               Klik untuk mengirim ulang kode
             </p>
             {isError && (

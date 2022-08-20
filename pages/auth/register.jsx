@@ -3,19 +3,16 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 import { useDispatch, useSelector } from "react-redux";
 import { registerUser } from "../../features/user/userAction";
+import toast from "react-hot-toast";
+
+// layout
+import Auth from "../../layouts/Auth";
 
 // Components
 import FormInput from "../../components/Inputs/FormInput";
 
 // Icons
-import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
-import AlternateEmailOutlinedIcon from "@mui/icons-material/AlternateEmailOutlined";
-import VisibilityOffOutlinedIcon from "@mui/icons-material/VisibilityOffOutlined";
-import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
-import toast from "react-hot-toast";
-
-// layout
-import Auth from "../../layouts/Auth";
+import { DirectboxDefault, Eye, EyeSlash, User } from "iconsax-react";
 
 export default function register() {
   // controlled form hooks
@@ -38,7 +35,9 @@ export default function register() {
     // redirect user yang berhasil registrasi ke halaman login
     if (success) router.replace("/auth/login");
 
-    if (userInfo) router.replace("/home");
+    if (userInfo == {}) {
+      router.replace("/home");
+    }
   }, [router, success]);
 
   const handleSubmit = async (e) => {
@@ -76,7 +75,7 @@ export default function register() {
       <div className="bg-white rounded-xl max-w-xl h-auto p-6 shadow-lg">
         <span className="bg-gray-400 text-white px-10 py-2">logo</span>
         <div className="mt-3">
-          <h1 className="font-bold font-poppins text-2xl">
+          <h1 className="font-bold font-inter text-2xl">
             Selamat datang di Consultio
           </h1>
           <p className="text-md text-gray-400">
@@ -90,7 +89,7 @@ export default function register() {
               label="Full Name"
               handleChange={handleNameInput}
               value={fullname}
-              icon={<PersonOutlineOutlinedIcon className="text-gray-400 w-5" />}
+              icon={<User className="text-gray-400 w-4" />}
             />
           </div>
           <div className="mt-4">
@@ -99,9 +98,7 @@ export default function register() {
               label="Email"
               handleChange={handleEmailInput}
               value={email}
-              icon={
-                <AlternateEmailOutlinedIcon className="text-gray-400 w-4" />
-              }
+              icon={<DirectboxDefault className="text-gray-400 w-4" />}
             />
           </div>
           <div className="my-4">
@@ -116,9 +113,9 @@ export default function register() {
                   onClick={() => setPassVisibility(!passVisibility)}
                 >
                   {passVisibility ? (
-                    <VisibilityOutlinedIcon className="text-gray-400 w-4" />
+                    <Eye className="text-gray-400 w-4" />
                   ) : (
-                    <VisibilityOffOutlinedIcon className="text-gray-400 w-4" />
+                    <EyeSlash className="text-gray-400 w-4" />
                   )}
                 </button>
               }
@@ -138,9 +135,9 @@ export default function register() {
                   }
                 >
                   {passConfirmVisibility ? (
-                    <VisibilityOutlinedIcon className="text-gray-400 w-4" />
+                    <Eye className="text-gray-400 w-4" />
                   ) : (
-                    <VisibilityOffOutlinedIcon className="text-gray-400 w-4" />
+                    <EyeSlash className="text-gray-400 w-4" />
                   )}
                 </button>
               }
