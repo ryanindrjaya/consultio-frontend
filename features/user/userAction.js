@@ -21,13 +21,41 @@ export const registerUser = createAsyncThunk(
 
       const endpoint = process.env.API_URL + "/register/user";
 
-      await axios.post(endpoint, { fullname, email, password }, config);
+      const user = await axios.post(
+        endpoint,
+        { fullname, email, password },
+        config
+      );
+
+      return user.data.data;
     } catch (error) {
       if (error.response && error.response.data.message) {
         return rejectWithValue(error.response.data.message);
       } else {
         return rejectWithValue(error.message);
       }
+    }
+  }
+);
+
+export const verifyEmail = createAsyncThunk(
+  "user/verification",
+  async (token) => {
+    console.log("token at redux", token);
+    try {
+      const config = {
+        headers: {
+          Authorization: token,
+        },
+      };
+
+      const endpoint = process.env.API_URL + "/users/sendEmailVerify";
+
+      const res = await axios.get(endpoint, config);
+
+      console.log(res);
+    } catch (error) {
+      console.log(error);
     }
   }
 );

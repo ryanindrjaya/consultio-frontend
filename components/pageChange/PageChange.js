@@ -18,7 +18,7 @@ import React from "react";
 
 export default function PageChange() {
   return (
-    <div>
+    <div className="h-screen overflow-y-hidden">
       <div className="bg-cover fixed z-40 w-full h-full top-0 left-0 bg-white"></div>
       <div className="my-40 mx-auto max-w-sm text-center relative z-50 top-0">
         <div className="block h-screen mb-4">

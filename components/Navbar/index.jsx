@@ -21,18 +21,28 @@ function Navbar() {
   return (
     <div className="col-span-2 border-x flex flex-col justify-between h-screen max-h-screen p-7">
       <div>
-        <p className="bg-gray-400 w-full py-4 text-center text-white">logo</p>
+        <img
+          src="/consultio.png"
+          className="text-center"
+          alt="logo consultio"
+        />
 
         <Fitur />
       </div>
 
       {/* User profile */}
       <div>
-        <p className="text-sm font-medium mb-5 text-black text-opacity-30">
-          Profile
-        </p>
-        <div className="h-32 flex flex-col justify-between">
-          {userToken && (
+        {userInfo && (
+          <p className="text-sm font-medium mb-5 text-black text-opacity-30">
+            Profile
+          </p>
+        )}
+        <div
+          className={`h-32 flex flex-col ${
+            userInfo ? "justify-between" : "justify-end"
+          }`}
+        >
+          {userInfo && (
             <div className="flex justify-between items-center h-12">
               <div className="flex justify-between">
                 <img
@@ -51,13 +61,14 @@ function Navbar() {
               <MoreHorizIcon className="cursor-pointer" />
             </div>
           )}
-          {userToken ? (
-            <Link href={"/home"} onClick={() => dispatch(logout())}>
-              <div className="w-full px-5 py-3 cursor-pointer rounded-lg duration-150 text-white bg-blue-500 hover:bg-blue-600 flex items-center">
-                <Logout size={24} variant={"Bold"} className="text-white" />
-                <p className="font-normal text-base font-inter ml-4">Logout</p>
-              </div>
-            </Link>
+          {userInfo ? (
+            <div
+              onClick={() => dispatch(logout())}
+              className="w-full px-5 py-3 cursor-pointer rounded-lg duration-150 text-white bg-blue-500 hover:bg-blue-600 flex items-center"
+            >
+              <Logout size={24} variant={"Bold"} className="text-white" />
+              <p className="font-normal text-base font-inter ml-4">Logout</p>
+            </div>
           ) : (
             <Link href={"/auth/login"}>
               <div className="w-full px-5 py-3 cursor-pointer rounded-lg duration-150 text-white bg-blue-500 hover:bg-blue-600 flex items-center">

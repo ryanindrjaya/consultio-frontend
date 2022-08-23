@@ -12,7 +12,7 @@ module.exports = {
         sans: ['"Work Sans"', "sans-serif"],
       },
       colors: {
-        primary: "#2028EB",
+        primary: "#437EEB",
       },
     },
   },

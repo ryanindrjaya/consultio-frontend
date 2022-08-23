@@ -5,14 +5,15 @@ import { inputLabelClasses } from "@mui/material/InputLabel";
 
 function FormInput({ type, label, value, handleChange, icon }) {
   return (
-    <div className="relative">
+    <div className="relative flex items-center">
       <TextField
+        // config style ketika pada state 'focus'
         sx={{
           "& .MuiOutlinedInput-root.Mui-focused": {
             "& > fieldset": {
               border: 1,
-              borderColor: "#2028EB",
-              color: "#2028EB",
+              borderColor: "#437EEB",
+              color: "#437EEB",
             },
           },
         }}
@@ -33,7 +34,7 @@ function FormInput({ type, label, value, handleChange, icon }) {
             color: "#656565",
             [`&.${inputLabelClasses.shrink}`]: {
               // set the color of the label when shrinked (usually when the TextField is focused)
-              color: "#2028EB",
+              color: "#437EEB",
             },
           },
         }}

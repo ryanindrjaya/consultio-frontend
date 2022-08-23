@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { registerUser, userLogin } from "./userAction";
+import { registerUser, userLogin, verifyEmail } from "./userAction";
 import { cookieCutter } from "cookie-cutter";
 import nookies from "nookies";
 
@@ -56,8 +56,23 @@ const userSlice = createSlice({
     [registerUser.fulfilled]: (state, { payload }) => {
       state.loading = false;
       state.success = true; // registration successful
+      state.userInfo = payload;
     },
     [registerUser.rejected]: (state, { payload }) => {
+      state.loading = false;
+      state.error = payload;
+    },
+
+    // verify user
+    [verifyEmail.pending]: (state) => {
+      state.loading = true;
+      state.error = null;
+    },
+    [verifyEmail.fulfilled]: (state, { payload }) => {
+      state.loading = false;
+      state.success = true;
+    },
+    [verifyEmail.rejected]: (state, { payload }) => {
       state.loading = false;
       state.error = payload;
     },
