@@ -21,11 +21,13 @@ function Navbar() {
   return (
     <div className="col-span-2 border-x flex flex-col justify-between h-screen max-h-screen p-7">
       <div>
-        <img
-          src="/consultio.png"
-          className="text-center"
-          alt="logo consultio"
-        />
+        <Link href={"/"}>
+          <img
+            src="/consultio.svg"
+            className="text-center cursor-pointer"
+            alt="logo consultio"
+          />
+        </Link>
 
         <Fitur />
       </div>

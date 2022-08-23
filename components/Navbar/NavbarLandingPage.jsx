@@ -3,7 +3,7 @@ import React from "react";
 
 function NavbarLandingPage() {
   return (
-    <div className="py-7 flex justify-between">
+    <div className="py-7 absolute left-0 right-0 top-0 flex justify-between">
       <Link href={"/"}>
         <img
           className="cursor-pointer object-contain"

@@ -5,13 +5,21 @@ import NavbarLandingPage from "../components/Navbar/NavbarLandingPage";
 
 function LandingPage({ children }) {
   return (
-    <div className="px-3 lg:px-12">
-      <NavbarLandingPage />
+    <>
+      <div className="relative lg:max-w-6xl mx-auto">
+        <NavbarLandingPage />
 
-      {children}
+        <div>{children}</div>
 
-      <FooterLandingPage />
-    </div>
+        <FooterLandingPage />
+      </div>
+      <div
+        className="w-full flex justify-center py-3 text-white"
+        style={{ backgroundColor: "#A6A8AD" }}
+      >
+        <p>Powered by Consultio</p>
+      </div>
+    </>
   );
 }
 
