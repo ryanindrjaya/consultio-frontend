@@ -32,6 +32,10 @@ export default function login() {
     if (success) {
       router.replace("/home");
     }
+
+    if (userInfo) {
+      router.replace("/home");
+    }
   });
 
   const handleSubmit = async (e) => {

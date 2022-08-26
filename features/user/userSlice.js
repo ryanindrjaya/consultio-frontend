@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { registerUser, userLogin, verifyEmail } from "./userAction";
+import { registerUser, userLogin, verifyEmail, verifyUser } from "./userAction";
 import { cookieCutter } from "cookie-cutter";
 import nookies from "nookies";
 
@@ -29,6 +29,8 @@ const userSlice = createSlice({
       state.userInfo = null;
       state.userToken = null;
       state.success = false;
+
+      location.reload();
     },
   },
   extraReducers: {
@@ -63,7 +65,7 @@ const userSlice = createSlice({
       state.error = payload;
     },
 
-    // verify user
+    // verify email
     [verifyEmail.pending]: (state) => {
       state.loading = true;
       state.error = null;
@@ -73,6 +75,21 @@ const userSlice = createSlice({
       state.success = true;
     },
     [verifyEmail.rejected]: (state, { payload }) => {
+      state.loading = false;
+      state.error = payload;
+    },
+
+    // verify user
+    [verifyUser.pending]: (state) => {
+      state.success = false;
+      state.loading = true;
+      state.error = null;
+    },
+    [verifyUser.fulfilled]: (state, { payload }) => {
+      state.loading = false;
+      state.success = true;
+    },
+    [verifyUser.rejected]: (state, { payload }) => {
       state.loading = false;
       state.error = payload;
     },

@@ -19,15 +19,17 @@ function Navbar() {
   const router = useRouter;
 
   return (
-    <div className="col-span-2 border-x flex flex-col justify-between h-screen max-h-screen p-7">
-      <div>
-        <Link href={"/"}>
-          <img
-            src="/consultio.svg"
-            className="text-center cursor-pointer"
-            alt="logo consultio"
-          />
-        </Link>
+    <div className="col-span-2 h-screen border-x flex flex-col justify-between max-h-screen p-7 overflow-y-hidden scrollbar-hide">
+      <div className="max-w-full">
+        <div className="flex justify-center">
+          <Link href={"/"}>
+            <img
+              src="/consultio.svg"
+              className="text-center cursor-pointer"
+              alt="logo consultio"
+            />
+          </Link>
+        </div>
 
         <Fitur />
       </div>

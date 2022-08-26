@@ -227,24 +227,32 @@ export default function Home() {
                   </p>
                 </div>
                 <div className="flex">
-                  <ArrowLeft2
-                    size={32}
-                    className={
-                      min
-                        ? "text-gray-900/20 cursor-pointer"
-                        : "text-primary cursor-pointer"
-                    }
+                  <button
                     onClick={(e) => handlePrev()}
-                  />
-                  <ArrowRight2
-                    size={32}
-                    className={
-                      max
-                        ? "text-gray-900/20 cursor-pointer"
-                        : "text-primary cursor-pointer"
-                    }
+                    disabled={min ? true : false}
+                  >
+                    <ArrowLeft2
+                      size={32}
+                      className={
+                        min
+                          ? "text-gray-900/20 cursor-pointer"
+                          : "text-primary cursor-pointer"
+                      }
+                    />
+                  </button>
+                  <button
                     onClick={(e) => handleNext()}
-                  />
+                    disabled={max ? true : false}
+                  >
+                    <ArrowRight2
+                      size={32}
+                      className={
+                        max
+                          ? "text-gray-900/20 cursor-pointer"
+                          : "text-primary cursor-pointer"
+                      }
+                    />
+                  </button>
                 </div>
               </div>
               <p className="text-inter font-medium text-2xl text-black/60">

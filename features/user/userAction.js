@@ -49,13 +49,36 @@ export const verifyEmail = createAsyncThunk(
         },
       };
 
-      const endpoint = process.env.API_URL + "/users/sendEmailVerify";
+      const endpoint = process.env.API_URL + "/users/sendVerifyEmail";
 
       const res = await axios.get(endpoint, config);
 
       console.log(res);
     } catch (error) {
       console.log(error);
+    }
+  }
+);
+
+export const verifyUser = createAsyncThunk(
+  "user/verify",
+  async ({ token, jwt }) => {
+    console.log("token", token);
+    console.log("jwt", jwt);
+    try {
+      const config = {
+        headers: {
+          Authorization: jwt,
+        },
+      };
+
+      const endpoint = process.env.API_URL + "/users/verifyEmail";
+
+      const res = await axios.post(endpoint, token, config);
+
+      console.log(res);
+    } catch (error) {
+      return true;
     }
   }
 );

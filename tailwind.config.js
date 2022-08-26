@@ -14,6 +14,15 @@ module.exports = {
       colors: {
         primary: "#437EEB",
       },
+      keyframes: {
+        wiggle: {
+          "0%, 100%": { transform: "rotate(-14deg)" },
+          "50%": { transform: "rotate(14deg)" },
+        },
+      },
+      animation: {
+        wiggle: "wiggle 200ms ease-in-out",
+      },
     },
   },
   optimizeFonts: false,

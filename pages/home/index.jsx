@@ -5,24 +5,26 @@ import nookies from "nookies";
 
 import Home from "../../layouts/Home";
 import Fitur from "../../components/HomeLayout/Fitur";
-import ProfileCard from "../../components/HomeLayout/ProfileCard";
+import Thread from "../../components/HomeLayout/Thread";
 import Feeds from "../../components/HomeLayout/Feeds";
+
+import { Toaster } from "react-hot-toast";
 
 export default function index() {
   const { userInfo, userToken } = useSelector((state) => state.user);
-
-  console.log(userInfo);
 
   const dispatch = useDispatch();
   const router = useRouter();
 
   return (
-    <div className="">
+    <div className="flex w-full scrollbar-hide">
       {/* feeds */}
       <Feeds />
 
+      <Toaster />
+
       {/* profil */}
-      <ProfileCard />
+      <Thread />
     </div>
   );
 }
