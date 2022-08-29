@@ -14,22 +14,6 @@ function Posts({ posts }) {
 
   console.log(posts);
 
-  const handleLike = async (postId) => {
-    const endpoint = process.env.API_URL + "/like/" + postId;
-
-    const config = {
-      headers: {
-        Authorization: userToken,
-      },
-    };
-
-    try {
-      await axios.post(endpoint, config);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   return (
     <>
       {posts.map((post) => (
@@ -40,7 +24,11 @@ function Posts({ posts }) {
           <div className="pb-4 border-b mb-3">
             <div className="flex gap-x-3 mb-5">
               <img
-                src="https://img.celebrities.id/okz/900/I52Dz3/master_x12dr76sp6_556.jpg"
+                src={
+                  post.isAnonymous !== 0
+                    ? "https://www.nicepng.com/png/full/73-730154_open-default-profile-picture-png.png"
+                    : "https://img.celebrities.id/okz/900/I52Dz3/master_x12dr76sp6_556.jpg"
+                }
                 className="h-12 w-12 object-cover rounded-lg"
                 alt=""
               />
@@ -48,7 +36,7 @@ function Posts({ posts }) {
               <div className="w-full flex justify-between items-center">
                 <div className="flex flex-col justify-between h-12">
                   <h3 className="font-inter font-medium text-lg">
-                    {post.Author}
+                    {post.isAnonymous !== 0 ? "Anonymous" : post.Author}
                   </h3>
                   <TimeAgo
                     style={{ color: "#023047" }}
@@ -67,7 +55,7 @@ function Posts({ posts }) {
 
             {post.attachment && (
               <img
-                src={`http://localhost:5000/public/${post.attachment}`}
+                src={`http://203.6.149.156:8480/public/${post.attachment}`}
                 className="max-h-96 w-full mb-5 object-cover rounded-xl"
                 alt=""
               />

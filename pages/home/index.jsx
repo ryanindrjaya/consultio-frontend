@@ -55,11 +55,29 @@ export default function index({ data }) {
   const { userInfo, userToken } = useSelector((state) => state.user);
   const [posts, setPosts] = useState(data);
 
+  console.log(userInfo);
+
   const dispatch = useDispatch();
   const router = useRouter();
 
+  const handleLike = async (postId) => {
+    const endpoint = process.env.API_URL + "/like/" + postId;
+
+    const config = {
+      headers: {
+        Authorization: userToken,
+      },
+    };
+
+    try {
+      const req = await axios.post(endpoint, config);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
-    <div className="flex justify-center w-full scrollbar-hide">
+    <div className="flex justify-center  w-full scrollbar-hide">
       {/* feeds */}
       <Feeds data={posts} />
 

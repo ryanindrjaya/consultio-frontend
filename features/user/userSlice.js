@@ -32,6 +32,9 @@ const userSlice = createSlice({
 
       location.reload();
     },
+    reset: (state) => {
+      state.success = false;
+    },
   },
   extraReducers: {
     // login user
@@ -87,6 +90,7 @@ const userSlice = createSlice({
     },
     [verifyUser.fulfilled]: (state, { payload }) => {
       state.loading = false;
+      state.userInfo = payload;
       state.success = true;
     },
     [verifyUser.rejected]: (state, { payload }) => {
@@ -96,5 +100,5 @@ const userSlice = createSlice({
   },
 });
 
-export const { logout } = userSlice.actions;
+export const { logout, reset } = userSlice.actions;
 export default userSlice.reducer;

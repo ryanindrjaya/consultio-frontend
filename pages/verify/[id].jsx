@@ -2,6 +2,7 @@ import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { verifyEmail, verifyUser } from "../../features/user/userAction";
+import { reset } from "../../features/user/userSlice";
 import Auth from "../../layouts/Auth";
 
 import Lottie from "lottie-react";
@@ -34,10 +35,22 @@ export default function Verify({ id }) {
   console.log(error);
 
   const Indicator = () => {
-    if (error) {
-      return <Lottie animationData={failedLottie} loop={false} />;
+    if (success) {
+      return (
+        <Lottie
+          className="w-36 h-36"
+          animationData={successLottie}
+          loop={false}
+        />
+      );
     } else {
-      return <Lottie animationData={successLottie} loop={false} />;
+      return (
+        <Lottie
+          className="w-36 h-36"
+          animationData={failedLottie}
+          loop={false}
+        />
+      );
     }
   };
 
@@ -47,11 +60,17 @@ export default function Verify({ id }) {
   const handleVerifyUser = () => {
     const token = id;
     const jwt = userInfo.token;
+    const userId = userInfo.profile.userId;
 
-    dispatch(verifyUser({ token, jwt }));
+    dispatch(verifyUser({ token, jwt, userId }));
   };
 
   useEffect(() => {
+    if (success) {
+      dispatch(reset());
+      router.replace("/home");
+    }
+
     if (!userInfo) {
       router.replace("/home");
     }
@@ -62,10 +81,19 @@ export default function Verify({ id }) {
   }, []);
 
   return (
-    <div className="flex flex-col justify-center h-full p-6">
+    <div className="flex flex-col justify-center items-center h-screen w-full p-6">
       {!loading ? (
         <>
           <Indicator />
+          {success ? (
+            <p className="text-lg text-gray-700 text-center font-bold">
+              Email telah terkonfirmasi
+            </p>
+          ) : (
+            <p className="text-lg text-gray-700 text-center font-bold">
+              Email gagal terverifikasi
+            </p>
+          )}
         </>
       ) : (
         <svg

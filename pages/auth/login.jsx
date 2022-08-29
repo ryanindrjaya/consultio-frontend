@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { userLogin } from "../../features/user/userAction";
 import nookies from "nookies";
 import Auth from "../../layouts/Auth";
+import { reset } from "../../features/user/userSlice";
 
 // Components
 import FormInput from "../../components/Inputs/FormInput";
@@ -30,12 +31,12 @@ export default function login() {
 
   useEffect(() => {
     if (success) {
+      dispatch(reset());
       router.replace("/home");
     }
-
-    if (userInfo) {
-      router.replace("/home");
-    }
+    // if (userInfo) {
+    //   router.replace("/home");
+    // }
   });
 
   const handleSubmit = async (e) => {

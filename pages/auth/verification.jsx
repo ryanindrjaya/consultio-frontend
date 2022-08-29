@@ -6,6 +6,7 @@ import { verifyEmail } from "../../features/user/userAction";
 import FormInput from "../../components/Inputs/FormInput";
 import Auth from "../../layouts/Auth";
 import nookies from "nookies";
+import { reset } from "../../features/user/userSlice";
 
 export default function emailVerification() {
   const [isSent, setIsSent] = useState(false);
@@ -17,6 +18,10 @@ export default function emailVerification() {
   console.log("user info", userInfo);
 
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(reset());
+  }, []);
 
   return (
     <div className="flex flex-col justify-center h-full p-6">
@@ -44,7 +49,7 @@ export default function emailVerification() {
             {success ? (
               <p
                 onClick={() => dispatch(verifyEmail(userInfo.token))}
-                className="text-sm font-medium text-primary underline"
+                className="text-sm cursor-pointer font-medium text-primary underline"
               >
                 Klik untuk mengirim ulang kode
               </p>

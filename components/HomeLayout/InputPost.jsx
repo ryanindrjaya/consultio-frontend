@@ -47,6 +47,10 @@ function InputPost() {
     file.append("story", story);
     file.append("userId", userId);
 
+    if (isAnonym) {
+      file.append("isAnonymous", 1);
+    }
+
     try {
       const config = {
         headers: {

@@ -24,6 +24,7 @@ function Fitur() {
       <div className={`w-full ${showMoreMenu ? "space-y-3" : "space-y-6"}`}>
         <FiturRow
           title={"Timeline"}
+          path="/home"
           Icon={<Element variant="Bold" size={24} />}
         />
         <div
@@ -31,6 +32,7 @@ function Fitur() {
           onClick={() => setShowMoreMenu(!showMoreMenu)}
         >
           <FiturRow
+            path="#"
             title={"Konsultasi"}
             Icon={<DocumentText variant="Bold" size={24} />}
             optionalIcon={<ArrowDown2 variant="Bold" size={16} />}
@@ -41,11 +43,13 @@ function Fitur() {
             }`}
           >
             <FiturRow
+              path="#"
               title={"Kesehatan Mental"}
               Icon={<Lovely variant="Bold" size={24} />}
               subMenu={true}
             />
             <FiturRow
+              path="#"
               title={"Bantuan Hukum"}
               Icon={<Judge variant="Bold" size={24} />}
               subMenu={true}
@@ -53,14 +57,17 @@ function Fitur() {
           </div>
         </div>
         <FiturRow
+          path="#"
           title={"Message"}
           Icon={<Message variant="Bold" size={24} />}
         />
         <FiturRow
+          path="#"
           title={"History"}
           Icon={<EmptyWallet variant="Bold" size={24} />}
         />
         <FiturRow
+          path="#"
           title={"Setting"}
           Icon={<Setting2 variant="Bold" size={24} />}
         />

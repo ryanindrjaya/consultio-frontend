@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
+import { reset } from "../../features/user/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { registerUser, verifyEmail } from "../../features/user/userAction";
 import toast from "react-hot-toast";
@@ -34,6 +35,7 @@ export default function register() {
   useEffect(() => {
     // redirect user yang berhasil registrasi ke halaman login
     if (success) {
+      dispatch(reset());
       router.replace("/auth/verification");
     }
   }, [router, success]);

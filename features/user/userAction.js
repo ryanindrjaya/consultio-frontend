@@ -1,5 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import { get } from "http";
 import nookies from "nookies";
 
 export const registerUser = createAsyncThunk(
@@ -62,7 +63,7 @@ export const verifyEmail = createAsyncThunk(
 
 export const verifyUser = createAsyncThunk(
   "user/verify",
-  async ({ token, jwt }) => {
+  async ({ token, jwt, userId }) => {
     console.log("token", token);
     console.log("jwt", jwt);
     try {
@@ -74,11 +75,23 @@ export const verifyUser = createAsyncThunk(
 
       const endpoint = process.env.API_URL + "/users/verifyEmail";
 
-      const res = await axios.post(endpoint, token, config);
+      const res = await axios.post(endpoint, { token }, config);
 
-      console.log(res);
+      if (res) {
+        try {
+          const getUser = await axios.get(
+            process.env.API_URL + "/users/" + userId,
+            config
+          );
+          if (getUser) {
+            return getUser.data.data;
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      }
     } catch (error) {
-      return true;
+      console.log(error);
     }
   }
 );
