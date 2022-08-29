@@ -64,6 +64,8 @@ function InputPost() {
       setImage(null);
       setImagePreview(null);
       toast("Cerita anda telah terupload");
+
+      window.location.reload();
     } catch (error) {
       console.log(error);
     }
@@ -73,7 +75,7 @@ function InputPost() {
     <form
       encType="mutipart/form-data"
       onSubmit={handlePost}
-      className="mt-5 mb-7 border-t rounded-lg shadow-2xl px-7 py-3"
+      className="mt-5 mb-7 border-t rounded-lg shadow-lg px-7 py-3"
     >
       <div className="flex gap-x-5 pb-5 border-b">
         <img

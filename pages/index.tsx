@@ -71,8 +71,16 @@ export default function Home() {
         <section id="hero1" className="flex w-full items-center pt-24">
           <div className="w-2/4">
             <div className="w-fit relative">
-              <h2 className="font-inter font-bold text-4xl">Consultio</h2>
-              <div className=" absolute bottom-1 w-full h-2 bg-primary opacity-60"></div>
+              <h2
+                style={{ zIndex: 10 }}
+                className="font-inter font-bold text-4xl"
+              >
+                Consultio
+              </h2>
+              <div
+                style={{ zIndex: 0 }}
+                className=" absolute bottom-1 w-full h-2 bg-primary opacity-60"
+              ></div>
             </div>
             <p className="mb-5 font-inter text-xl font-normal">
               Bicarakan keluh kesahmu disini agar ketenangan menghampirimu!
@@ -119,9 +127,11 @@ export default function Home() {
             <h2 className="font-inter font-bold text-5xl">
               Mulailah langkah mu dengan
             </h2>
-            <div className="w-fit relative">
-              <h2 className="font-inter font-bold text-5xl">Consultio</h2>
-              <div className=" absolute bottom-1 w-full h-2 bg-primary opacity-60"></div>
+            <div className="w-fit z-40 relative">
+              <h2 className="font-inter static font-bold text-5xl">
+                Consultio
+              </h2>
+              <div className="absolute z-10 bottom-1 w-full h-2 bg-primary opacity-60"></div>
             </div>
           </div>
 
@@ -141,11 +151,11 @@ export default function Home() {
 
             <div className="w-full lg:w-2/4 hover:bg-primary hover:text-white duration-75 bg-primary/10 rounded-xl shadow-md p-5 flex gap-x-5">
               <div className="bg-white rounded-xl lg:w-2/5 shadow-md px-3 py-2 relative flex justify-center">
-                <img
+                {/* <img
                   src="/collage 2.svg"
                   className="absolute bottom-0"
                   alt=""
-                />
+                /> */}
               </div>
               <div className="lg:w-3/5">
                 <h3 className="font-inter font-bold text-xl">
@@ -177,11 +187,11 @@ export default function Home() {
 
             <div className="w-full lg:w-2/4 hover:bg-primary hover:text-white duration-75 bg-primary/10 rounded-xl shadow-md p-5 flex gap-x-5">
               <div className="bg-white rounded-xl lg:w-2/5 shadow-md px-3 py-2 relative flex justify-center">
-                <img
+                {/* <img
                   src="/collage 4.svg"
                   className="absolute bottom-0"
                   alt=""
-                />
+                /> */}
               </div>
               <div className="lg:w-3/5">
                 <h3 className="font-inter font-bold text-xl">
@@ -204,8 +214,10 @@ export default function Home() {
               <div className="flex justify-center gap-x-3">
                 <h2 className="font-inter font-bold text-5xl">tentang</h2>
                 <div className="w-fit relative">
-                  <h2 className="font-inter font-bold text-5xl">Consultio</h2>
-                  <div className=" absolute bottom-1 w-full h-2 bg-primary opacity-60"></div>
+                  <h2 className="font-inter z-20 font-bold text-5xl">
+                    Consultio
+                  </h2>
+                  <div className=" absolute z-0 bottom-1 w-full h-2 bg-primary opacity-60"></div>
                 </div>
               </div>
               <h2 className="font-inter font-bold text-5xl">?</h2>

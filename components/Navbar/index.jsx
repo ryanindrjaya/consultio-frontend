@@ -15,6 +15,8 @@ function Navbar() {
   const { userInfo, userToken } = useSelector((state) => state.user);
   const [profileOption, setProfileOption] = useState(false);
 
+  const [showUserOption, setShowUserOption] = useState(false);
+
   const dispatch = useDispatch();
   const router = useRouter;
 
@@ -62,7 +64,25 @@ function Navbar() {
                   <p className="font-normal text-sm">User Account</p>
                 </div>
               </div>
-              <MoreHorizIcon className="cursor-pointer" />
+              <div
+                onClick={() => setShowUserOption(!showUserOption)}
+                className="relative"
+              >
+                <MoreHorizIcon className="cursor-pointer" />
+                {showUserOption && (
+                  <div
+                    className="w-40 h-10 bg-white rounded-tl-lg rounded-br-lg rounded-bl-lg border absolute right-3 top-5 z-10"
+                    style={{ borderColor: "black" }}
+                  >
+                    <div
+                      className="h-full cursor-pointer rounded-tl-lg rounded-br-lg rounded-bl-lg px-5 py-3 duration-75 hover:bg-black/10 flex items-center"
+                      style={{ borderColor: "black" }}
+                    >
+                      <p>Ubah Profile</p>
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
           )}
           {userInfo ? (
