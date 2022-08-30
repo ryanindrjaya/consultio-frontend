@@ -54,12 +54,12 @@ function Navbar() {
                 <img
                   onClick={() => setProfileOption(!profileOption)}
                   className="h-12 cursor-pointer relative w-12 object-cover rounded-full"
-                  src={userInfo.profile.photo}
+                  src={userInfo.profile?.photo}
                   alt=""
                 />
                 <div className="h-full ml-4 flex flex-col justify-between">
                   <p className="font-medium text-base">
-                    {userInfo.profile.fullname}
+                    {userInfo.profile?.fullname}
                   </p>
                   <p className="font-normal text-sm">User Account</p>
                 </div>
