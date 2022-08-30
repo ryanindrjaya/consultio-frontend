@@ -33,6 +33,7 @@ export async function getServerSideProps(context) {
 }
 
 const fetchData = async (cookies) => {
+  console.log(cookies);
   try {
     const endpoint = process.env.API_URL + "/posts";
 
@@ -62,24 +63,50 @@ export default function index({ data }) {
 
   const handleLike = async (postId) => {
     const endpoint = process.env.API_URL + "/like/" + postId;
+    const cookies = nookies.get(null, "token");
 
     const config = {
+      method: "POST",
       headers: {
-        Authorization: userToken,
+        "Content-Type": "application/json",
+        Authorization: userInfo.token,
       },
     };
+    const res = await fetch(endpoint, config);
+    console.log(res);
 
-    try {
-      const req = await axios.post(endpoint, config);
-    } catch (error) {
-      console.log(error);
+    if (res) {
+      const req = await fetchData(cookies);
+      const posts = await req.json();
+      setPosts(posts.data.data);
+    }
+  };
+
+  const handleUnlike = async (postId) => {
+    const endpoint = process.env.API_URL + "/like/" + postId;
+    const cookies = nookies.get(null, "token");
+
+    const config = {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: userInfo.token,
+      },
+    };
+    const res = await fetch(endpoint, config);
+    console.log(res);
+
+    if (res) {
+      const req = await fetchData(cookies);
+      const posts = await req.json();
+      setPosts(posts.data.data);
     }
   };
 
   return (
     <div className="flex justify-center  w-full scrollbar-hide">
       {/* feeds */}
-      <Feeds data={posts} />
+      <Feeds data={posts} onLike={handleLike} onUnlike={handleUnlike} />
 
       <Toaster />
     </div>
