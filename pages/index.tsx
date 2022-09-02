@@ -110,14 +110,12 @@ export default function Home() {
               Our <span className="text-primary">Vision</span> and{" "}
               <span className="text-primary">Mission</span>
             </h2>
-            <p className="font-normal text-xl">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam, quis nostrud exercitation ullamco laboris
-              nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
-              reprehenderit in voluptate velit esse cillum dolore eu fugiat
-              nulla pariatur. Excepteur sint occaecat cupidatat non proident,
-              sunt in culpa qui officia deserunt mollit anim id est laborum.
+            <p className="font-normal text-xl leading-loose text-justify">
+              Visi kami adalah menciptakan ruang edukasi publik dan pendampingan
+              bagi penyintas kekerasan seksual. Misi untuk merealisasikan ruang
+              aman tersebut, kami menciptakan ruang diskusi dan memberikan akses
+              mudah bagi penyintas kekerasan seksual untuk melakukan konsultasi
+              psikologi, konsultasi hukum, dan bantuan langsung.
             </p>
           </div>
         </section>

@@ -83,7 +83,10 @@ function InputPost() {
     >
       <div className="flex gap-x-5 pb-5 border-b">
         <img
-          src={userInfo?.profile?.photo || "https://links.papareact.com/gll"}
+          src={
+            `http://203.6.149.156:8480/public/${userInfo.profile.photo}` ||
+            "https://links.papareact.com/gll"
+          }
           className="h-12 w-12 object-cover rounded-lg"
           alt=""
         />
