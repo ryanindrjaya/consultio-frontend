@@ -10,12 +10,12 @@ import { persistor, store } from "./store";
 import PageChange from "../components/pageChange/PageChange.js";
 import "../styles/globals.css";
 
-Router.events.on("routeChangeStart", () => {
-  ReactDOM.render(<PageChange />, document.getElementById("page-transition"));
-});
-Router.events.on("routeChangeComplete", () => {
-  ReactDOM.unmountComponentAtNode(document.getElementById("page-transition"));
-});
+// Router.events.on("routeChangeStart", () => {
+//   ReactDOM.render(<PageChange />, document.getElementById("page-transition"));
+// });
+// Router.events.on("routeChangeComplete", () => {
+//   ReactDOM.unmountComponentAtNode(document.getElementById("page-transition"));
+// });
 
 function MyApp({ Component, pageProps }) {
   const Layout = Component.layout || ((page) => page);
