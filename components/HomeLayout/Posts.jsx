@@ -11,6 +11,7 @@ import Comments from "./Comments";
 import dynamic from "next/dynamic";
 
 function Posts({ posts, like, unlike, userInfo }) {
+  const [openComment, setOpenComment] = useState(undefined);
   const handleLike = (id, isLiked) => {
     if (isLiked !== 0) {
       unlike(id);
@@ -21,11 +22,11 @@ function Posts({ posts, like, unlike, userInfo }) {
 
   return (
     <>
-      {posts.map((post) => {
-        const [openComment, setOpenComment] = useState(false);
+      {posts.map((post, idx) => {
         return (
           <div
-            key={post.postId}
+            show={openComment}
+            key={idx}
             className="mt-5 mb-7 border-t rounded-lg shadow-lg px-7 py-3"
           >
             <div className="pb-4 border-b mb-3">
@@ -90,7 +91,11 @@ function Posts({ posts, like, unlike, userInfo }) {
                   )}
                 </button>
                 <div
-                  onClick={() => setOpenComment(!openComment)}
+                  onClick={() =>
+                    openComment === idx
+                      ? setOpenComment(undefined)
+                      : setOpenComment(idx)
+                  }
                   className="w-2/5 justify-around cursor-pointer flex rounded-3xl bg-gray-100 px-3 py-2"
                 >
                   <p>{post.commentsCount}</p>
@@ -98,7 +103,7 @@ function Posts({ posts, like, unlike, userInfo }) {
                 </div>
               </div>
             </div>
-            {openComment && (
+            {idx === openComment && (
               <Comments
                 commentCount={post.commentsCount}
                 userInfo={userInfo}

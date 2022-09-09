@@ -14,7 +14,7 @@ import { DirectboxDefault, Eye, EyeSlash, User } from "iconsax-react";
 import axios from "axios";
 import Head from "next/head";
 
-export default function register() {
+export default function Register() {
   // controlled form hooks
   const [passVisibility, setPassVisibility] = useState(false);
   const [passConfirmVisibility, setPassConfirmVisibility] = useState(false);
@@ -224,4 +224,4 @@ export default function register() {
   );
 }
 
-register.layout = Auth;
+Register.layout = Auth;

@@ -1,6 +1,5 @@
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
-import { reset } from "../../features/user/userSlice";
 import Auth from "../../layouts/Auth";
 import nookies from "nookies";
 

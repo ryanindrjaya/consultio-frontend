@@ -54,7 +54,7 @@ const fetchData = async (cookies) => {
   }
 };
 
-export default function index({ data, userInfo }) {
+export default function Index({ data, userInfo }) {
   const [posts, setPosts] = useState(data);
 
   const handleLike = async (postId) => {
@@ -150,4 +150,4 @@ export default function index({ data, userInfo }) {
   );
 }
 
-index.layout = Home;
+Index.layout = Home;

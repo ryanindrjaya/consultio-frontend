@@ -15,7 +15,7 @@ export async function getServerSideProps(context) {
   };
 }
 
-export default function emailVerification({ userInfo }) {
+export default function EmailVerification({ userInfo }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
@@ -123,4 +123,4 @@ export default function emailVerification({ userInfo }) {
   );
 }
 
-emailVerification.layout = Auth;
+EmailVerification.layout = Auth;

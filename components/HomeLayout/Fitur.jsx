@@ -57,8 +57,8 @@ function Fitur() {
           </div>
         </div>
         <FiturRow
-          path="#"
-          title={"Message"}
+          path="/chats"
+          title={"Pesan"}
           Icon={<Message variant="Bold" size={24} />}
         />
         <FiturRow

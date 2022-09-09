@@ -12,7 +12,7 @@ import Head from "next/head";
 
 // Icons
 
-export default function login() {
+export default function Login() {
   const token = nookies.get("token");
 
   // controlled form hooks
@@ -185,4 +185,4 @@ export default function login() {
   );
 }
 
-login.layout = Auth;
+Login.layout = Auth;
