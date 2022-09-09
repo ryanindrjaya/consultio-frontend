@@ -1,11 +1,14 @@
 import { CloseCircle, Heart, Message } from "iconsax-react";
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
 
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 
+import nookies from "nookies";
+
 function Thread() {
-  const { userInfo } = useSelector((state) => state.user);
+  const cookies = nookies.get(null);
+  const userInfo = JSON.parse(cookies.user);
+
   const [liked, setLiked] = useState(false);
 
   return (

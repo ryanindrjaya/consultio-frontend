@@ -1,5 +1,5 @@
-import { useSelector } from "react-redux";
 import React, { useRef, useState } from "react";
+import nookies from "nookies";
 
 // icons
 import InsertPhotoIcon from "@mui/icons-material/InsertPhoto";
@@ -9,8 +9,9 @@ import { Gallery } from "iconsax-react";
 import { IOSSwitch } from "../Switch";
 import toast from "react-hot-toast";
 import axios from "axios";
+import { useRouter } from "next/router";
 
-function InputPost() {
+function InputPost({ userInfo, handlePost }) {
   const [story, setStory] = useState("");
   const [image, setImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
@@ -18,8 +19,7 @@ function InputPost() {
 
   const [loading, setLoading] = useState(false);
 
-  const { userInfo } = useSelector((state) => state.user);
-  const firstName = userInfo?.profile?.fullname?.split(" ");
+  const firstName = userInfo.fullname.split(" ");
 
   const validateImg = (e) => {
     const file = e.target.files[0];
@@ -36,55 +36,39 @@ function InputPost() {
     setImagePreview(null);
   };
 
-  const handlePost = async (e) => {
+  const onSubmitPost = (e) => {
     e.preventDefault();
-    setLoading(true);
+    if (story.length < 1) {
+      toast.error("Tidak ada yang ingin kamu bagikan?");
+    } else {
+      setLoading(true);
+      const formData = new FormData();
+      formData.append("story", story);
+      if (isAnonym) {
+        formData.append("isAnonym", isAnonym);
+      }
+      formData.append("image", image);
+      formData.append("userId", userInfo.userId);
 
-    const userId = userInfo.profile.userId;
-    const file = new FormData();
-
-    file.append("photo", image);
-    file.append("story", story);
-    file.append("userId", userId);
-
-    if (isAnonym) {
-      file.append("isAnonymous", 1);
-    }
-
-    try {
-      const config = {
-        headers: {
-          Authorization: userInfo.token,
-        },
-      };
-
-      const endpoint = process.env.API_URL + "/posts";
-
-      const res = await axios.post(endpoint, file, config);
-      console.log(res);
-
-      setLoading(false);
+      handlePost(formData);
       setStory("");
       setImage(null);
       setImagePreview(null);
-      toast("Cerita anda telah terupload");
-
-      window.location.reload();
-    } catch (error) {
-      console.log(error);
     }
+
+    setLoading(false);
   };
 
   return (
     <form
       encType="mutipart/form-data"
-      onSubmit={handlePost}
+      onSubmit={onSubmitPost}
       className="mt-5 mb-7 border-t rounded-lg shadow-lg px-7 py-3"
     >
       <div className="flex gap-x-5 pb-5 border-b">
         <img
           src={
-            `http://203.6.149.156:8480/public/${userInfo.profile.photo}` ||
+            `http://203.6.149.156:8480/public/${userInfo.photo}` ||
             "https://links.papareact.com/gll"
           }
           className="h-12 w-12 object-cover rounded-lg"

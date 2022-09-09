@@ -1,23 +1,29 @@
 import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import nookies from "nookies";
 
 import Fitur from "../HomeLayout/Fitur";
-
-import { logout } from "../../features/user/userSlice";
 
 import { Button } from "@mui/material";
 import { Logout, Login } from "iconsax-react";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
+import { useEffect } from "react";
 
 function Navbar() {
-  const { userInfo, userToken } = useSelector((state) => state.user);
   const [profileOption, setProfileOption] = useState(false);
+  const [userInfo, setUserInfo] = useState({});
+
+  const cookies = nookies.get(null, "user");
+
+  useEffect(() => {
+    setUserInfo(JSON.parse(cookies.user ));
+  }, []);
+
+  console.log(userInfo);
 
   const [showUserOption, setShowUserOption] = useState(false);
 
-  const dispatch = useDispatch();
   const router = useRouter;
 
   return (
@@ -54,13 +60,11 @@ function Navbar() {
                 <img
                   onClick={() => setProfileOption(!profileOption)}
                   className="h-12 cursor-pointer relative w-12 object-cover rounded-full"
-                  src={userInfo.profile?.photo}
+                  src={userInfo?.photo}
                   alt=""
                 />
                 <div className="h-full ml-4 flex flex-col justify-between">
-                  <p className="font-medium text-base">
-                    {userInfo.profile?.fullname}
-                  </p>
+                  <p className="font-medium text-base">{userInfo?.fullname}</p>
                   <p className="font-normal text-sm">User Account</p>
                 </div>
               </div>
@@ -70,17 +74,19 @@ function Navbar() {
               >
                 <MoreHorizIcon className="cursor-pointer" />
                 {showUserOption && (
-                  <div
-                    className="w-40 h-10 bg-white rounded-tl-lg rounded-br-lg rounded-bl-lg border absolute right-3 top-5 z-10"
-                    style={{ borderColor: "black" }}
-                  >
+                  <Link href={"/profile"}>
                     <div
-                      className="h-full cursor-pointer rounded-tl-lg rounded-br-lg rounded-bl-lg px-5 py-3 duration-75 hover:bg-black/10 flex items-center"
+                      className="w-40 h-10 bg-white rounded-tl-lg rounded-br-lg rounded-bl-lg border absolute right-3 top-5 z-10"
                       style={{ borderColor: "black" }}
                     >
-                      <p>Ubah Profile</p>
+                      <div
+                        className="h-full cursor-pointer rounded-tl-lg rounded-br-lg rounded-bl-lg px-5 py-3 duration-75 hover:bg-black/10 flex items-center"
+                        style={{ borderColor: "black" }}
+                      >
+                        <p>Ubah Profile</p>
+                      </div>
                     </div>
-                  </div>
+                  </Link>
                 )}
               </div>
             </div>

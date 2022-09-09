@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import { useRouter } from "next/dist/client/router";
-import { useDispatch, useSelector } from "react-redux";
 import nookies from "nookies";
 
 import Home from "../../layouts/Home";
@@ -8,25 +6,29 @@ import Fitur from "../../components/HomeLayout/Fitur";
 import Thread from "../../components/HomeLayout/Thread";
 import Feeds from "../../components/HomeLayout/Feeds";
 
-import { Toaster } from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
 import axios from "axios";
+import Head from "next/head";
 
 export async function getServerSideProps(context) {
   const cookies = nookies.get(context);
+  const user = cookies.user;
 
   const res = await fetchData(cookies);
   const posts = await res.json();
 
-  if (res.status == 200) {
+  if (user) {
     return {
       props: {
         data: posts.data.data,
+        userInfo: JSON.parse(user),
       },
     };
   } else {
     return {
       redirect: {
         destination: "/auth/login",
+        permanent: false,
       },
     };
   }
@@ -52,14 +54,8 @@ const fetchData = async (cookies) => {
   }
 };
 
-export default function index({ data }) {
-  const { userInfo, userToken } = useSelector((state) => state.user);
+export default function index({ data, userInfo }) {
   const [posts, setPosts] = useState(data);
-
-  console.log(userInfo);
-
-  const dispatch = useDispatch();
-  const router = useRouter();
 
   const handleLike = async (postId) => {
     const endpoint = process.env.API_URL + "/like/" + postId;
@@ -69,7 +65,7 @@ export default function index({ data }) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: userInfo.token,
+        Authorization: cookies.token,
       },
     };
     const res = await fetch(endpoint, config);
@@ -90,7 +86,7 @@ export default function index({ data }) {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
-        Authorization: userInfo.token,
+        Authorization: cookies.token,
       },
     };
     const res = await fetch(endpoint, config);
@@ -103,13 +99,53 @@ export default function index({ data }) {
     }
   };
 
-  return (
-    <div className="flex justify-center  w-full scrollbar-hide">
-      {/* feeds */}
-      <Feeds data={posts} onLike={handleLike} onUnlike={handleUnlike} />
+  const handlePost = async (data) => {
+    const cookies = nookies.get(null, "token");
 
-      <Toaster />
-    </div>
+    try {
+      const config = {
+        headers: {
+          Authorization: cookies.token,
+        },
+      };
+
+      const endpoint = process.env.API_URL + "/posts";
+
+      const res = await axios.post(endpoint, data, config);
+      console.log(res);
+
+      if (res.status == 201) {
+        toast.success("Cerita anda berhasil di upload");
+        const newData = await fetchData(cookies);
+        const posts = await newData.json();
+
+        setPosts(posts.data.data);
+      } else {
+        toast.error("Gagal mengupload cerita");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  return (
+    <>
+      <Head>
+        <title>Home</title>
+      </Head>
+      <div className="flex justify-center overflow-y-scroll max-h-screen w-full scrollbar-hide">
+        {/* feeds */}
+        <Feeds
+          data={posts}
+          userInfo={userInfo}
+          onLike={handleLike}
+          onUnlike={handleUnlike}
+          handleSubmit={handlePost}
+        />
+
+        <Toaster />
+      </div>
+    </>
   );
 }
 

@@ -1,6 +1,5 @@
 import { Gallery, Heart, Message, Send2 } from "iconsax-react";
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
 import TimeAgo from "react-timeago";
 import nookies from "nookies";
 
@@ -10,7 +9,7 @@ import axios from "axios";
 import { useEffect } from "react";
 import Comments from "./Comments";
 
-function Posts({ posts, like, unlike }) {
+function Posts({ posts, like, unlike, userInfo }) {
   const handleLike = (id, isLiked) => {
     if (isLiked !== 0) {
       unlike(id);
@@ -99,7 +98,11 @@ function Posts({ posts, like, unlike }) {
               </div>
             </div>
             {openComment && (
-              <Comments commentCount={post.commentsCount} id={post.postId} />
+              <Comments
+                commentCount={post.commentsCount}
+                userInfo={userInfo}
+                id={post.postId}
+              />
             )}
           </div>
         );

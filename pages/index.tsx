@@ -149,11 +149,7 @@ export default function Home() {
 
             <div className="w-full lg:w-2/4 hover:bg-primary hover:text-white duration-75 bg-primary/10 rounded-xl shadow-md p-5 flex gap-x-5">
               <div className="bg-white rounded-xl lg:w-2/5 shadow-md px-3 py-2 relative flex justify-center">
-                {/* <img
-                  src="/collage 2.svg"
-                  className="absolute bottom-0"
-                  alt=""
-                /> */}
+                <img src="/collage2.png" className="absolute bottom-0" alt="" />
               </div>
               <div className="lg:w-3/5">
                 <h3 className="font-inter font-bold text-xl">
@@ -185,11 +181,11 @@ export default function Home() {
 
             <div className="w-full lg:w-2/4 hover:bg-primary hover:text-white duration-75 bg-primary/10 rounded-xl shadow-md p-5 flex gap-x-5">
               <div className="bg-white rounded-xl lg:w-2/5 shadow-md px-3 py-2 relative flex justify-center">
-                {/* <img
-                  src="/collage 4.svg"
+                <img
+                  src="/collage 4.png"
                   className="absolute bottom-0"
                   alt=""
-                /> */}
+                />
               </div>
               <div className="lg:w-3/5">
                 <h3 className="font-inter font-bold text-xl">

@@ -3,7 +3,7 @@ import React from "react";
 import { TextField } from "@mui/material";
 import { inputLabelClasses } from "@mui/material/InputLabel";
 
-function FormInput({ type, label, value, handleChange, icon }) {
+function FormInput({ type, label, value, handleChange, defaultValue, icon }) {
   return (
     <div className="relative flex items-center">
       <TextField

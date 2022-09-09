@@ -1,27 +1,47 @@
 import Link from "next/link";
 import React, { useState } from "react";
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { verifyEmail } from "../../features/user/userAction";
-import FormInput from "../../components/Inputs/FormInput";
 import Auth from "../../layouts/Auth";
 import nookies from "nookies";
-import { reset } from "../../features/user/userSlice";
+import axios from "axios";
 
-export default function emailVerification() {
-  const [isSent, setIsSent] = useState(false);
+export async function getServerSideProps(context) {
+  const cookies = nookies.get(context);
 
-  const { loading, error, userInfo, success } = useSelector(
-    (state) => state.user
-  );
+  return {
+    props: {
+      userInfo: JSON.parse(cookies.user),
+    },
+  };
+}
 
-  console.log("user info", userInfo);
+export default function emailVerification({ userInfo }) {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(false);
 
-  const dispatch = useDispatch();
+  const handleSend = async (e) => {
+    setLoading(true);
+    e.preventDefault();
 
-  useEffect(() => {
-    dispatch(reset());
-  }, []);
+    try {
+      const config = {
+        headers: {
+          Authorization: userInfo.token,
+        },
+      };
+
+      const endpoint = process.env.API_URL + "/users/sendVerifyEmail";
+
+      const res = await axios.get(endpoint, config);
+      console.log(res);
+      if (res.status == 200) {
+        setSuccess(true);
+      }
+    } catch (error) {
+      // setError(error.response.message)
+      console.log(error);
+    }
+  };
 
   return (
     <div className="flex flex-col justify-center h-full p-6">
@@ -48,7 +68,7 @@ export default function emailVerification() {
 
             {success ? (
               <p
-                onClick={() => dispatch(verifyEmail(userInfo.token))}
+                onClick={handleSend}
                 className="text-sm cursor-pointer font-medium text-primary underline"
               >
                 Klik untuk mengirim ulang kode
@@ -56,7 +76,7 @@ export default function emailVerification() {
             ) : (
               <button
                 type="submit"
-                onClick={() => dispatch(verifyEmail(userInfo.token))}
+                onClick={handleSend}
                 className="bg-blue-400 hover:bg-primary duration-150 w-3/4 cursor-pointer text-white font-normal py-3 mt-3 text-sm rounded-lg text-center"
                 disabled={loading}
               >

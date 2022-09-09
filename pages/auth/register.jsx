@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
-import { reset } from "../../features/user/userSlice";
-import { useDispatch, useSelector } from "react-redux";
-import { registerUser, verifyEmail } from "../../features/user/userAction";
 import toast from "react-hot-toast";
 
 // layout
@@ -14,6 +11,7 @@ import FormInput from "../../components/Inputs/FormInput";
 
 // Icons
 import { DirectboxDefault, Eye, EyeSlash, User } from "iconsax-react";
+import axios from "axios";
 
 export default function register() {
   // controlled form hooks
@@ -24,26 +22,61 @@ export default function register() {
   const [email, setEmail] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
-  // ambil data yang dibutuhkan di dalam redux
-  const { loading, userInfo, error, success } = useSelector(
-    (state) => state.user
-  );
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
 
-  const dispatch = useDispatch();
   const router = useRouter();
 
   useEffect(() => {
     // redirect user yang berhasil registrasi ke halaman login
     if (success) {
-      dispatch(reset());
       router.replace("/auth/verification");
     }
-  }, [router, success]);
+  }, [handleSubmit]);
 
   const handleSubmit = async (e) => {
+    setLoading(true);
     e.preventDefault();
 
-    dispatch(registerUser({ fullname, email, password, confirmPassword }));
+    if (password !== confirmPassword) {
+      setError("Password tidak sama!");
+    }
+
+    try {
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+
+      const endpoint = process.env.API_URL + "/register/user";
+
+      const user = await axios.post(
+        endpoint,
+        { fullname, email, password },
+        config
+      );
+
+      const registeredUser = user.data.data;
+
+      if (user) {
+        setSuccess(true);
+        nookies.set(null, "user", JSON.stringify(registeredUser.profile), {
+          maxAge: 30 * 24 * 60 * 60,
+          path: "/",
+          secure: process.env.NODE_ENV !== "development",
+          sameSite: "strict",
+        });
+        console.log(user);
+      }
+    } catch (error) {
+      if (error.response && error.response.data.message) {
+        setError(error.response.data.message);
+      } else {
+        setError(error.message);
+      }
+    }
   };
 
   const handleNameInput = (e) => {

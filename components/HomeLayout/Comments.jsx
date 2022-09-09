@@ -2,14 +2,16 @@ import axios from "axios";
 import { Send2 } from "iconsax-react";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { useSelector } from "react-redux";
 import TimeAgo from "react-timeago";
 
-function Comments({ commentCount, id }) {
+import nookies from "nookies";
+
+function Comments({ commentCount, id, userInfo }) {
   const [inputComment, setInputComment] = useState("");
   const [comments, setComments] = useState([]);
   const [loading, setLoading] = useState(false);
-  const { userInfo, userToken } = useSelector((state) => state.user);
+
+  console.log("loading", loading);
 
   useEffect(() => {
     getComment(id);
@@ -18,11 +20,12 @@ function Comments({ commentCount, id }) {
   const getComment = async (idPost) => {
     setLoading(true);
     const endpoint = process.env.API_URL + "/comments/" + idPost;
+    const cookies = nookies.get(null, "token");
 
     const config = {
       headers: {
         "Content-Type": "application/json",
-        Authorization: userInfo.token,
+        Authorization: cookies.token,
       },
     };
     try {
@@ -34,18 +37,21 @@ function Comments({ commentCount, id }) {
       }
     } catch (error) {
       console.log(error);
+      setLoading(false);
     }
+    setLoading(false);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
 
+    const cookies = nookies.get(null, "token");
     const endpoint = process.env.API_URL + "/comments/" + id;
     const config = {
       headers: {
         "Content-Type": "application/json",
-        Authorization: userInfo.token,
+        Authorization: cookies.token,
       },
     };
 
@@ -70,7 +76,7 @@ function Comments({ commentCount, id }) {
         className="w-full pt-4 mb-4 flex gap-x-3 justify-between items-center"
       >
         <img
-          src={userInfo?.profile?.photo || "https://links.papareact.com/gll"}
+          src={userInfo?.photo || "https://links.papareact.com/gll"}
           className="h-12 w-12 object-cover rounded-lg"
           alt=""
         />
@@ -90,41 +96,49 @@ function Comments({ commentCount, id }) {
         </button>
       </form>
 
-      {commentCount > 0
-        ? comments.map((comment, idx) => (
-            <div key={idx} className="flex justify-between mb-3">
-              <div className="flex gap-x-6">
-                <img
-                  src={
-                    `http://203.6.149.156:8480/public/${comment.photo}` ||
-                    "https://links.papareact.com/gll"
-                  }
-                  className="h-12 w-12 object-cover rounded-lg"
-                  alt=""
-                />
-                <div>
-                  <p
-                    style={{ color: "#023047" }}
-                    className="font-inter font-medium text-base"
-                  >
-                    {comment.fullname}
-                  </p>
-                  <p
-                    style={{ backgroundColor: "#F7F7F7" }}
-                    className="font-inter font-normal rounded-md text-base p-2"
-                  >
-                    {comment.message}
-                  </p>
-                </div>
-              </div>
-              <TimeAgo
-                style={{ color: "#023047" }}
-                className="font-inter text-sm"
-                date={comment.createdAt}
+      {loading != true ? (
+        comments.map((comment, idx) => (
+          <div key={idx} className="flex justify-between mb-3">
+            <div className="flex gap-x-6">
+              <img
+                src={
+                  `http://203.6.149.156:8480/public/${comment.photo}` ||
+                  "https://links.papareact.com/gll"
+                }
+                className="h-12 w-12 object-cover rounded-lg"
+                alt=""
               />
+              <div>
+                <p
+                  style={{ color: "#023047" }}
+                  className="font-inter font-medium text-base"
+                >
+                  {comment.fullname}
+                </p>
+                <p
+                  style={{ backgroundColor: "#F7F7F7" }}
+                  className="font-inter font-normal rounded-md text-base p-2"
+                >
+                  {comment.message}
+                </p>
+              </div>
             </div>
-          ))
-        : ""}
+            <TimeAgo
+              style={{ color: "#023047" }}
+              className="font-inter text-sm"
+              date={comment.createdAt}
+            />
+          </div>
+        ))
+      ) : (
+        <div className="w-full justify-center items-center flex gap-x-2">
+          <p className="text-center text-blue-600">Sedang mengambil data... </p>
+          <div
+            class="w-5 h-5 rounded-full animate-spin
+                    border-2 border-solid border-blue-500 border-t-transparent"
+          ></div>
+        </div>
+      )}
     </>
   );
 }

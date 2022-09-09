@@ -1,15 +1,13 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/dist/client/router";
-import { useDispatch, useSelector } from "react-redux";
-import { userLogin } from "../../features/user/userAction";
 import nookies from "nookies";
 import Auth from "../../layouts/Auth";
-import { reset } from "../../features/user/userSlice";
 
 // Components
 import FormInput from "../../components/Inputs/FormInput";
 import { Eye, EyeSlash, User } from "iconsax-react";
+import axios from "axios";
 
 // Icons
 
@@ -20,28 +18,68 @@ export default function login() {
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const [passVisibility, setPassVisibility] = useState(false);
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
 
-  // ambil data dari global state
-  const { loading, error, userInfo, success } = useSelector(
-    (state) => state.user
-  );
-
-  const dispatch = useDispatch();
   const router = useRouter();
 
   useEffect(() => {
     if (success) {
-      dispatch(reset());
       router.replace("/home");
     }
     // if (userInfo) {
     //   router.replace("/home");
     // }
-  });
+  }, [success]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    dispatch(userLogin({ email, password }));
+    setLoading(true);
+
+    try {
+      const endpoint = process.env.API_URL + "/login";
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+
+      const req = await axios.post(endpoint, { email, password }, config);
+      const user = req.data.data;
+
+      if (user.token) {
+        const role = user.profile.role;
+
+        // set new token
+        nookies.set(null, "token", user.token, {
+          maxAge: 30 * 24 * 60 * 60,
+          path: "/",
+          secure: process.env.NODE_ENV !== "development",
+          sameSite: "strict",
+        });
+
+        // set role token
+        nookies.set(null, "role", role, {
+          maxAge: 30 * 24 * 60 * 60,
+          path: "/",
+          secure: process.env.NODE_ENV !== "development",
+          sameSite: "strict",
+        });
+
+        // save authenticated user to cookies
+        nookies.set(null, "user", JSON.stringify(user.profile), {
+          maxAge: 30 * 24 * 60 * 60,
+          path: "/",
+          secure: process.env.NODE_ENV !== "development",
+          sameSite: "strict",
+        });
+        setSuccess(true);
+      }
+    } catch (error) {
+      setLoading(false);
+      setError(error.response.data.message);
+    }
   };
 
   const handleEmailInput = (e) => {

@@ -1,38 +1,30 @@
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { verifyEmail, verifyUser } from "../../features/user/userAction";
 import { reset } from "../../features/user/userSlice";
 import Auth from "../../layouts/Auth";
+import nookies from "nookies";
 
 import Lottie from "lottie-react";
 import successLottie from "../../public/lottie/success.json";
 import failedLottie from "../../public/lottie/failed.json";
+import axios from "axios";
 
 export async function getServerSideProps(context) {
   const id = context.params.id;
+  const cookies = nookies.get(context);
 
-  if (id) {
-    return {
-      props: {
-        id,
-      },
-    };
-  } else {
-    return {
-      redirect: {
-        destination: "/auth/verification",
-      },
-    };
-  }
+  return {
+    props: {
+      id,
+      userInfo: JSON.parse(cookies.user),
+    },
+  };
 }
 
-export default function Verify({ id }) {
-  const { loading, error, userInfo, success } = useSelector(
-    (state) => state.user
-  );
-
-  console.log(error);
+export default function Verify({ id, userInfo }) {
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
 
   const Indicator = () => {
     if (success) {
@@ -55,14 +47,55 @@ export default function Verify({ id }) {
   };
 
   const router = useRouter();
-  const dispatch = useDispatch();
 
-  const handleVerifyUser = () => {
+  const handleVerifyUser = async () => {
+    setLoading(true);
+
     const token = id;
-    const jwt = userInfo.token;
-    const userId = userInfo.profile.userId;
+    const jwt = nookies.get(null, "token");
+    const userId = userInfo.userId;
 
-    dispatch(verifyUser({ token, jwt, userId }));
+    console.log("token", token);
+    console.log("jwt", jwt);
+    try {
+      const config = {
+        headers: {
+          Authorization: jwt,
+        },
+      };
+
+      const endpoint = process.env.API_URL + "/users/verifyEmail";
+
+      const res = await axios.post(endpoint, { token }, config);
+
+      if (res) {
+        try {
+          const getUser = await axios.get(
+            process.env.API_URL + "/users/" + userId,
+            config
+          );
+
+          const newUser = getUser.data.data;
+
+          if (getUser) {
+            setSuccess(true);
+            nookies.set(null, "user", JSON.stringify(newUser.profile), {
+              maxAge: 30 * 24 * 60 * 60,
+              path: "/",
+              secure: process.env.NODE_ENV !== "development",
+              sameSite: "strict",
+            });
+            setLoading(false);
+          }
+        } catch (error) {
+          console.log(error);
+          setLoading(false);
+        }
+      }
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
