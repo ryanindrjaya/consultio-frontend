@@ -76,7 +76,10 @@ function Comments({ commentCount, id, userInfo }) {
         className="w-full pt-4 mb-4 flex gap-x-3 justify-between items-center"
       >
         <img
-          src={userInfo?.photo || "https://links.papareact.com/gll"}
+          src={
+            `http://203.6.149.156:8480/public/${userInfo.photo}` ||
+            "https://links.papareact.com/gll"
+          }
           className="h-12 w-12 object-cover rounded-lg"
           alt=""
         />

@@ -2,21 +2,17 @@ import React, { useRef, useState } from "react";
 import nookies from "nookies";
 
 // icons
-import InsertPhotoIcon from "@mui/icons-material/InsertPhoto";
 import { Gallery } from "iconsax-react";
 
 // components
 import { IOSSwitch } from "../Switch";
 import toast from "react-hot-toast";
-import axios from "axios";
-import { useRouter } from "next/router";
 
 function InputPost({ userInfo, handlePost }) {
   const [story, setStory] = useState("");
   const [image, setImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const [isAnonym, setIsAnonym] = useState(false);
-
   const [loading, setLoading] = useState(false);
 
   const firstName = userInfo.fullname.split(" ");
@@ -42,13 +38,16 @@ function InputPost({ userInfo, handlePost }) {
       toast.error("Tidak ada yang ingin kamu bagikan?");
     } else {
       setLoading(true);
+
       const formData = new FormData();
+
+      formData.append("photo", image);
       formData.append("story", story);
-      if (isAnonym) {
-        formData.append("isAnonym", isAnonym);
-      }
-      formData.append("image", image);
       formData.append("userId", userInfo.userId);
+
+      if (isAnonym) {
+        formData.append("isAnonymous", 1);
+      }
 
       handlePost(formData);
       setStory("");

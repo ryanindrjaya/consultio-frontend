@@ -9,7 +9,7 @@ function FiturRow({ title, path, Icon, optionalIcon, subMenu = false }) {
         <div className="w-5/6 flex items-center justify-between">
           <p
             className={`hidden md:inline-flex   group-hover:text-twitter ${
-              subMenu ? "text-xs" : "lg:text-base"
+              subMenu ? "text-md" : "lg:text-base"
             }`}
           >
             {title}

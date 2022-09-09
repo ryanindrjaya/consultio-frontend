@@ -2,8 +2,9 @@ import React from "react";
 import { useState } from "react";
 import nookies from "nookies";
 import DropFile from "../DropFile/DropFile";
+import axios from "axios";
 
-export default function Modal({ showModal, closeModal, userPhoto, userId }) {
+export default function Modal({ showModal, closeModal, userPhoto, onUpload }) {
   const [isUploaded, setIsUploaded] = useState(false);
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const [previewImages, setPreviewImages] = useState([]);
@@ -28,17 +29,11 @@ export default function Modal({ showModal, closeModal, userPhoto, userId }) {
     setIsUploaded(true);
   };
 
-  const uploadPhotoProfile = async () => {
-    const cookies = nookies.get(null, "token");
-    const endpoint = process.env.API + "/users/" + userId + "/photo";
+  const handleUpdatePhoto = (e) => {
+    e.preventDefault();
+    onUpload(uploadedFiles[0]);
 
-    const config = {
-      headers: {
-        Authorization: cookies,
-      },
-    };
-
-    const req = await fetch();
+    closeModal();
   };
 
   return (
@@ -96,7 +91,7 @@ export default function Modal({ showModal, closeModal, userPhoto, userId }) {
                   <button
                     className="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                     type="button"
-                    onClick={closeModal}
+                    onClick={handleUpdatePhoto}
                   >
                     Simpan
                   </button>

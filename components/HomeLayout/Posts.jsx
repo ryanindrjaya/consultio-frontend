@@ -1,6 +1,6 @@
 import { Gallery, Heart, Message, Send2 } from "iconsax-react";
 import React, { useState } from "react";
-import TimeAgo from "react-timeago";
+const TimeAgo = dynamic(() => import("react-timeago"), { ssr: false });
 import nookies from "nookies";
 
 // icon
@@ -8,6 +8,7 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import axios from "axios";
 import { useEffect } from "react";
 import Comments from "./Comments";
+import dynamic from "next/dynamic";
 
 function Posts({ posts, like, unlike, userInfo }) {
   const handleLike = (id, isLiked) => {

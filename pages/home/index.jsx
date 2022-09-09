@@ -17,7 +17,7 @@ export async function getServerSideProps(context) {
   const res = await fetchData(cookies);
   const posts = await res.json();
 
-  if (user) {
+  if (cookies.token) {
     return {
       props: {
         data: posts.data.data,
@@ -101,6 +101,7 @@ export default function index({ data, userInfo }) {
 
   const handlePost = async (data) => {
     const cookies = nookies.get(null, "token");
+    console.log(data);
 
     try {
       const config = {
@@ -131,7 +132,7 @@ export default function index({ data, userInfo }) {
   return (
     <>
       <Head>
-        <title>Home</title>
+        <title>Home - Consultio</title>
       </Head>
       <div className="flex justify-center overflow-y-scroll max-h-screen w-full scrollbar-hide">
         {/* feeds */}

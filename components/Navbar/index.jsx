@@ -1,30 +1,57 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import nookies from "nookies";
 
 import Fitur from "../HomeLayout/Fitur";
 
-import { Button } from "@mui/material";
 import { Logout, Login } from "iconsax-react";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
-import { useEffect } from "react";
 
 function Navbar() {
   const [profileOption, setProfileOption] = useState(false);
-  const [userInfo, setUserInfo] = useState({});
-
-  const cookies = nookies.get(null, "user");
+  const [showUserOption, setShowUserOption] = useState(false);
+  const [userInfo, setUserInfo] = useState(null);
 
   useEffect(() => {
-    setUserInfo(JSON.parse(cookies.user ));
+    fetchData();
   }, []);
 
-  console.log(userInfo);
+  const router = useRouter();
 
-  const [showUserOption, setShowUserOption] = useState(false);
+  async function fetchData() {
+    const cookies = nookies.get(null);
+    const user = JSON.parse(cookies.user);
 
-  const router = useRouter;
+    const endpoint = process.env.API_URL + "/users/" + user.userId;
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: cookies.token,
+      },
+    };
+
+    try {
+      const req = await fetch(endpoint, config);
+      const res = await req.json();
+
+      if (req.status === 200) {
+        setUserInfo(res.data.profile);
+      } else {
+        console.log(res);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  function handleLogout() {
+    nookies.destroy(null, "token");
+    nookies.destroy(null, "role");
+    nookies.destroy(null, "user");
+
+    router.replace("/auth/login");
+  }
 
   return (
     <div className="col-span-2 h-screen border-x flex flex-col justify-between max-h-screen p-7 overflow-y-hidden scrollbar-hide">
@@ -60,7 +87,10 @@ function Navbar() {
                 <img
                   onClick={() => setProfileOption(!profileOption)}
                   className="h-12 cursor-pointer relative w-12 object-cover rounded-full"
-                  src={userInfo?.photo}
+                  src={
+                    `http://203.6.149.156:8480/public/${userInfo.photo}` ||
+                    "https://links.papareact.com/gll"
+                  }
                   alt=""
                 />
                 <div className="h-full ml-4 flex flex-col justify-between">
@@ -93,7 +123,7 @@ function Navbar() {
           )}
           {userInfo ? (
             <div
-              onClick={() => dispatch(logout())}
+              onClick={handleLogout}
               className="w-full px-5 py-3 cursor-pointer rounded-lg duration-150 text-white bg-blue-500 hover:bg-blue-600 flex items-center"
             >
               <Logout size={24} variant={"Bold"} className="text-white" />
