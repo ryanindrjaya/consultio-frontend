@@ -73,13 +73,13 @@ export default function Home() {
             <div className="w-fit relative">
               <h2
                 style={{ zIndex: 10 }}
-                className="font-inter font-bold text-4xl"
+                className="font-inter font-bold relative z-10 text-4xl"
               >
                 Consultio
               </h2>
               <div
                 style={{ zIndex: 0 }}
-                className=" absolute bottom-1 w-full h-2 bg-primary opacity-60"
+                className="z-20 absolute bottom-1 w-full h-2 bg-primary opacity-60"
               ></div>
             </div>
             <p className="mb-5 font-inter text-xl font-normal">
@@ -125,8 +125,8 @@ export default function Home() {
             <h2 className="font-inter font-bold text-5xl">
               Mulailah langkah mu dengan
             </h2>
-            <div className="w-fit z-40 relative">
-              <h2 className="font-inter static font-bold text-5xl">
+            <div className="w-fit relative">
+              <h2 className="font-inter relative z-20 font-bold text-5xl">
                 Consultio
               </h2>
               <div className="absolute z-10 bottom-1 w-full h-2 bg-primary opacity-60"></div>
@@ -208,7 +208,7 @@ export default function Home() {
               <div className="flex justify-center gap-x-3">
                 <h2 className="font-inter font-bold text-5xl">tentang</h2>
                 <div className="w-fit relative">
-                  <h2 className="font-inter z-20 font-bold text-5xl">
+                  <h2 className="font-inter relative z-20 font-bold text-5xl">
                     Consultio
                   </h2>
                   <div className=" absolute z-0 bottom-1 w-full h-2 bg-primary opacity-60"></div>
