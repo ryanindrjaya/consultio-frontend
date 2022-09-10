@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import FormInput from "../../components/Inputs/FormInput";
 import PhotoModal from "../../components/Modal/uploadPhoto";
 import { IOSSwitch } from "../../components/Switch";
-import Home from "../../layouts/Home";
+import ProfileLayout from "../../layouts/Profile";
 import nookies from "nookies";
 import toast from "react-hot-toast";
 import axios from "axios";
@@ -150,7 +150,7 @@ export default function Profile({ userInfo }) {
       <Head>
         <title>{user.fullname || "Profile"}</title>
       </Head>
-      <div className="container-lg rounded-xl shadow-md border mb-10 overflow-y-scroll max-h-screen mx-auto w-4/5 mt-10 relative scrollbar-hide">
+      <div className="container-lg rounded-xl shadow-md border mb-10 overflow-scroll h-screen mx-auto w-4/5 mt-10 relative scrollbar-hide">
         <div className="w-full relative">
           <img
             src="/banner.png"
@@ -231,7 +231,7 @@ export default function Profile({ userInfo }) {
           </div>
         </div>
 
-        <div className="w-full justify-end px-5 py-3  flex items-center">
+        <div className="w-full justify-end px-5 py-3 flex items-center">
           {loading ? (
             <button
               type="submit"
@@ -279,4 +279,4 @@ export default function Profile({ userInfo }) {
   );
 }
 
-Profile.layout = Home;
+Profile.layout = ProfileLayout;
