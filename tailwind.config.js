@@ -16,7 +16,8 @@ module.exports = {
       },
       fontFamily: {
         inter: ["Inter", "sans-serif"],
-        sans: ['"Work Sans"', "sans-serif"]
+        sans: ['"Work Sans"', "sans-serif"],
+        poppins: ['"Poppins"', "sans-serif"]
       },
       colors: {
         primary: "#437EEB"
