@@ -85,12 +85,14 @@ export default function Home() {
             <p className="mb-5 font-inter text-xl font-normal">
               Bicarakan keluh kesahmu disini agar ketenangan menghampirimu!
             </p>
-            <button
-              className="px-6 py-2 font-medium rounded-lg border hover:bg-primary duration-100 hover:text-white"
-              style={{ borderColor: "#437EEB" }}
-            >
-              View More
-            </button>
+            <a href="#hero2">
+              <button
+                className="px-6 py-2 font-medium rounded-lg border hover:bg-primary duration-100 hover:text-white"
+                style={{ borderColor: "#437EEB" }}
+              >
+                View More
+              </button>
+            </a>
           </div>
 
           <img src="/hero.svg" className="h-3/5" alt="" />

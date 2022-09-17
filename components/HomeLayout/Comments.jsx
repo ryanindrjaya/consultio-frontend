@@ -120,7 +120,7 @@ function Comments({ commentCount, id, userInfo }) {
                 </p>
                 <p
                   style={{ backgroundColor: "#F7F7F7" }}
-                  className="font-inter font-normal rounded-md text-base p-2"
+                  className="font-inter font-normal rounded-tr-md rounded-br-md rounded-bl-md text-base p-2"
                 >
                   {comment.message}
                 </p>

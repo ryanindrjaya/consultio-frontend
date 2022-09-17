@@ -3,7 +3,15 @@ import React from "react";
 import { TextField } from "@mui/material";
 import { inputLabelClasses } from "@mui/material/InputLabel";
 
-function FormInput({ type, label, value, handleChange, defaultValue, icon }) {
+function FormInput({
+  type,
+  label,
+  value,
+  handleChange,
+  defaultValue,
+  icon,
+  isTextArea = false,
+}) {
   return (
     <div className="relative flex items-center">
       <TextField
@@ -38,6 +46,8 @@ function FormInput({ type, label, value, handleChange, defaultValue, icon }) {
             },
           },
         }}
+        multiline={isTextArea}
+        rows={isTextArea ? 4 : 1}
         fullWidth
         type={type}
         variant="outlined"

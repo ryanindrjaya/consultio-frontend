@@ -12,9 +12,12 @@ import {
   Lovely,
   Judge,
 } from "iconsax-react";
+import { useRouter } from "next/router";
 
 function Fitur() {
   const [showMoreMenu, setShowMoreMenu] = useState(false);
+
+  const router = useRouter();
 
   return (
     <div className="flex flex-col w-full items-center md:items-start">
@@ -31,25 +34,39 @@ function Fitur() {
           className="transition-all"
           onClick={() => setShowMoreMenu(!showMoreMenu)}
         >
-          <FiturRow
-            path="#"
-            title={"Konsultasi"}
-            Icon={<DocumentText variant="Bold" size={24} />}
-            optionalIcon={<ArrowDown2 variant="Bold" size={16} />}
-          />
+          <div
+            className={`flex w-full items-center ${
+              router.pathname.indexOf("/consultant") !== -1
+                ? "text-primary"
+                : "text-black text-opacity-30"
+            }  duration-75 hover:text-primary cursor-pointer group`}
+          >
+            <div className="w-1/6">
+              <DocumentText variant="Bold" size={24} />
+            </div>
+            <div className="w-5/6 flex items-center justify-between">
+              <p
+                className={`hidden md:inline-flex   group-hover:text-twitter lg:text-base"
+                }`}
+              >
+                Konsultasi
+              </p>
+              <ArrowDown2 variant="Bold" size={16} />
+            </div>
+          </div>
           <div
             className={`ml-10 mt-4 flex flex-col gap-y-4 ${
               showMoreMenu ? "inline" : "hidden"
             }`}
           >
             <FiturRow
-              path="#"
+              path="/consultant/mental-health"
               title={"Kesehatan Mental"}
               Icon={<Lovely variant="Bold" size={24} />}
               subMenu={true}
             />
             <FiturRow
-              path="#"
+              path="/consultant/lawyer"
               title={"Bantuan Hukum"}
               Icon={<Judge variant="Bold" size={24} />}
               subMenu={true}
@@ -62,7 +79,7 @@ function Fitur() {
           Icon={<Message variant="Bold" size={24} />}
         />
         <FiturRow
-          path="#"
+          path="/history"
           title={"History"}
           Icon={<EmptyWallet variant="Bold" size={24} />}
         />

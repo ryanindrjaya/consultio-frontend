@@ -1,10 +1,18 @@
 import Link from "next/link";
+import { useRouter } from "next/router";
 import React from "react";
 
 function FiturRow({ title, path, Icon, optionalIcon, subMenu = false }) {
+  const router = useRouter();
   return (
     <Link href={path}>
-      <div className="flex w-full items-center text-black duration-75 text-opacity-30 hover:text-primary cursor-pointer group">
+      <div
+        className={`flex w-full items-center ${
+          router.pathname.indexOf(path) !== -1
+            ? "text-primary"
+            : "text-black text-opacity-30"
+        } duration-75 hover:text-primary cursor-pointer group`}
+      >
         <div className="w-1/6">{Icon}</div>
         <div className="w-5/6 flex items-center justify-between">
           <p

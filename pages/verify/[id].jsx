@@ -12,15 +12,25 @@ export async function getServerSideProps(context) {
   const id = context.params.id;
   const cookies = nookies.get(context);
 
-  return {
-    props: {
-      id,
-      userInfo: JSON.parse(cookies.user),
-    },
-  };
+  if (cookies.token) {
+    return {
+      props: {
+        id,
+        user: cookies.user,
+      },
+    };
+  } else {
+    return {
+      redirect: {
+        destination: "/auth/login",
+        permanent: false,
+      },
+    };
+  }
 }
 
-export default function Verify({ id, userInfo }) {
+export default function Verify({ id, user }) {
+  const userInfo = JSON.parse(user);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -103,11 +113,7 @@ export default function Verify({ id, userInfo }) {
       router.replace("/home");
     }
 
-    if (!userInfo) {
-      router.replace("/home");
-    }
-
-    if (userInfo.profile.isVerified == 0) {
+    if (userInfo.isVerified == 0) {
       handleVerifyUser();
     }
   }, []);

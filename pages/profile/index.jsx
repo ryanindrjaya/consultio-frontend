@@ -150,7 +150,7 @@ export default function Profile({ userInfo }) {
       <Head>
         <title>{user.fullname || "Profile"}</title>
       </Head>
-      <div className="container-lg rounded-xl shadow-md border mb-10 overflow-scroll h-screen mx-auto w-4/5 mt-10 relative scrollbar-hide">
+      <div className="container-lg rounded-xl shadow-md border mb-10 h-auto mx-auto w-4/5 mt-10 relative scrollbar-hide">
         <div className="w-full relative">
           <img
             src="/banner.png"

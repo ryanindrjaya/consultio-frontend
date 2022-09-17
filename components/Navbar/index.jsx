@@ -46,9 +46,15 @@ function Navbar() {
   }
 
   function handleLogout() {
-    nookies.destroy(null, "token");
-    nookies.destroy(null, "role");
-    nookies.destroy(null, "user");
+    nookies.destroy(null, "token", {
+      path: "/",
+    });
+    nookies.destroy(null, "role", {
+      path: "/",
+    });
+    nookies.destroy(null, "user", {
+      path: "/",
+    });
 
     router.replace("/auth/login");
   }

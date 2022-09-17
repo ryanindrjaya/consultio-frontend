@@ -1,10 +1,8 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import ConsultantLayout from "../../../layouts/Consultant";
 import nookies from "nookies";
 import axios from "axios";
 import ConsultForm from "../../../components/Modal/ConsultForm";
-import { AppContext } from "../../../context/appContext";
-
 import { io } from "socket.io-client";
 import {
   ArrowCircleLeft,
@@ -55,21 +53,12 @@ export async function getServerSideProps(context) {
   }
 }
 
-export default function Lawyer({ consultants, userInfo }) {
+export default function MentalHealth({ consultants, userInfo }) {
   const [showModal, setShowModal] = useState(undefined);
   const [selectedTips, setSelectedTips] = useState(0);
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
-
-  const {
-    socket,
-    setCurrentRoom,
-    currentRoom,
-    setMessages,
-    messages,
-    priverMemberMsg,
-    setPrivateMemberMsg,
-  } = useContext(AppContext);
+  const socket = io(process.env.API_URL);
 
   const router = useRouter();
 
@@ -123,8 +112,7 @@ export default function Lawyer({ consultants, userInfo }) {
       const res = await axios.post(endpoint, data, options);
       if (res.status == 200) {
         toast.success("Berhasil mengajukan konsultasi");
-        setCurrentRoom(res.data.data.data.chatId);
-        setPrivateMemberMsg(res.data.data.data);
+
         setShowModal(undefined);
         router.replace("/chats");
         setMessage("");
@@ -159,7 +147,7 @@ export default function Lawyer({ consultants, userInfo }) {
                 fontWeight: "bold",
               }}
             >
-              Alur <br /> Konsultasi Bantuan Hukum
+              Alur <br /> Konsultasi Kesehatan Mental
             </h3>
           </div>
 
@@ -358,4 +346,4 @@ export default function Lawyer({ consultants, userInfo }) {
   );
 }
 
-Lawyer.layout = ConsultantLayout;
+MentalHealth.layout = ConsultantLayout;
