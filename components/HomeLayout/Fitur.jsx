@@ -24,14 +24,13 @@ function Fitur() {
       <h2 className="py-5 font-inter text-black text-opacity-30 font-medium text-sm">
         Menu
       </h2>
-      <div className={`w-full ${showMoreMenu ? "space-y-3" : "space-y-6"}`}>
+      <div className={`w-full space-y-6`}>
         <FiturRow
           title={"Timeline"}
           path="/home"
           Icon={<Element variant="Bold" size={24} />}
         />
         <div
-          className="transition-all"
           onClick={() => setShowMoreMenu(!showMoreMenu)}
         >
           <div
@@ -54,10 +53,9 @@ function Fitur() {
               <ArrowDown2 variant="Bold" size={16} />
             </div>
           </div>
+          {showMoreMenu ? (
           <div
-            className={`ml-10 mt-4 flex flex-col gap-y-4 ${
-              showMoreMenu ? "inline" : "hidden"
-            }`}
+            className={`ml-10 transition-all pt-5 flex flex-col gap-y-4`}
           >
             <FiturRow
               path="/consultant/mental-health"
@@ -72,6 +70,7 @@ function Fitur() {
               subMenu={true}
             />
           </div>
+          ) : (<div className="transition-all"></div>)}
         </div>
         <FiturRow
           path="/chats"

@@ -23,11 +23,12 @@ export default function EmailVerification({ userInfo }) {
   const handleSend = async (e) => {
     setLoading(true);
     e.preventDefault();
+    const cookies = nookies.get(null);
 
     try {
       const config = {
         headers: {
-          Authorization: userInfo.token,
+          Authorization: cookies.token,
         },
       };
 
@@ -37,9 +38,11 @@ export default function EmailVerification({ userInfo }) {
       console.log(res);
       if (res.status == 200) {
         setSuccess(true);
+        setLoading(false);
       }
     } catch (error) {
       // setError(error.response.message)
+      setLoading(false);
       console.log(error);
     }
   };
@@ -49,33 +52,25 @@ export default function EmailVerification({ userInfo }) {
       <Head>
         <title>Verifikasi Email - Consultio</title>
       </Head>
-      <div className="flex flex-col justify-center h-full p-6">
+      <div className="flex flex-col justify-center w-full items-center h-full p-6">
         {!loading ? (
           <>
             <div className="text-center mb-4">
               {success ? (
                 <h1 className="font-bold font-inter text-2xl">Kode terkirim</h1>
               ) : (
-                <h1 className="font-bold font-inter text-2xl">
-                  Konfirmasi Email Anda
-                </h1>
+                <h1 className="font-bold font-inter text-2xl">Konfirmasi Email Anda</h1>
               )}
               {success ? (
-                <p className="text-md font-normal text-black text-opacity-40 mb-4">
-                  silahkan periksa email untuk memeriksa kode
-                </p>
+                <p className="text-md font-normal text-black text-opacity-40 mb-4">silahkan periksa email untuk memeriksa kode</p>
               ) : (
                 <p className="text-md font-normal text-black text-opacity-40 mb-4">
-                  silahkan klik tombol dibawah untuk mengirim kode verifikasi ke{" "}
-                  <span className="underline">{userInfo.profile.email}</span>
+                  silahkan klik tombol dibawah untuk mengirim kode verifikasi ke <span className="underline">{userInfo.email}</span>
                 </p>
               )}
 
               {success ? (
-                <p
-                  onClick={handleSend}
-                  className="text-sm cursor-pointer font-medium text-primary underline"
-                >
+                <p onClick={handleSend} className="text-sm cursor-pointer font-medium text-primary underline">
                   Klik untuk mengirim ulang kode
                 </p>
               ) : (
@@ -90,20 +85,14 @@ export default function EmailVerification({ userInfo }) {
               )}
             </div>
             <form className="w-full">
-              <div className="w-full flex justify-between">
-                {error && (
-                  <p className="text-red-600 font-bold text-xs">{error}</p>
-                )}
-              </div>
-              {error && (
-                <div className="text-center  text-red-600 font-bold text-xs my-3"></div>
-              )}
+              <div className="w-full flex justify-between">{error && <p className="text-red-600 font-bold text-xs">{error}</p>}</div>
+              {error && <div className="text-center  text-red-600 font-bold text-xs my-3"></div>}
             </form>
           </>
         ) : (
           <svg
             aria-hidden="true"
-            className="w-16 h-16 text-gray-200 animate-spin dark:text-white fill-blue-600"
+            className="w-28 h-28 text-gray-200 animate-spin dark:text-white fill-blue-600"
             viewBox="0 0 100 101"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"

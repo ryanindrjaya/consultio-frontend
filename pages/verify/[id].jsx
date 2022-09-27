@@ -1,4 +1,4 @@
-import { useRouter } from "next/router";
+import Router, { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import Auth from "../../layouts/Auth";
 import nookies from "nookies";
@@ -11,12 +11,13 @@ import axios from "axios";
 export async function getServerSideProps(context) {
   const id = context.params.id;
   const cookies = nookies.get(context);
+  const user = JSON.parse(cookies.user.trim());
 
-  if (cookies.token) {
+  if (user.isVerified !== 1) {
     return {
       props: {
         id,
-        user: cookies.user,
+        user: user,
       },
     };
   } else {
@@ -30,28 +31,16 @@ export async function getServerSideProps(context) {
 }
 
 export default function Verify({ id, user }) {
-  const userInfo = JSON.parse(user);
+  const userInfo = user;
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
 
   const Indicator = () => {
     if (success) {
-      return (
-        <Lottie
-          className="w-36 h-36"
-          animationData={successLottie}
-          loop={false}
-        />
-      );
+      return <Lottie className="w-36 h-36" animationData={successLottie} loop={false} />;
     } else {
-      return (
-        <Lottie
-          className="w-36 h-36"
-          animationData={failedLottie}
-          loop={false}
-        />
-      );
+      return <Lottie className="w-36 h-36" animationData={failedLottie} loop={false} />;
     }
   };
 
@@ -61,15 +50,14 @@ export default function Verify({ id, user }) {
     setLoading(true);
 
     const token = id;
-    const jwt = nookies.get(null, "token");
+    const cookies = nookies.get(null);
     const userId = userInfo.userId;
 
     console.log("token", token);
-    console.log("jwt", jwt);
     try {
       const config = {
         headers: {
-          Authorization: jwt,
+          Authorization: cookies.token,
         },
       };
 
@@ -79,10 +67,7 @@ export default function Verify({ id, user }) {
 
       if (res) {
         try {
-          const getUser = await axios.get(
-            process.env.API_URL + "/users/" + userId,
-            config
-          );
+          const getUser = await axios.get(process.env.API_URL + "/users/" + userId, config);
 
           const newUser = getUser.data.data;
 
@@ -95,6 +80,8 @@ export default function Verify({ id, user }) {
               sameSite: "strict",
             });
             setLoading(false);
+
+            setTimeout(() => router.replace("/home"), 5000);
           }
         } catch (error) {
           console.log(error);
@@ -108,11 +95,6 @@ export default function Verify({ id, user }) {
   };
 
   useEffect(() => {
-    if (success) {
-      dispatch(reset());
-      router.replace("/home");
-    }
-
     if (userInfo.isVerified == 0) {
       handleVerifyUser();
     }
@@ -124,13 +106,9 @@ export default function Verify({ id, user }) {
         <>
           <Indicator />
           {success ? (
-            <p className="text-lg text-gray-700 text-center font-bold">
-              Email telah terkonfirmasi
-            </p>
+            <p className="text-lg text-gray-700 text-center font-bold">Email telah terkonfirmasi</p>
           ) : (
-            <p className="text-lg text-gray-700 text-center font-bold">
-              Email gagal terverifikasi
-            </p>
+            <p className="text-lg text-gray-700 text-center font-bold">Email gagal terverifikasi</p>
           )}
         </>
       ) : (
