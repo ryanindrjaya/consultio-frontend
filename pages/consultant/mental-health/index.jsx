@@ -204,7 +204,7 @@ export default function MentalHealth({ consultants, userInfo }) {
                     if (index === selectedTips) {
                       return <div key={index} className="w-6 h-1 bg-blue-500 mr-4" />;
                     }
-                    return <div className="w-6 h-1 mr-4" style={{ backgroundColor: "rgba(0,0,0,0.25)" }}></div>;
+                    return <div key={index} className="w-6 h-1 mr-4" style={{ backgroundColor: "rgba(0,0,0,0.25)" }}></div>;
                   })}
                 </div>
               </div>
@@ -274,7 +274,7 @@ export default function MentalHealth({ consultants, userInfo }) {
 
         <div className="w-full px-16 grid grid-cols-2 mb-10">
           {consultants.data?.map((consultant, idx) => (
-            <div className="flex mt-10 w-3/4">
+            <div key={idx} className="flex mt-10 w-3/4">
               <img src={`http://203.6.149.156:8480/public/${consultant.photo}`} className="w-60 h-36 object-cover object-center rounded-lg mr-8" />
 
               <div className="description overflow-hidden flex-1 h-full flex flex-col justify-between">
