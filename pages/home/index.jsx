@@ -20,7 +20,7 @@ export async function getServerSideProps(context) {
   if (cookies.token) {
     return {
       props: {
-        data: posts.data.data,
+        data: posts,
         userInfo: JSON.parse(user),
       },
     };
@@ -55,7 +55,9 @@ const fetchData = async (cookies) => {
 };
 
 export default function Index({ data, userInfo }) {
-  const [posts, setPosts] = useState(data ? data : []);
+  const [posts, setPosts] = useState(data.data.data ? data.data.data : []);
+
+  console.log(posts);
 
   const handleLike = async (postId) => {
     const endpoint = process.env.API_URL + "/like/" + postId;

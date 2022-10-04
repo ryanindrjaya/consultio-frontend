@@ -11,7 +11,7 @@ import axios from "axios";
 export async function getServerSideProps(context) {
   const id = context.params.id;
   const cookies = nookies.get(context);
-  const user = JSON.parse(cookies.user.trim());
+  const user = JSON.parse(cookies.user);
 
   if (user.isVerified !== 1) {
     return {
@@ -95,7 +95,7 @@ export default function Verify({ id, user }) {
   };
 
   useEffect(() => {
-    if (userInfo.isVerified == 0) {
+    if (userInfo.isVerified === false) {
       handleVerifyUser();
     }
   }, []);

@@ -32,14 +32,14 @@ export async function getServerSideProps(context) {
   };
 
   const res = await axios.get(endpoint, config);
-  const data = await res.data.data;
+  const data = await res.data?.data;
 
   console.log(data);
 
   if (cookies.token) {
     return {
       props: {
-        consultants: data,
+        consultants: data || [],
         userInfo: JSON.parse(user),
       },
     };
@@ -110,17 +110,19 @@ export default function MentalHealth({ consultants, userInfo }) {
 
     try {
       const res = await axios.post(endpoint, data, options);
-      if (res.status == 200) {
+      if (res) {
         toast.success("Berhasil mengajukan konsultasi");
+        console.log(res);
 
         setShowModal(undefined);
         router.replace("/chats");
+        socket.emit("");
         setMessage("");
       } else {
         toast.error("Gagal mengajukan konsultasi");
       }
     } catch (error) {
-      console.log(error);
+      console.log(error.response.data);
     }
     setLoading(false);
   };
@@ -200,16 +202,9 @@ export default function MentalHealth({ consultants, userInfo }) {
                 <div className="w-full mt-2 flex justify-center items-center">
                   {stepTips.map((item, index) => {
                     if (index === selectedTips) {
-                      return (
-                        <div key={index} className="w-6 h-1 bg-blue-500 mr-4" />
-                      );
+                      return <div key={index} className="w-6 h-1 bg-blue-500 mr-4" />;
                     }
-                    return (
-                      <div
-                        className="w-6 h-1 mr-4"
-                        style={{ backgroundColor: "rgba(0,0,0,0.25)" }}
-                      ></div>
-                    );
+                    return <div className="w-6 h-1 mr-4" style={{ backgroundColor: "rgba(0,0,0,0.25)" }}></div>;
                   })}
                 </div>
               </div>
@@ -278,12 +273,9 @@ export default function MentalHealth({ consultants, userInfo }) {
         </div>
 
         <div className="w-full px-16 grid grid-cols-2 mb-10">
-          {consultants.data.map((consultant, idx) => (
+          {consultants.data?.map((consultant, idx) => (
             <div className="flex mt-10 w-3/4">
-              <img
-                src={`http://203.6.149.156:8480/public/${consultant.photo}`}
-                className="w-60 h-36 object-cover object-center rounded-lg mr-8"
-              />
+              <img src={`http://203.6.149.156:8480/public/${consultant.photo}`} className="w-60 h-36 object-cover object-center rounded-lg mr-8" />
 
               <div className="description overflow-hidden flex-1 h-full flex flex-col justify-between">
                 <h3
@@ -297,23 +289,13 @@ export default function MentalHealth({ consultants, userInfo }) {
                 </h3>
 
                 <div className="flex">
-                  <Building
-                    size="22"
-                    className="mr-2"
-                    color="rgba(41, 45, 50,0.6)"
-                  />
+                  <Building size="22" className="mr-2" color="rgba(41, 45, 50,0.6)" />
                   {consultant.city || "-"}
                 </div>
 
                 <div className="flex items-center">
-                  <Star1
-                    size="22"
-                    className="mr-2 text-yellow-400"
-                    variant="Bold"
-                  />
-                  <p className="text-sm font-bold text-yellow-400">
-                    {/* {randomRoundedDecimal(4, 5)} */}
-                  </p>
+                  <Star1 size="22" className="mr-2 text-yellow-400" variant="Bold" />
+                  <p className="text-sm font-bold text-yellow-400">{/* {randomRoundedDecimal(4, 5)} */}</p>
                 </div>
                 <div className="w-full flex">
                   <div

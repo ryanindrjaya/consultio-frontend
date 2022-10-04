@@ -3,40 +3,34 @@ import React, { useContext, useState } from "react";
 import { AppContext } from "../../context/appContext";
 import nookies from "nookies";
 import { useEffect } from "react";
+import { useRef } from "react";
 
-function MessageForm() {
+function MessageForm({ user }) {
   const [message, setMessage] = useState("");
+  const [chatDetail, setChatDetail] = useState([]);
+  const messageEndRef = useRef(null);
 
-  const {
-    socket,
-    currentRoom,
-    setMessages,
-    messages,
-    privateMemberMsg,
-    setPrivateMemberMsg,
-  } = useContext(AppContext);
+  const { socket, currentRoom, setMessages, messages, privateMemberMsg, setPrivateMemberMsg } = useContext(AppContext);
 
   useEffect(() => {
     setPrivateMemberMsg(privateMemberMsg);
-    socket.emit("chat-history", { currentRoom });
-  }, [currentRoom]);
+    socket.emit("chat-detail", { userId: user.userId, chatId: currentRoom.chatId });
+  }, [chatDetail]);
 
-  socket.on("send-message-response", (data) => {
-    setMessages([...messages, data]);
+  socket.on("message-log", (data) => {
+    console.log("message log", data);
+    setChatDetail((prev) => [...prev, data]);
   });
 
-  socket.on("send-message-response", (msg) => {
-    setMessages(msg);
-    console.log(msg);
+  socket.on("message-detail", (data) => {
+    setChatDetail(data);
   });
-
-  console.log(messages);
 
   async function sendMessage(e) {
     e.preventDefault();
-    const chatId = currentRoom;
-    const userId = privateMemberMsg.consultantUserId;
-    const consultantId = privateMemberMsg.consultantId;
+    const chatId = currentRoom.chatId;
+    const userId = user.userId;
+    const consultantId = currentRoom.consultantId;
 
     socket.emit("send-message", {
       chatId,
@@ -44,8 +38,11 @@ function MessageForm() {
       receiver: consultantId,
       message,
     });
-
     setMessage("");
+  }
+
+  function scrollToBottom() {
+    messageEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }
 
   return (
@@ -61,35 +58,37 @@ function MessageForm() {
         >
           <div className="flex items-center">
             <img
-              src={`http://203.6.149.156:8480/public/${privateMemberMsg.consultantPhoto}`}
+              src={`http://203.6.149.156:8480/public/${currentRoom.consultantPhoto}`}
               className="rounded-full h-16 w-16 object-cover object-center mx-6 border"
             />
 
-            <h5 className="text-lg font-medium text-white font-inter">
-              {privateMemberMsg?.consultantName}
-            </h5>
+            <h5 className="text-lg font-medium text-white font-inter">{currentRoom?.consultantName}</h5>
           </div>
         </div>
       </div>
 
       <div className="w-full flex-1 relative chat-list overflow-y-scroll scrollbar-hide">
-        <div className="chat" style={{ minHeight: "64px" }}>
-          <div
-            className="absolute left-0 m-3 p-5"
-            style={{
-              backgroundColor: "rgba(0, 0, 0, 0.1)",
-              borderRadius: "0 15px 15px 15px",
-            }}
-          >
-            Test
-          </div>
-        </div>
+        {chatDetail.length > 0 && (
+          <>
+            {chatDetail.map((msg, idx) => (
+              <div key={idx} className="chat my-2" style={{ minHeight: "64px" }}>
+                <div
+                  className={`absolute ${user.userId === msg.sender ? "right-0 text-white" : "left-0 text-gray-800"} m-3 p-5`}
+                  style={{
+                    backgroundColor: user.userId !== msg.sender ? "rgba(0, 0, 0, 0.1)" : "#437EEB",
+                    borderRadius: user.userId !== msg.sender ? "0 15px 15px 15px" : "15px 0 15px 15px",
+                  }}
+                >
+                  {msg.message}
+                </div>
+              </div>
+            ))}
+            <div ref={messageEndRef}></div>
+          </>
+        )}
       </div>
 
-      <form
-        onSubmit={sendMessage}
-        className="w-full relative mb-5 mt-1 h-14 px-4"
-      >
+      <form onSubmit={sendMessage} className="w-full relative mb-5 mt-3 h-14 px-4">
         <input
           value={message}
           onChange={(e) => setMessage(e.target.value)}
@@ -99,10 +98,7 @@ function MessageForm() {
           }}
         />
 
-        <button
-          type="submit"
-          className="bg-primary cursor-pointer rounded-full absolute top-1 right-6 p-3"
-        >
+        <button type="submit" className="bg-primary cursor-pointer rounded-full absolute top-1 right-6 p-3">
           <Send2 size={24} variant="Bold" color="white" />
         </button>
       </form>

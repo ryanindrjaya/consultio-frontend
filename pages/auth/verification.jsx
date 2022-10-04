@@ -23,6 +23,7 @@ export default function EmailVerification({ userInfo }) {
   const handleSend = async (e) => {
     setLoading(true);
     e.preventDefault();
+
     const cookies = nookies.get(null);
 
     try {

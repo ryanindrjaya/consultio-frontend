@@ -13,6 +13,7 @@ import FormInput from "../../components/Inputs/FormInput";
 import { DirectboxDefault, Eye, EyeSlash, User } from "iconsax-react";
 import axios from "axios";
 import Head from "next/head";
+import nookies from "nookies";
 
 export default function Register() {
   // controlled form hooks
@@ -52,6 +53,13 @@ export default function Register() {
 
       if (user) {
         nookies.set(null, "user", JSON.stringify(registeredUser.profile), {
+          maxAge: 30 * 24 * 60 * 60,
+          path: "/",
+          secure: process.env.NODE_ENV !== "development",
+          sameSite: "strict",
+        });
+
+        nookies.set(null, "token", registeredUser.token, {
           maxAge: 30 * 24 * 60 * 60,
           path: "/",
           secure: process.env.NODE_ENV !== "development",
