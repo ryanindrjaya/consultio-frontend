@@ -20,7 +20,8 @@ Router.events.on("routeChangeError", () => {
 
 function MyApp({ Component, pageProps }) {
   const [rooms, setRooms] = useState([]);
-  const [currentRoom, setCurrentRoom] = useState([]);
+  const [currentRoom, setCurrentRoom] = useState({});
+  const [joinedRoom, setJoinedRoom] = useState(false);
   const [members, setMembers] = useState([]);
   const [messages, setMessages] = useState([]);
   const [privateMemberMsg, setPrivateMemberMsg] = useState({});
@@ -33,6 +34,8 @@ function MyApp({ Component, pageProps }) {
       value={{
         socket,
         members,
+        joinedRoom,
+        setJoinedRoom,
         setMembers,
         messages,
         setMessages,
