@@ -56,28 +56,19 @@ export default function Modal({ showModal, closeModal, userPhoto, onUpload }) {
                     className="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
                     onClick={closeModal}
                   >
-                    <span className="bg-transparent text-black opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none">
-                      ×
-                    </span>
+                    <span className="bg-transparent text-black opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none">×</span>
                   </button>
                 </div>
                 {/*body*/}
-                <div className="relative p-6 flex-auto">
-                  <div className="flex justify-center items-center mb-7">
+                <div className="relative flex justify-center items-center w-full p-6 ">
+                  <div className=" mb-7">
                     <img
                       className="w-40 h-40 object-cover rounded-full"
-                      src={
-                        !isUploaded
-                          ? `http://203.6.149.156:8480/public/${userPhoto}`
-                          : previewImages
-                      }
+                      src={!isUploaded ? `http://203.6.149.156:8480/public/${userPhoto}` : previewImages}
                       alt=""
                     />
                   </div>
-                  <DropFile
-                    onDisable={isUploaded}
-                    handleFile={handleFileChange}
-                  />
+                  <DropFile onDisable={isUploaded} handleFile={handleFileChange} />
                 </div>
                 {/*footer*/}
                 <div className="flex items-center justify-end p-6 border-t border-solid border-slate-200 rounded-b">

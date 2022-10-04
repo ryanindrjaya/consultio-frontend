@@ -20,7 +20,7 @@ export async function getServerSideProps(context) {
   if (cookies.token) {
     return {
       props: {
-        data: posts.data.data,
+        data: posts,
         userInfo: JSON.parse(user),
       },
     };
@@ -55,7 +55,9 @@ const fetchData = async (cookies) => {
 };
 
 export default function Index({ data, userInfo }) {
-  const [posts, setPosts] = useState(data);
+  const [posts, setPosts] = useState(data.data.data ? data.data.data : []);
+
+  console.log(posts);
 
   const handleLike = async (postId) => {
     const endpoint = process.env.API_URL + "/like/" + postId;
@@ -136,13 +138,7 @@ export default function Index({ data, userInfo }) {
       </Head>
       <div className="flex justify-center overflow-y-scroll max-h-screen w-full scrollbar-hide pb-16">
         {/* feeds */}
-        <Feeds
-          data={posts}
-          userInfo={userInfo}
-          onLike={handleLike}
-          onUnlike={handleUnlike}
-          handleSubmit={handlePost}
-        />
+        <Feeds data={posts} userInfo={userInfo} onLike={handleLike} onUnlike={handleUnlike} handleSubmit={handlePost} />
 
         <Toaster />
       </div>

@@ -5,7 +5,8 @@ function DropFile({ handleFile, onDisable }) {
     <div class="max-w-xl">
       <label
         htmlFor="fileUpload"
-        class="flex justify-center w-full h-32 px-4 transition bg-white border-2 border-gray-300 border-dashed rounded-md appearance-none cursor-pointer hover:border-gray-400 focus:outline-none"
+        class="flex justify-center items-center
+         w-full h-32 px-4 transition bg-white border-2 border-gray-300 border-dashed rounded-md appearance-none cursor-pointer hover:border-gray-400 focus:outline-none"
       >
         <span class="flex items-center space-x-2">
           <svg
@@ -27,15 +28,7 @@ function DropFile({ handleFile, onDisable }) {
             <span class="text-blue-600 underline ml-1">telusuri file</span>
           </span>
         </span>
-        <input
-          disabled={onDisable}
-          id="fileUpload"
-          multiple
-          type="file"
-          onChange={handleFile}
-          name="file_upload"
-          class="hidden"
-        />
+        <input disabled={onDisable} id="fileUpload" multiple type="file" onChange={handleFile} name="file_upload" class="hidden" />
       </label>
     </div>
   );

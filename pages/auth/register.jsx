@@ -13,6 +13,7 @@ import FormInput from "../../components/Inputs/FormInput";
 import { DirectboxDefault, Eye, EyeSlash, User } from "iconsax-react";
 import axios from "axios";
 import Head from "next/head";
+import nookies from "nookies";
 
 export default function Register() {
   // controlled form hooks
@@ -46,23 +47,26 @@ export default function Register() {
 
       const endpoint = process.env.API_URL + "/register/user";
 
-      const user = await axios.post(
-        endpoint,
-        { fullname, email, password },
-        config
-      );
+      const user = await axios.post(endpoint, { fullname, email, password }, config);
 
       const registeredUser = user.data.data;
 
       if (user) {
-        setSuccess(true);
         nookies.set(null, "user", JSON.stringify(registeredUser.profile), {
           maxAge: 30 * 24 * 60 * 60,
           path: "/",
           secure: process.env.NODE_ENV !== "development",
           sameSite: "strict",
         });
+
+        nookies.set(null, "token", registeredUser.token, {
+          maxAge: 30 * 24 * 60 * 60,
+          path: "/",
+          secure: process.env.NODE_ENV !== "development",
+          sameSite: "strict",
+        });
         console.log(user);
+        setSuccess(true);
       }
     } catch (error) {
       if (error.response && error.response.data.message) {
@@ -105,22 +109,12 @@ export default function Register() {
       </Head>
       <div className="flex flex-col justify-center h-full px-6">
         <div className="mb-7 text-center">
-          <h1 className="font-bold font-inter text-2xl">
-            Selamat datang di Consultio
-          </h1>
-          <p className="text-md font-normal text-black text-opacity-40">
-            selesaikan keluh kesahmu dengan mudah disini
-          </p>
+          <h1 className="font-bold font-inter text-2xl">Selamat datang di Consultio</h1>
+          <p className="text-md font-normal text-black text-opacity-40">selesaikan keluh kesahmu dengan mudah disini</p>
         </div>
         <form className="w-full" onSubmit={handleSubmit}>
           <div className="flex-1">
-            <FormInput
-              type="text"
-              label="Full Name"
-              handleChange={handleNameInput}
-              value={fullname}
-              icon={<User className="text-gray-400 w-4" />}
-            />
+            <FormInput type="text" label="Full Name" handleChange={handleNameInput} value={fullname} icon={<User className="text-gray-400 w-4" />} />
           </div>
           <div className="mt-4">
             <FormInput
@@ -138,15 +132,8 @@ export default function Register() {
               handleChange={handlePasswordInput}
               value={password}
               icon={
-                <button
-                  type="button"
-                  onClick={() => setPassVisibility(!passVisibility)}
-                >
-                  {passVisibility ? (
-                    <Eye className="text-gray-400 w-4" />
-                  ) : (
-                    <EyeSlash className="text-gray-400 w-4" />
-                  )}
+                <button type="button" onClick={() => setPassVisibility(!passVisibility)}>
+                  {passVisibility ? <Eye className="text-gray-400 w-4" /> : <EyeSlash className="text-gray-400 w-4" />}
                 </button>
               }
             />
@@ -158,26 +145,13 @@ export default function Register() {
               handleChange={handleConfirmPasswordInput}
               value={confirmPassword}
               icon={
-                <button
-                  type="button"
-                  onClick={() =>
-                    setPassConfirmVisibility(!passConfirmVisibility)
-                  }
-                >
-                  {passConfirmVisibility ? (
-                    <Eye className="text-gray-400 w-4" />
-                  ) : (
-                    <EyeSlash className="text-gray-400 w-4" />
-                  )}
+                <button type="button" onClick={() => setPassConfirmVisibility(!passConfirmVisibility)}>
+                  {passConfirmVisibility ? <Eye className="text-gray-400 w-4" /> : <EyeSlash className="text-gray-400 w-4" />}
                 </button>
               }
             />
           </div>
-          {error && (
-            <div className="text-center  text-red-600 font-bold text-xs my-3">
-              {error}
-            </div>
-          )}
+          {error && <div className="text-center  text-red-600 font-bold text-xs my-3">{error}</div>}
           <div className="flex w-full flex-col justify-center items-center ">
             {loading ? (
               <button
@@ -203,11 +177,7 @@ export default function Register() {
                 <span>Loading...</span>
               </button>
             ) : (
-              <button
-                type="submit"
-                className="bg-primary w-3/4 text-white font-normal py-3 mt-3 text-sm rounded-lg text-center"
-                disabled={loading}
-              >
+              <button type="submit" className="bg-primary w-3/4 text-white font-normal py-3 mt-3 text-sm rounded-lg text-center" disabled={loading}>
                 Daftar
               </button>
             )}

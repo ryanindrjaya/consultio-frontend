@@ -61,15 +61,7 @@ export default function Lawyer({ consultants, userInfo }) {
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const {
-    socket,
-    setCurrentRoom,
-    currentRoom,
-    setMessages,
-    messages,
-    priverMemberMsg,
-    setPrivateMemberMsg,
-  } = useContext(AppContext);
+  const { socket, setCurrentRoom, currentRoom, setMessages, messages, priverMemberMsg, setPrivateMemberMsg } = useContext(AppContext);
 
   const router = useRouter();
 
@@ -212,16 +204,9 @@ export default function Lawyer({ consultants, userInfo }) {
                 <div className="w-full mt-2 flex justify-center items-center">
                   {stepTips.map((item, index) => {
                     if (index === selectedTips) {
-                      return (
-                        <div key={index} className="w-6 h-1 bg-blue-500 mr-4" />
-                      );
+                      return <div key={index} className="w-6 h-1 bg-blue-500 mr-4" />;
                     }
-                    return (
-                      <div
-                        className="w-6 h-1 mr-4"
-                        style={{ backgroundColor: "rgba(0,0,0,0.25)" }}
-                      ></div>
-                    );
+                    return <div key={index} className="w-6 h-1 mr-4" style={{ backgroundColor: "rgba(0,0,0,0.25)" }}></div>;
                   })}
                 </div>
               </div>
@@ -291,11 +276,8 @@ export default function Lawyer({ consultants, userInfo }) {
 
         <div className="w-full px-16 grid grid-cols-2 mb-10">
           {consultants.data.map((consultant, idx) => (
-            <div className="flex mt-10 w-3/4">
-              <img
-                src={`http://203.6.149.156:8480/public/${consultant.photo}`}
-                className="w-60 h-36 object-cover object-center rounded-lg mr-8"
-              />
+            <div key={idx} className="flex mt-10 w-3/4">
+              <img src={`http://203.6.149.156:8480/public/${consultant.photo}`} className="w-60 h-36 object-cover object-center rounded-lg mr-8" />
 
               <div className="description overflow-hidden flex-1 h-full flex flex-col justify-between">
                 <h3
@@ -309,23 +291,13 @@ export default function Lawyer({ consultants, userInfo }) {
                 </h3>
 
                 <div className="flex">
-                  <Building
-                    size="22"
-                    className="mr-2"
-                    color="rgba(41, 45, 50,0.6)"
-                  />
+                  <Building size="22" className="mr-2" color="rgba(41, 45, 50,0.6)" />
                   {consultant.city || "-"}
                 </div>
 
                 <div className="flex items-center">
-                  <Star1
-                    size="22"
-                    className="mr-2 text-yellow-400"
-                    variant="Bold"
-                  />
-                  <p className="text-sm font-bold text-yellow-400">
-                    {/* {randomRoundedDecimal(4, 5)} */}
-                  </p>
+                  <Star1 size="22" className="mr-2 text-yellow-400" variant="Bold" />
+                  <p className="text-sm font-bold text-yellow-400">{/* {randomRoundedDecimal(4, 5)} */}</p>
                 </div>
                 <div className="w-full flex">
                   <div
