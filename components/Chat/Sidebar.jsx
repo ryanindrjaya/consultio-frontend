@@ -134,16 +134,16 @@ function Sidebar({ user, dataRoom, role }) {
                     src={`http://203.6.149.156:8480/public/${msg.sender === user.userId ? msg.receiverPhoto : msg.senderPhoto}`}
                     className="rounded-full object-cover object-center border w-16 h-16 mr-5"
                   />
-                  <div className="flex w-full justify-between">
-                    <div className="flex flex-col justify-between">
+                  <div className="flex w-3/4  flex-col justify-between">
+                    <div className="flex w-full justify-between">
                       <h5 style={{ fontSize: "16px", fontWeight: "bold" }}>{msg.sender === user.userId ? msg.receiverName : msg.senderName}</h5>
-                      <p style={{ fontSize: "14px" }}>{msg.message}</p>
+                      <p style={{ fontWeight: "medium", fontSize: "14px" }}>{moment(msg.createdAt).format("LT")}</p>
                     </div>
 
-                    <div className="flex flex-col w-10 justify-between items-center mr-10">
-                      <p style={{ fontWeight: "medium", fontSize: "14px" }}>{moment(msg.createdAt).format("LT")}</p>
-
-                      {/* <div
+                    <p className="w-full truncate" style={{ fontSize: "14px" }}>
+                      {msg.message}
+                    </p>
+                    {/* <div
                             className="w-6 h-6 rounded-full text-center flex justify-center items-center"
                             style={{
                               backgroundColor: "red",
@@ -153,7 +153,6 @@ function Sidebar({ user, dataRoom, role }) {
                           >
                             5
                           </div> */}
-                    </div>
                   </div>
                 </div>
               </>

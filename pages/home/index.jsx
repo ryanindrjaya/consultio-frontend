@@ -136,7 +136,7 @@ export default function Index({ data, userInfo }) {
       <Head>
         <title>Home - Consultio</title>
       </Head>
-      <div className="flex justify-center overflow-y-scroll max-h-screen w-full scrollbar-hide pb-16">
+      <div className="flex lg:justify-center overflow-y-scroll max-h-screen w-full scrollbar-hide pb-16">
         {/* feeds */}
         <Feeds data={posts} userInfo={userInfo} onLike={handleLike} onUnlike={handleUnlike} handleSubmit={handlePost} />
 

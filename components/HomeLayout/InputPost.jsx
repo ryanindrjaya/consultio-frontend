@@ -59,17 +59,10 @@ function InputPost({ userInfo, handlePost }) {
   };
 
   return (
-    <form
-      encType="mutipart/form-data"
-      onSubmit={onSubmitPost}
-      className="mt-5 mb-7 border-t rounded-lg shadow-lg px-7 py-3"
-    >
+    <form encType="mutipart/form-data" onSubmit={onSubmitPost} className="mt-5 mb-7 border-t rounded-lg shadow-lg px-3 lg:px-7 py-3">
       <div className="flex gap-x-5 pb-5 border-b">
         <img
-          src={
-            `http://203.6.149.156:8480/public/${userInfo.photo}` ||
-            "https://links.papareact.com/gll"
-          }
+          src={`http://203.6.149.156:8480/public/${userInfo.photo}` || "https://links.papareact.com/gll"}
           className="h-12 w-12 object-cover rounded-lg"
           alt=""
         />
@@ -80,19 +73,13 @@ function InputPost({ userInfo, handlePost }) {
             onChange={(e) => setStory(e.target.value)}
             value={story}
             className="outline-none bg-transparent flex-1 font-inter font-normal text-base"
-            placeholder={
-              userInfo ? `Apa yang mau kamu ceritakan, ${firstName[0]}?` : ""
-            }
+            placeholder={userInfo ? `Apa yang mau kamu ceritakan, ${firstName[0]}?` : ""}
           />
         </div>
       </div>
       {imagePreview && (
         <div className="relative">
-          <img
-            src={imagePreview}
-            className="max-h-96 w-full mb-5 object-cover rounded-xl"
-            alt=""
-          />
+          <img src={imagePreview} className="max-h-96 w-full mb-5 object-cover rounded-xl" alt="" />
           <button
             onClick={removePhoto}
             className="p-2 flex shadow-xl justify-center items-center w-8 h-8 absolute top-3 right-3 bg-red-600 text-xs rounded-lg text-white"
@@ -102,10 +89,7 @@ function InputPost({ userInfo, handlePost }) {
         </div>
       )}
       <div className="flex py-4">
-        <label
-          htmlFor="photo"
-          className="flex-1 cursor-pointer hover:text-primary duration-100 flex gap-x-4 justify-center items-center"
-        >
+        <label htmlFor="photo" className="flex-1 cursor-pointer hover:text-primary duration-100 flex gap-x-4 justify-center items-center">
           <input onChange={validateImg} type="file" id="photo" hidden />
 
           <Gallery variant="Bold" size={22} color="#437EEB" />
@@ -116,17 +100,12 @@ function InputPost({ userInfo, handlePost }) {
           <span onClick={() => setIsAnonym(!isAnonym)}>
             <IOSSwitch />
           </span>
-          <p className="font-inter text-sm font-normal">
-            Sembunyikan identitas
-          </p>
+          <p className="font-inter text-sm font-normal">Sembunyikan identitas</p>
         </div>
       </div>
       <div className="w-full flex justify-end">
         {loading ? (
-          <button
-            type="submit"
-            className="font-medium flex justify-center bg-primary text-white duration-200 px-7 py-2 text-sm rounded-lg border"
-          >
+          <button type="submit" className="font-medium flex justify-center bg-primary text-white duration-200 px-7 py-2 text-sm rounded-lg border">
             <svg
               aria-hidden="true"
               className="mr-2 w-5 h-5 text-gray-200 animate-spin dark:text-white fill-blue-600"

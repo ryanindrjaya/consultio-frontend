@@ -26,7 +26,7 @@ export async function getServerSideProps(context) {
   const cookies = nookies.get(context);
   const user = cookies.user;
 
-  const endpoint = process.env.API_URL + "/consultant";
+  const endpoint = process.env.API_URL + "/consultant?roleid=4";
   const config = {
     headers: {
       Authorization: cookies.token,
@@ -41,7 +41,7 @@ export async function getServerSideProps(context) {
   if (cookies.token) {
     return {
       props: {
-        consultants: data,
+        consultants: data || [],
         userInfo: JSON.parse(user),
       },
     };

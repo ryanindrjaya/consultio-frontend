@@ -4,7 +4,7 @@ import Posts from "./Posts";
 
 function Feeds({ data, onLike, onUnlike, userInfo, handleSubmit }) {
   return (
-    <div className="w-3/5 px-5 overflow-scroll scrollbar-hide">
+    <div className="w-full lg:w-3/5 px-2 lgg:px-5 overflow-scroll scrollbar-hide">
       {/* Input post */}
       <InputPost userInfo={userInfo} handlePost={handleSubmit} />
       {/* Posts */}
