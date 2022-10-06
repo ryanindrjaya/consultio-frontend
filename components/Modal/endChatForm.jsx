@@ -23,7 +23,7 @@ export default function Modal({
             {/*header*/}
             <div className="flex relative items-start justify-center p-5  rounded-t">
               <h3 className="text-2xl font-medium text-center font-poppins">
-                Ketikkan keluh kesahmu disini
+                Masukan solusi yang bisa anda berikan
               </h3>
               <button
                 className="absolute top-3 right-3 p-1 ml-auto bg-transparent border-0 text-black opacity-20 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
@@ -40,7 +40,7 @@ export default function Modal({
             {/*body*/}
             <div className="relative p-6 flex-auto">
               <TextField
-                label="Tempat Bercerita"
+                label="Solusi Permasalahan"
                 className="w-full"
                 placeholder="Ada apa dengan kamu?"
                 onChange={onChange}
