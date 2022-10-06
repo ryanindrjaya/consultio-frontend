@@ -10,7 +10,6 @@ export default function Modal({ showModal, closeModal, userPhoto, onUpload }) {
   const [previewImages, setPreviewImages] = useState([]);
 
   const handleUploadFiles = (files) => {
-    console.log(files);
     const uploaded = [...uploadedFiles];
     const preview = [...previewImages];
     files.some((file) => {
@@ -43,7 +42,7 @@ export default function Modal({ showModal, closeModal, userPhoto, onUpload }) {
           <div className="justify-center h-screen items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
             <div
               style={{
-                width: "40vw",
+                width: "40vw"
               }}
               className="relative my-6 mx-auto max-w-3xl"
             >
@@ -56,7 +55,9 @@ export default function Modal({ showModal, closeModal, userPhoto, onUpload }) {
                     className="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
                     onClick={closeModal}
                   >
-                    <span className="bg-transparent text-black opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none">×</span>
+                    <span className="bg-transparent text-black opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none">
+                      ×
+                    </span>
                   </button>
                 </div>
                 {/*body*/}
@@ -64,11 +65,18 @@ export default function Modal({ showModal, closeModal, userPhoto, onUpload }) {
                   <div className="mb-7">
                     <img
                       className="w-40 h-40 object-cover rounded-full"
-                      src={!isUploaded ? `http://203.6.149.156:8480/public/${userPhoto}` : previewImages}
+                      src={
+                        !isUploaded
+                          ? `http://203.6.149.156:8480/public/${userPhoto}`
+                          : previewImages
+                      }
                       alt=""
                     />
                   </div>
-                  <DropFile onDisable={isUploaded} handleFile={handleFileChange} />
+                  <DropFile
+                    onDisable={isUploaded}
+                    handleFile={handleFileChange}
+                  />
                 </div>
                 {/*footer*/}
                 <div className="flex items-center justify-end p-6 border-t border-solid border-slate-200 rounded-b">

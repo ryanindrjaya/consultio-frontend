@@ -21,43 +21,40 @@ export async function getServerSideProps(context) {
     return {
       props: {
         data: posts,
-        userInfo: JSON.parse(user),
-      },
+        userInfo: JSON.parse(user)
+      }
     };
   } else {
     return {
       redirect: {
         destination: "/auth/login",
-        permanent: false,
-      },
+        permanent: false
+      }
     };
   }
 }
 
 const fetchData = async (cookies) => {
-  console.log(cookies);
   try {
     const endpoint = process.env.API_URL + "/posts";
 
     const config = {
       method: "GET",
       headers: {
-        Authorization: cookies.token,
-      },
+        Authorization: cookies.token
+      }
     };
 
     const req = await fetch(endpoint, config);
 
     return req;
   } catch (error) {
-    console.log(error);
+    toast("Terjadi kesalahan saat mengambil data");
   }
 };
 
 export default function Index({ data, userInfo }) {
   const [posts, setPosts] = useState(data.data.data ? data.data.data : []);
-
-  console.log(posts);
 
   const handleLike = async (postId) => {
     const endpoint = process.env.API_URL + "/like/" + postId;
@@ -67,11 +64,10 @@ export default function Index({ data, userInfo }) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: cookies.token,
-      },
+        Authorization: cookies.token
+      }
     };
     const res = await fetch(endpoint, config);
-    console.log(res);
 
     if (res) {
       const req = await fetchData(cookies);
@@ -88,11 +84,10 @@ export default function Index({ data, userInfo }) {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
-        Authorization: cookies.token,
-      },
+        Authorization: cookies.token
+      }
     };
     const res = await fetch(endpoint, config);
-    console.log(res);
 
     if (res) {
       const req = await fetchData(cookies);
@@ -103,19 +98,17 @@ export default function Index({ data, userInfo }) {
 
   const handlePost = async (data) => {
     const cookies = nookies.get(null, "token");
-    console.log(data);
 
     try {
       const config = {
         headers: {
-          Authorization: cookies.token,
-        },
+          Authorization: cookies.token
+        }
       };
 
       const endpoint = process.env.API_URL + "/posts";
 
       const res = await axios.post(endpoint, data, config);
-      console.log(res);
 
       if (res.status == 201) {
         toast.success("Cerita anda berhasil di upload");
@@ -127,7 +120,7 @@ export default function Index({ data, userInfo }) {
         toast.error("Gagal mengupload cerita");
       }
     } catch (error) {
-      console.log(error);
+      toast("Terjadi kesalahan saat mengambil data");
     }
   };
 
@@ -138,7 +131,13 @@ export default function Index({ data, userInfo }) {
       </Head>
       <div className="flex lg:justify-center overflow-y-scroll max-h-screen w-full scrollbar-hide pb-16">
         {/* feeds */}
-        <Feeds data={posts} userInfo={userInfo} onLike={handleLike} onUnlike={handleUnlike} handleSubmit={handlePost} />
+        <Feeds
+          data={posts}
+          userInfo={userInfo}
+          onLike={handleLike}
+          onUnlike={handleUnlike}
+          handleSubmit={handlePost}
+        />
 
         <Toaster />
       </div>

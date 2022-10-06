@@ -9,6 +9,7 @@ import { TextField } from "@mui/material";
 import styled from "@emotion/styled";
 import StarRatings from "react-star-ratings";
 import toast from "react-hot-toast";
+import axios from "axios";
 
 export async function getServerSideProps(ctx) {
   const cookies = nookies.get(ctx);
@@ -18,8 +19,8 @@ export async function getServerSideProps(ctx) {
   const config = {
     method: "GET",
     headers: {
-      Authorization: cookies.token,
-    },
+      Authorization: cookies.token
+    }
   };
 
   const res = await fetch(endpoint, config);
@@ -27,8 +28,8 @@ export async function getServerSideProps(ctx) {
 
   return {
     props: {
-      data: data.data,
-    },
+      data: data.data
+    }
   };
 }
 
@@ -36,29 +37,26 @@ export default function History({ data }) {
   const [bookingState, setBookingState] = useState(data);
   const [loading, setLoading] = useState(false);
   const cookies = nookies.get(null);
-
-  console.log(data);
-
-  const status = "Waiting for review";
+  const { role } = cookies;
 
   const CustomTextField = styled(TextField)({
     "& .MuiInputBase-root.Mui-disabled": {
-      backgroundColor: "white",
+      backgroundColor: "white"
     },
     "& .MuiOutlinedInput-root.Mui-disabled": {
       "& fieldset": {
-        borderColor: "#437EEB",
+        borderColor: "#437EEB"
       },
       "&:hover fieldset": {
-        borderColor: "#437EEB",
+        borderColor: "#437EEB"
       },
       "&.Mui-focused fieldset": {
-        borderColor: "#437EEB",
-      },
+        borderColor: "#437EEB"
+      }
     },
     "& .MuiFormLabel-root.Mui-disabled": {
-      color: "#437EEB",
-    },
+      color: "#437EEB"
+    }
   });
 
   const ConsultComponent = () => {
@@ -70,7 +68,9 @@ export default function History({ data }) {
             src={`http://203.6.149.156:8480/public/${bookingState?.consultantPhoto}`}
             alt="consultant photo"
           />
-          <h1 className="font-poppins font-medium text-2xl">{bookingState.consultantName}</h1>
+          <h1 className="font-poppins font-medium text-2xl">
+            {bookingState.consultantName}
+          </h1>
           <div className="flex align-baseline gap-x-3">
             <Building4 size="32" color="rgba(41, 45, 50,0.6)" />
             <p className="inline" style={{ color: "rgba(41, 45, 50,0.6)" }}>
@@ -88,7 +88,11 @@ export default function History({ data }) {
             disabled
             multiline
           />
-          <TextBlock size={24} color="#437EEB" className="absolute top-9 right-9" />
+          <TextBlock
+            size={24}
+            color="#437EEB"
+            className="absolute top-9 right-9"
+          />
         </div>
       </div>
     );
@@ -107,16 +111,17 @@ export default function History({ data }) {
       console.log("review", review);
       console.log("rating", rating);
 
-      const endpoint = process.env.API_URL + "/booking/" + bookingState.bookingId + "/rating";
+      const endpoint =
+        process.env.API_URL + "/booking/" + bookingState.bookingId + "/rating";
       const config = {
         method: "PUT",
         headers: {
-          Authorization: cookies.token,
+          Authorization: cookies.token
         },
         body: JSON.stringify({
           rating: rating,
-          review: review,
-        }),
+          review: review
+        })
       };
 
       const res = await fetch(endpoint, config);
@@ -125,12 +130,13 @@ export default function History({ data }) {
       console.log(data);
 
       if (data.status === "success") {
-        const endpoint = process.env.API_URL + "/booking/" + bookingState.bookingId;
+        const endpoint =
+          process.env.API_URL + "/booking/" + bookingState.bookingId;
         const config = {
           method: "GET",
           headers: {
-            Authorization: cookies.token,
-          },
+            Authorization: cookies.token
+          }
         };
 
         const res = await fetch(endpoint, config);
@@ -144,7 +150,7 @@ export default function History({ data }) {
         }
       } else {
         toast.error(data.message, {
-          position: "top-right",
+          position: "top-right"
         });
       }
     }
@@ -161,7 +167,9 @@ export default function History({ data }) {
           </div>
           <div className="w-full lg:w-3/4">
             <div className="w-full flex flex-col items-center lg:items-start">
-              <h1 className="font-poppins font-medium text-2xl">{bookingState.consultantName}</h1>
+              <h1 className="font-poppins font-medium text-2xl">
+                {bookingState.consultantName}
+              </h1>
               <div className="flex mt-2 align-baseline gap-x-3">
                 <Building4 size="32" color="rgba(41, 45, 50,0.6)" />
                 <p className="inline" style={{ color: "rgba(41, 45, 50,0.6)" }}>
@@ -183,37 +191,55 @@ export default function History({ data }) {
             </div>
           </div>
         </div>
-
-        <div className="w-full flex flex-col items-center mt-12 mb-6">
-          <h1 className="mb-8 font-medium font-poppins text-xl">Bagaimana konsultasi mu?</h1>
-          <StarRatings
-            starDimension="50px"
-            rating={bookingState.rating !== null ? bookingState.rating : rating}
-            starRatedColor="#437EEB"
-            starHoverColor="rgba(67, 126, 235, 0.5)"
-            changeRating={bookingState.rating !== null ? () => {} : setRating}
-            numberOfStars={5}
-            svgIconPath={starIcon}
-            name="rating"
-          />
-
-          <div className="w-full lg:w-4/5 mt-5">
-            <TextField
-              label="Review"
-              onChange={(e) => setReview(e.target.value)}
-              className="w-full outline-none"
-              placeholder="Ketika ulasan kamu disini..."
-              value={bookingState.review !== null ? bookingState.review : review}
-              multiline
-              rows={10}
+        {role === "USER" && (
+          <div className="w-full flex flex-col items-center mt-12 mb-6">
+            <h1 className="mb-8 font-medium font-poppins text-xl">
+              Bagaimana konsultasi mu?
+            </h1>
+            <StarRatings
+              starDimension="50px"
+              rating={
+                bookingState.rating !== null ? bookingState.rating : rating
+              }
+              starRatedColor="#437EEB"
+              starHoverColor="rgba(67, 126, 235, 0.5)"
+              changeRating={bookingState.rating !== null ? () => {} : setRating}
+              numberOfStars={5}
+              svgIconPath={starIcon}
+              name="rating"
             />
-            <div className="flex justify-end mt-5">
-              <button onClick={handleSendReview} className="px-20 py-2 text-white bg-primary rounded-lg">
-                Kirim
-              </button>
+
+            <div className="w-full lg:w-4/5 mt-5">
+              <TextField
+                label="Review"
+                onChange={(e) => setReview(e.target.value)}
+                className="w-full outline-none"
+                placeholder="Ketika ulasan kamu disini..."
+                value={
+                  bookingState.review !== null ? bookingState.review : review
+                }
+                multiline
+                rows={10}
+              />
+              <div className="flex justify-end mt-5">
+                <button
+                  onClick={handleSendReview}
+                  className="px-20 py-2 text-white bg-primary rounded-lg"
+                >
+                  Kirim
+                </button>
+              </div>
             </div>
           </div>
-        </div>
+        )}
+
+        {role !== "USER" && bookingState.rating == null && (
+          <div className="w-full flex flex-col items-center mt-12 mb-6">
+            <h1 className="mb-8 font-medium font-poppins text-xl">
+              Menunggu ulasan {bookingState.customerName}
+            </h1>
+          </div>
+        )}
       </div>
     );
   };

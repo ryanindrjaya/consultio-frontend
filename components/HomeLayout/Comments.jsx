@@ -11,8 +11,6 @@ function Comments({ commentCount, id, userInfo }) {
   const [comments, setComments] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  console.log("loading", loading);
-
   useEffect(() => {
     getComment(id);
   }, [handleSubmit]);
@@ -25,18 +23,16 @@ function Comments({ commentCount, id, userInfo }) {
     const config = {
       headers: {
         "Content-Type": "application/json",
-        Authorization: cookies.token,
-      },
+        Authorization: cookies.token
+      }
     };
     try {
       const res = await axios.get(endpoint, config);
-      console.log(res.data.data.data);
       if (res.status === 200) {
         setLoading(false);
         setComments(res.data.data.data);
       }
     } catch (error) {
-      console.log(error);
       setLoading(false);
     }
     setLoading(false);
@@ -51,8 +47,8 @@ function Comments({ commentCount, id, userInfo }) {
     const config = {
       headers: {
         "Content-Type": "application/json",
-        Authorization: cookies.token,
-      },
+        Authorization: cookies.token
+      }
     };
 
     const res = await axios.post(endpoint, { message: inputComment }, config);
@@ -64,8 +60,6 @@ function Comments({ commentCount, id, userInfo }) {
 
       commentCount += 1;
       setInputComment("");
-    } else {
-      console.log(res);
     }
   };
 

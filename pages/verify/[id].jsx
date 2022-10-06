@@ -16,9 +16,21 @@ export default function Verify() {
 
   const Indicator = () => {
     if (success) {
-      return <Lottie className="w-36 h-36" animationData={successLottie} loop={false} />;
+      return (
+        <Lottie
+          className="w-36 h-36"
+          animationData={successLottie}
+          loop={false}
+        />
+      );
     } else {
-      return <Lottie className="w-36 h-36" animationData={failedLottie} loop={false} />;
+      return (
+        <Lottie
+          className="w-36 h-36"
+          animationData={failedLottie}
+          loop={false}
+        />
+      );
     }
   };
 
@@ -31,12 +43,11 @@ export default function Verify() {
     const cookies = nookies.get(null);
     const userId = userInfo.userId;
 
-    console.log("token", token);
     try {
       const config = {
         headers: {
-          Authorization: cookies.token,
-        },
+          Authorization: cookies.token
+        }
       };
 
       const endpoint = process.env.API_URL + "/users/verifyEmail";
@@ -45,7 +56,10 @@ export default function Verify() {
 
       if (res) {
         try {
-          const getUser = await axios.get(process.env.API_URL + "/users/" + userId, config);
+          const getUser = await axios.get(
+            process.env.API_URL + "/users/" + userId,
+            config
+          );
 
           const newUser = getUser.data.data;
 
@@ -73,26 +87,24 @@ export default function Verify() {
               maxAge: 30 * 24 * 60 * 60,
               path: "/",
               secure: process.env.NODE_ENV !== "development",
-              sameSite: "strict",
+              sameSite: "strict"
             });
 
             nookies.set(null, "role", JSON.stringify(newUser.role), {
               maxAge: 30 * 24 * 60 * 60,
               path: "/",
               secure: process.env.NODE_ENV !== "development",
-              sameSite: "strict",
+              sameSite: "strict"
             });
             setLoading(false);
 
             setTimeout(() => router.replace("/home"), 5000);
           }
         } catch (error) {
-          console.log(error);
           setLoading(false);
         }
       }
     } catch (error) {
-      console.log(error);
       setLoading(false);
     }
   };
@@ -116,9 +128,13 @@ export default function Verify() {
         <>
           <Indicator />
           {success ? (
-            <p className="text-lg text-gray-700 text-center font-bold">Email telah terkonfirmasi</p>
+            <p className="text-lg text-gray-700 text-center font-bold">
+              Email telah terkonfirmasi
+            </p>
           ) : (
-            <p className="text-lg text-gray-700 text-center font-bold">Email gagal terverifikasi</p>
+            <p className="text-lg text-gray-700 text-center font-bold">
+              Email gagal terverifikasi
+            </p>
           )}
         </>
       ) : (

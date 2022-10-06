@@ -42,8 +42,8 @@ export default function Login() {
       const endpoint = process.env.API_URL + "/login";
       const config = {
         headers: {
-          "Content-Type": "application/json",
-        },
+          "Content-Type": "application/json"
+        }
       };
 
       const req = await axios.post(endpoint, { email, password }, config);
@@ -77,7 +77,7 @@ export default function Login() {
           maxAge: 30 * 24 * 60 * 60,
           path: "/",
           secure: process.env.NODE_ENV !== "development",
-          sameSite: "strict",
+          sameSite: "strict"
         });
 
         // set role token
@@ -85,7 +85,7 @@ export default function Login() {
           maxAge: 30 * 24 * 60 * 60,
           path: "/",
           secure: process.env.NODE_ENV !== "development",
-          sameSite: "strict",
+          sameSite: "strict"
         });
 
         // save authenticated user to cookies
@@ -93,13 +93,12 @@ export default function Login() {
           maxAge: 30 * 24 * 60 * 60,
           path: "/",
           secure: process.env.NODE_ENV !== "development",
-          sameSite: "strict",
+          sameSite: "strict"
         });
         setSuccess(true);
       }
     } catch (error) {
       setLoading(false);
-      console.log(error);
       setError(error.response.data.message);
     }
   };
@@ -119,12 +118,22 @@ export default function Login() {
       </Head>
       <div className="flex flex-col justify-center h-full p-6">
         <div className="text-center mb-7">
-          <h1 className="font-bold font-inter text-2xl">Selamat datang di Consultio</h1>
-          <p className="text-md font-normal text-black text-opacity-40">selesaikan keluh kesahmu dengan mudah disini</p>
+          <h1 className="font-bold font-inter text-2xl">
+            Selamat datang di Consultio
+          </h1>
+          <p className="text-md font-normal text-black text-opacity-40">
+            selesaikan keluh kesahmu dengan mudah disini
+          </p>
         </div>
         <form className="w-full" onSubmit={handleSubmit}>
           <div>
-            <FormInput type="email" label="Email" handleChange={handleEmailInput} value={email} icon={<User className="text-gray-400 w-4" />} />
+            <FormInput
+              type="email"
+              label="Email"
+              handleChange={handleEmailInput}
+              value={email}
+              icon={<User className="text-gray-400 w-4" />}
+            />
           </div>
           <div className="my-4">
             <FormInput
@@ -133,13 +142,24 @@ export default function Login() {
               handleChange={handlePasswordInput}
               value={password}
               icon={
-                <button type="button" onClick={() => setPassVisibility(!passVisibility)}>
-                  {passVisibility ? <Eye className="text-gray-400 w-4" /> : <EyeSlash className="text-gray-400 w-4" />}
+                <button
+                  type="button"
+                  onClick={() => setPassVisibility(!passVisibility)}
+                >
+                  {passVisibility ? (
+                    <Eye className="text-gray-400 w-4" />
+                  ) : (
+                    <EyeSlash className="text-gray-400 w-4" />
+                  )}
                 </button>
               }
             />
           </div>
-          {error && <div className="text-center  text-red-600 font-bold text-xs my-3">{error}</div>}
+          {error && (
+            <div className="text-center  text-red-600 font-bold text-xs my-3">
+              {error}
+            </div>
+          )}
           <div className="flex w-full flex-col justify-center items-center ">
             {loading ? (
               <button
@@ -165,7 +185,10 @@ export default function Login() {
                 <span>Loading...</span>
               </button>
             ) : (
-              <button type="submit" className="bg-primary w-3/4 text-white font-normal mt-2 py-3 text-sm rounded-lg text-center">
+              <button
+                type="submit"
+                className="bg-primary w-3/4 text-white font-normal mt-2 py-3 text-sm rounded-lg text-center"
+              >
                 Masuk
               </button>
             )}

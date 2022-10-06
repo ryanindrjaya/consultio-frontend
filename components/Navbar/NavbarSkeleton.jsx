@@ -7,6 +7,7 @@ import Fitur from "../HomeLayout/Fitur";
 
 import { Logout, Login } from "iconsax-react";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
+import toast from "react-hot-toast";
 
 function NavbarSkeleton() {
   const [profileOption, setProfileOption] = useState(false);
@@ -27,8 +28,8 @@ function NavbarSkeleton() {
     const config = {
       headers: {
         "Content-Type": "application/json",
-        Authorization: cookies.token,
-      },
+        Authorization: cookies.token
+      }
     };
 
     try {
@@ -37,23 +38,21 @@ function NavbarSkeleton() {
 
       if (req.status === 200) {
         setUserInfo(res.data.profile);
-      } else {
-        console.log(res);
       }
     } catch (error) {
-      console.log(error);
+      toast("Terjadi kesalahan saat mengambil data");
     }
   }
 
   function handleLogout() {
     nookies.destroy(null, "token", {
-      path: "/",
+      path: "/"
     });
     nookies.destroy(null, "role", {
-      path: "/",
+      path: "/"
     });
     nookies.destroy(null, "user", {
-      path: "/",
+      path: "/"
     });
 
     router.replace("/auth/login");
@@ -64,7 +63,11 @@ function NavbarSkeleton() {
       <div className="max-w-full">
         <div className="flex justify-center">
           <Link href={"/"}>
-            <img src="/consultio.svg" className="text-center cursor-pointer" alt="logo consultio" />
+            <img
+              src="/consultio.svg"
+              className="text-center cursor-pointer"
+              alt="logo consultio"
+            />
           </Link>
         </div>
 
@@ -73,15 +76,26 @@ function NavbarSkeleton() {
 
       {/* User profile */}
       <div>
-        {userInfo && <p className="text-sm text-center lg:text-left font-medium mb-5 text-black text-opacity-30">Profile</p>}
-        <div className={`h-32 flex flex-col ${userInfo ? "justify-around lg:justify-between" : "justify-end"}`}>
+        {userInfo && (
+          <p className="text-sm text-center lg:text-left font-medium mb-5 text-black text-opacity-30">
+            Profile
+          </p>
+        )}
+        <div
+          className={`h-32 flex flex-col ${
+            userInfo ? "justify-around lg:justify-between" : "justify-end"
+          }`}
+        >
           {userInfo && (
             <div className="flex justify-center lg:justify-between items-center h-12">
               <div className="flex justify-between">
                 <img
                   onClick={() => setShowUserOption(!showUserOption)}
                   className="h-12 cursor-pointer relative w-12 object-cover rounded-full"
-                  src={`http://203.6.149.156:8480/public/${userInfo.photo}` || "https://links.papareact.com/gll"}
+                  src={
+                    `http://203.6.149.156:8480/public/${userInfo.photo}` ||
+                    "https://links.papareact.com/gll"
+                  }
                   alt=""
                 />
                 <div className="h-full hidden ml-4 lg:flex flex-col justify-between">
@@ -89,7 +103,10 @@ function NavbarSkeleton() {
                   <p className="font-normal text-sm">{userInfo?.role}</p>
                 </div>
               </div>
-              <div onClick={() => setShowUserOption(!showUserOption)} className="relative">
+              <div
+                onClick={() => setShowUserOption(!showUserOption)}
+                className="relative"
+              >
                 <MoreHorizIcon className="sm:hidden lg:block cursor-pointer" />
                 {showUserOption && (
                   <Link href={"/profile"}>
@@ -115,7 +132,9 @@ function NavbarSkeleton() {
               className="lg:w-full py-2 mx-2 lg:max-0 lg:px-5 lg:py-3 cursor-pointer rounded-lg duration-150 text-white bg-blue-500 hover:bg-blue-600 flex justify-center items-center"
             >
               <Logout size={24} variant={"Bold"} className="text-white" />
-              <p className="font-normal hidden lg:block text-base font-inter ml-4">Logout</p>
+              <p className="font-normal hidden lg:block text-base font-inter ml-4">
+                Logout
+              </p>
             </div>
           ) : (
             <Link href={"/auth/login"}>

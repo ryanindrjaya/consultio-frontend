@@ -16,15 +16,15 @@ export async function getServerSideProps(context) {
   if (cookies.user) {
     return {
       props: {
-        userInfo: JSON.parse(cookies.user),
-      },
+        userInfo: JSON.parse(cookies.user)
+      }
     };
   } else {
     return {
       redirect: {
         destination: "/auth/login",
-        permanent: false,
-      },
+        permanent: false
+      }
     };
   }
 }
@@ -53,8 +53,8 @@ export default function Profile({ userInfo }) {
       const config = {
         method: "GET",
         headers: {
-          Authorization: cookies.token,
-        },
+          Authorization: cookies.token
+        }
       };
       const res = await axios.get(endpoint, config);
 
@@ -66,7 +66,7 @@ export default function Profile({ userInfo }) {
       console.log(res);
       return res.data.data;
     } catch (error) {
-      console.log(error);
+      toast("Terjadi kesalahan saat mengambil data");
     }
   };
 
@@ -86,8 +86,8 @@ export default function Profile({ userInfo }) {
 
       const config = {
         headers: {
-          Authorization: cookies.token,
-        },
+          Authorization: cookies.token
+        }
       };
 
       let data;
@@ -124,7 +124,7 @@ export default function Profile({ userInfo }) {
             maxAge: 30 * 24 * 60 * 60,
             path: "/",
             secure: process.env.NODE_ENV !== "development",
-            sameSite: "strict",
+            sameSite: "strict"
           });
 
           setLoading(false);
@@ -136,7 +136,6 @@ export default function Profile({ userInfo }) {
         setLoading(false);
       }
     } catch (error) {
-      console.log(error);
       setLoading(false);
       toast.error("Gagal mengupdate profile");
     }
@@ -156,8 +155,8 @@ export default function Profile({ userInfo }) {
 
     const config = {
       headers: {
-        Authorization: cookies.token,
-      },
+        Authorization: cookies.token
+      }
     };
 
     const formData = new FormData();
@@ -189,15 +188,13 @@ export default function Profile({ userInfo }) {
           maxAge: 30 * 24 * 60 * 60,
           path: "/",
           secure: process.env.NODE_ENV !== "development",
-          sameSite: "strict",
+          sameSite: "strict"
         });
         toast.success("Update foto berhasil");
       } else {
         toast.error("Gagal mengupdate foto");
-        console.log(req);
       }
     } catch (error) {
-      console.log(error);
       toast.error("Gagal mengupdate foto");
     }
 

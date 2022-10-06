@@ -82,11 +82,11 @@ export default function CustomizedSteppers({status}) {
 
   function classifyStatus(status: String) {
     switch (status) {
-      case 'Active':
+      case "Active":
         return 0;
-      case 'Waiting for review':
+      case "Waiting for review":
         return 1;
-      case 'Completed':
+      case "Completed"                                                      :
         return 2;
       default:
         return 0;

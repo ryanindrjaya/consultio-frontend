@@ -4,14 +4,15 @@ import Auth from "../../layouts/Auth";
 import nookies from "nookies";
 import axios from "axios";
 import Head from "next/head";
+import toast from "react-hot-toast";
 
 export async function getServerSideProps(context) {
   const cookies = nookies.get(context);
 
   return {
     props: {
-      userInfo: JSON.parse(cookies.user),
-    },
+      userInfo: JSON.parse(cookies.user)
+    }
   };
 }
 
@@ -29,14 +30,13 @@ export default function EmailVerification({ userInfo }) {
     try {
       const config = {
         headers: {
-          Authorization: cookies.token,
-        },
+          Authorization: cookies.token
+        }
       };
 
       const endpoint = process.env.API_URL + "/users/sendVerifyEmail";
 
       const res = await axios.get(endpoint, config);
-      console.log(res);
       if (res.status == 200) {
         setSuccess(true);
         setLoading(false);
@@ -44,7 +44,7 @@ export default function EmailVerification({ userInfo }) {
     } catch (error) {
       // setError(error.response.message)
       setLoading(false);
-      console.log(error);
+      toast("Gagal mengirim email verifikasi");
     }
   };
 
@@ -60,18 +60,26 @@ export default function EmailVerification({ userInfo }) {
               {success ? (
                 <h1 className="font-bold font-inter text-2xl">Kode terkirim</h1>
               ) : (
-                <h1 className="font-bold font-inter text-2xl">Konfirmasi Email Anda</h1>
+                <h1 className="font-bold font-inter text-2xl">
+                  Konfirmasi Email Anda
+                </h1>
               )}
               {success ? (
-                <p className="text-md font-normal text-black text-opacity-40 mb-4">silahkan periksa email untuk memeriksa kode</p>
+                <p className="text-md font-normal text-black text-opacity-40 mb-4">
+                  silahkan periksa email untuk memeriksa kode
+                </p>
               ) : (
                 <p className="text-md font-normal text-black text-opacity-40 mb-4">
-                  silahkan klik tombol dibawah untuk mengirim kode verifikasi ke <span className="underline">{userInfo.email}</span>
+                  silahkan klik tombol dibawah untuk mengirim kode verifikasi ke{" "}
+                  <span className="underline">{userInfo.email}</span>
                 </p>
               )}
 
               {success ? (
-                <p onClick={handleSend} className="text-sm cursor-pointer font-medium text-primary underline">
+                <p
+                  onClick={handleSend}
+                  className="text-sm cursor-pointer font-medium text-primary underline"
+                >
                   Klik untuk mengirim ulang kode
                 </p>
               ) : (
@@ -86,8 +94,14 @@ export default function EmailVerification({ userInfo }) {
               )}
             </div>
             <form className="w-full">
-              <div className="w-full flex justify-between">{error && <p className="text-red-600 font-bold text-xs">{error}</p>}</div>
-              {error && <div className="text-center  text-red-600 font-bold text-xs my-3"></div>}
+              <div className="w-full flex justify-between">
+                {error && (
+                  <p className="text-red-600 font-bold text-xs">{error}</p>
+                )}
+              </div>
+              {error && (
+                <div className="text-center  text-red-600 font-bold text-xs my-3"></div>
+              )}
             </form>
           </>
         ) : (

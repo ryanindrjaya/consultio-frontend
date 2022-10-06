@@ -20,7 +20,6 @@ function MessageForm({ user, showModal }) {
     messages,
     setCurrentRoom
   } = useContext(AppContext);
-  console.log("currentRoom", currentRoom);
 
   useEffect(() => {
     socket.emit("chat-detail", {
@@ -43,7 +42,6 @@ function MessageForm({ user, showModal }) {
   }, [messages]);
 
   socket.off("message-log").on("message-log", (data) => {
-    console.log("message log", data);
     setMessages((prev) => [...prev, data]);
     messageEndRef.current.scrollIntoView();
   });
@@ -54,6 +52,7 @@ function MessageForm({ user, showModal }) {
 
   async function sendMessage(e) {
     e.preventDefault();
+
     const chatId = currentRoom.chatId;
     const userId = user.userId;
     const receiver =
@@ -168,6 +167,7 @@ function MessageForm({ user, showModal }) {
         <button
           type="submit"
           disabled={!message || currentRoom == {}}
+          onClick={sendMessage}
           className="bg-primary cursor-pointer rounded-full absolute top-1 right-6 p-3"
         >
           <Send2 size={24} variant="Bold" color="white" />
