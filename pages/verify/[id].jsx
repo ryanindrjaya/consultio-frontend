@@ -7,31 +7,9 @@ import Lottie from "lottie-react";
 import successLottie from "../../public/lottie/success.json";
 import failedLottie from "../../public/lottie/failed.json";
 import axios from "axios";
+import toast from "react-hot-toast";
 
-export async function getServerSideProps(context) {
-  const id = context.params.id;
-  const cookies = nookies.get(context);
-  const user = JSON.parse(cookies.user);
-
-  if (user.isVerified !== 1) {
-    return {
-      props: {
-        id,
-        user: user,
-      },
-    };
-  } else {
-    return {
-      redirect: {
-        destination: "/auth/login",
-        permanent: false,
-      },
-    };
-  }
-}
-
-export default function Verify({ id, user }) {
-  const userInfo = user;
+export default function Verify() {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -46,7 +24,7 @@ export default function Verify({ id, user }) {
 
   const router = useRouter();
 
-  const handleVerifyUser = async () => {
+  const handleVerifyUser = async (userInfo, id) => {
     setLoading(true);
 
     const token = id;
@@ -79,6 +57,13 @@ export default function Verify({ id, user }) {
               secure: process.env.NODE_ENV !== "development",
               sameSite: "strict",
             });
+
+            nookies.set(null, "role", JSON.stringify(newUser.role), {
+              maxAge: 30 * 24 * 60 * 60,
+              path: "/",
+              secure: process.env.NODE_ENV !== "development",
+              sameSite: "strict",
+            });
             setLoading(false);
 
             setTimeout(() => router.replace("/home"), 5000);
@@ -95,8 +80,15 @@ export default function Verify({ id, user }) {
   };
 
   useEffect(() => {
-    if (userInfo.isVerified === false) {
-      handleVerifyUser();
+    const cookies = nookies.get(null);
+    const user = JSON.parse(cookies.user);
+    const id = router.query.id;
+
+    if (user && user.isVerified === false) {
+      handleVerifyUser(user, id);
+    } else {
+      toast.error("Akun anda sudah terverifikasi");
+      setSuccess(false);
     }
   }, []);
 

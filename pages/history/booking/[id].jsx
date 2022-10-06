@@ -35,6 +35,7 @@ export async function getServerSideProps(ctx) {
 export default function History({ data }) {
   const [bookingState, setBookingState] = useState(data);
   const [loading, setLoading] = useState(false);
+  const cookies = nookies.get(null);
 
   console.log(data);
 
@@ -107,13 +108,11 @@ export default function History({ data }) {
       console.log("kirimm");
       e.preventDefault();
 
-      const cookies = nookies.get(null);
-      const endpoint = process.env.API_URL + "/booking/" + bookingState.bookingId;
+      const endpoint = process.env.API_URL + "/booking/" + bookingState.bookingId + "/rating";
       const config = {
         method: "PUT",
         headers: {
           Authorization: cookies.token,
-          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           review: review,
@@ -124,6 +123,8 @@ export default function History({ data }) {
       const res = await fetch(endpoint, config);
       const data = await res.json();
 
+      console.log(data);
+
       if (data.status === "success") {
         const endpoint = process.env.API_URL + "/booking/" + bookingState.bookingId;
         const config = {
@@ -132,6 +133,20 @@ export default function History({ data }) {
             Authorization: cookies.token,
           },
         };
+
+        const res = await fetch(endpoint, config);
+        const newData = await res.json();
+
+        if (newData.status === "success") {
+          setBookingState(newData.data);
+          toast.success("Review berhasil dikirim");
+        } else {
+          toast.error(newData.message);
+        }
+      } else {
+        toast.error(data.message, {
+          position: "top-right",
+        });
       }
     }
 
@@ -203,8 +218,6 @@ export default function History({ data }) {
   };
 
   const CompletedComponent = () => {
-    const starIcon =
-      "M19.45 4.97273L21.9433 9.9594C22.2833 10.6536 23.19 11.3194 23.955 11.4469L28.4741 12.1977C31.3641 12.6794 32.0441 14.7761 29.9616 16.8444L26.4483 20.3577C25.8533 20.9527 25.5275 22.1002 25.7116 22.9219L26.7175 27.2711C27.5108 30.7136 25.6833 32.0452 22.6375 30.2461L18.4016 27.7386C17.6366 27.2852 16.3758 27.2852 15.5966 27.7386L11.3608 30.2461C8.32914 32.0452 6.48747 30.6994 7.28081 27.2711L8.28664 22.9219C8.47081 22.1002 8.14497 20.9527 7.54997 20.3577L4.03664 16.8444C1.96831 14.7761 2.63414 12.6794 5.52414 12.1977L10.0433 11.4469C10.7941 11.3194 11.7008 10.6536 12.0408 9.9594L14.5341 4.97273C15.8941 2.2669 18.1041 2.2669 19.45 4.97273Z";
     return <h1>Hi ini halaman selesai</h1>;
   };
 
@@ -221,10 +234,16 @@ export default function History({ data }) {
 
   return (
     <div className="w-full px-8 py-6">
-      <BookingStepper status={status} />
+      <BookingStepper status={bookingState.status} />
 
       <div className="w-full mt-12">
-        {status === "Active" ? <ConsultComponent /> : status === "Waiting for review" ? <SolutionComponent /> : <CompletedComponent />}
+        {bookingState.status === "Active" ? (
+          <ConsultComponent />
+        ) : bookingState.status === "Waiting for review" ? (
+          <SolutionComponent />
+        ) : (
+          <CompletedComponent />
+        )}
       </div>
     </div>
   );

@@ -21,6 +21,7 @@ function sortDate(array) {
 function Sidebar({ user, dataRoom, role }) {
   moment.locale("id");
   const cookies = nookies.get(null);
+
   const {
     socket,
     setMembers,
@@ -58,8 +59,12 @@ function Sidebar({ user, dataRoom, role }) {
   }, []);
 
   useEffect(() => {
-    const consultantId = dataRoom[0].consultantId;
-    socket.emit("chat-history", { userId: user.userId, consultantId: consultantId, status: true });
+    const consultantId = dataRoom[0]?.consultantId;
+    if (role !== "USER") {
+      socket.emit("chat-history", { userId: user.userId, consultantId: consultantId, status: true });
+    } else {
+      socket.emit("chat-history", { userId: user.userId, status: true });
+    }
   }, [messages]);
 
   // useEffect(() => {
@@ -91,7 +96,7 @@ function Sidebar({ user, dataRoom, role }) {
 
   const joinRoom = (room) => {
     setSelectedChatId(room.chatId);
-    setCurrentRoom(room);
+    setCurrentRoom({ room });
     setJoinedRoom(true);
     nookies.set(null, "currentRoom", JSON.stringify(room), {
       path: "/",

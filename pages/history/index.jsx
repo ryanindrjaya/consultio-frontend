@@ -92,7 +92,7 @@ export default function History({ data }) {
                 <div className="flex flex-col justify-center font-poppins">
                   <h1 className="font-medium text-base">{booking.consultantName}</h1>
                   <p className="text-xs text-black/40">{moment(booking.updatedAt).format("LL")}</p>
-                  {booking.status === "Active" ? (
+                  {booking.isActive === 1 ? (
                     <h3 className="text-xs xl:text-md text-blue-700/70 mt-6">Sedang berjalan</h3>
                   ) : (
                     <h3 className="text-xs xl:text-md text-green-700/70 mt-6">Selesai</h3>

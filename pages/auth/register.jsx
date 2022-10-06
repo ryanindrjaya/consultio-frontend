@@ -31,11 +31,18 @@ export default function Register() {
   const router = useRouter();
 
   const handleSubmit = async (e) => {
-    setLoading(true);
     e.preventDefault();
+    setLoading(true);
 
     if (password !== confirmPassword) {
-      setError("Password tidak sama!");
+      setLoading(false);
+      return setError("Password tidak sama!");
+    }
+
+    let stringArray = fullname.split(" ");
+    if (stringArray.length < 2) {
+      setLoading(false);
+      return setError("Harap masukkan nama depan dan nama belakang");
     }
 
     try {

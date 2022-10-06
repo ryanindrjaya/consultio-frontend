@@ -90,7 +90,7 @@ function Navbar() {
                 </div>
               </div>
               <div onClick={() => setShowUserOption(!showUserOption)} className="relative">
-                <MoreHorizIcon className="hidden lg:block cursor-pointer" />
+                <MoreHorizIcon className="sm:hidden lg:block cursor-pointer" />
                 {showUserOption && (
                   <Link href={"/profile"}>
                     <div

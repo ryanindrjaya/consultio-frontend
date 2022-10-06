@@ -26,7 +26,7 @@ export async function getServerSideProps(context) {
   const cookies = nookies.get(context);
   const user = cookies.user;
 
-  const endpoint = process.env.API_URL + "/consultant?roleid=4";
+  const endpoint = process.env.API_URL + "/consultant?roleid=3";
   const config = {
     headers: {
       Authorization: cookies.token,
@@ -60,6 +60,8 @@ export default function Lawyer({ consultants, userInfo }) {
   const [selectedTips, setSelectedTips] = useState(0);
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
+
+  console.log("consultants", consultants);
 
   const { socket, setCurrentRoom, currentRoom, setMessages, messages, priverMemberMsg, setPrivateMemberMsg } = useContext(AppContext);
 
