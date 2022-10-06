@@ -96,7 +96,7 @@ function Sidebar({ user, dataRoom, role }) {
 
   const joinRoom = (room) => {
     setSelectedChatId(room.chatId);
-    setCurrentRoom({ room });
+    setCurrentRoom(room);
     setJoinedRoom(true);
     nookies.set(null, "currentRoom", JSON.stringify(room), {
       path: "/",
