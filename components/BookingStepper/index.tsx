@@ -78,7 +78,7 @@ function ColorlibStepIcon(props: StepIconProps) {
 
 const steps = ['Konsultan dan Masalahmu', 'Kesimpulan dan Review', 'Selesai'];
 
-export default function CustomizedSteppers({status}) {
+export default function CustomizedSteppers({status}: {status: String}) {
 
   function classifyStatus(status: String) {
     switch (status) {
