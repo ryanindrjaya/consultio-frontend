@@ -60,8 +60,8 @@ export default function Modal({ showModal, closeModal, userPhoto, onUpload }) {
                   </button>
                 </div>
                 {/*body*/}
-                <div className="relative flex justify-center items-center w-full p-6 ">
-                  <div className=" mb-7">
+                <div className="relative flex flex-col justify-center items-center w-full p-6 ">
+                  <div className="mb-7">
                     <img
                       className="w-40 h-40 object-cover rounded-full"
                       src={!isUploaded ? `http://203.6.149.156:8480/public/${userPhoto}` : previewImages}

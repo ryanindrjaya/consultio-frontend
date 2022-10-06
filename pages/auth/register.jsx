@@ -58,8 +58,26 @@ export default function Register() {
 
       const registeredUser = user.data.data;
 
+      let userData;
+      if (registeredUser.role === "USER") {
+        userData = {
+          userId: registeredUser.profile.userId,
+          fullname: registeredUser.profile.fullname,
+          email: registeredUser.profile.email,
+          role: registeredUser.profile.role,
+          photo: registeredUser.profile.photo,
+          address: registeredUser.profile.address,
+          phone: registeredUser.profile.phone,
+          city: registeredUser.profile.city,
+          isVerified: registeredUser.profile.isVerified,
+          isPrivate: registeredUser.profile.isPrivate,
+        };
+      } else {
+        userData = registeredUser.profile;
+      }
+
       if (user) {
-        nookies.set(null, "user", JSON.stringify(registeredUser.profile), {
+        nookies.set(null, "user", JSON.stringify(userData), {
           maxAge: 30 * 24 * 60 * 60,
           path: "/",
           secure: process.env.NODE_ENV !== "development",

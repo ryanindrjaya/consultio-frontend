@@ -8,6 +8,7 @@ import "moment/locale/id";
 import { useEffect } from "react";
 import toast from "react-hot-toast";
 import Link from "next/link";
+import CheckIcon from "@mui/icons-material/Check";
 
 export async function getServerSideProps(context) {
   const cookies = nookies.get(context);
@@ -93,9 +94,11 @@ export default function History({ data }) {
                   <h1 className="font-medium text-base">{booking.consultantName}</h1>
                   <p className="text-xs text-black/40">{moment(booking.updatedAt).format("LL")}</p>
                   {booking.isActive === 1 ? (
-                    <h3 className="text-xs xl:text-md text-blue-700/70 mt-6">Sedang berjalan</h3>
+                    <h3 className="text-sm xl:text-md text-blue-700/70 mt-6">Sedang berjalan</h3>
                   ) : (
-                    <h3 className="text-xs xl:text-md text-green-700/70 mt-6">Selesai</h3>
+                    <h3 className="text-sm xl:text-md text-green-700/70 mt-6">
+                      Selesai <CheckIcon />
+                    </h3>
                   )}
                 </div>
               </div>

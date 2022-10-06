@@ -15,7 +15,14 @@ function InputPost({ userInfo, handlePost }) {
   const [isAnonym, setIsAnonym] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const firstName = userInfo.fullname.split(" ");
+  let firstName;
+  const stringArr = userInfo.fullname.split(" ");
+  console.log(stringArr);
+  if (stringArr[0] === "Dr.") {
+    firstName = "Dok";
+  } else {
+    firstName = stringArr[0];
+  }
 
   const validateImg = (e) => {
     const file = e.target.files[0];
@@ -73,7 +80,7 @@ function InputPost({ userInfo, handlePost }) {
             onChange={(e) => setStory(e.target.value)}
             value={story}
             className="outline-none bg-transparent flex-1 font-inter font-normal text-base"
-            placeholder={userInfo ? `Apa yang mau kamu ceritakan, ${firstName[0]}?` : ""}
+            placeholder={userInfo ? `Apa yang mau kamu ceritakan, ${firstName}?` : ""}
           />
         </div>
       </div>

@@ -98,15 +98,14 @@ export default function History({ data }) {
     const [review, setReview] = useState("");
     const [rating, setRating] = useState(0);
 
-    console.log("review", review);
-    console.log("rating", rating);
-
     const starIcon =
       "M19.45 4.97273L21.9433 9.9594C22.2833 10.6536 23.19 11.3194 23.955 11.4469L28.4741 12.1977C31.3641 12.6794 32.0441 14.7761 29.9616 16.8444L26.4483 20.3577C25.8533 20.9527 25.5275 22.1002 25.7116 22.9219L26.7175 27.2711C27.5108 30.7136 25.6833 32.0452 22.6375 30.2461L18.4016 27.7386C17.6366 27.2852 16.3758 27.2852 15.5966 27.7386L11.3608 30.2461C8.32914 32.0452 6.48747 30.6994 7.28081 27.2711L8.28664 22.9219C8.47081 22.1002 8.14497 20.9527 7.54997 20.3577L4.03664 16.8444C1.96831 14.7761 2.63414 12.6794 5.52414 12.1977L10.0433 11.4469C10.7941 11.3194 11.7008 10.6536 12.0408 9.9594L14.5341 4.97273C15.8941 2.2669 18.1041 2.2669 19.45 4.97273Z";
 
     async function handleSendReview(e) {
-      console.log("kirimm");
       e.preventDefault();
+
+      console.log("review", review);
+      console.log("rating", rating);
 
       const endpoint = process.env.API_URL + "/booking/" + bookingState.bookingId + "/rating";
       const config = {
@@ -115,8 +114,8 @@ export default function History({ data }) {
           Authorization: cookies.token,
         },
         body: JSON.stringify({
-          review: review,
           rating: rating,
+          review: review,
         }),
       };
 
@@ -170,15 +169,17 @@ export default function History({ data }) {
                 </p>
               </div>
 
-              <CustomTextField
-                label="Kesimpulan"
-                className="w-full lg:w-11/12 outline-none mt-10"
-                placeholder="Ada apa dengan kamu?"
-                value={bookingState.solution || "Belum ada solusi"}
-                disabled
-                multiline
-                rows={10}
-              />
+              <div className="mt-10 w-full">
+                <CustomTextField
+                  label="Kesimpulan"
+                  className="w-full lg:w-11/12 outline-none"
+                  placeholder="Ada apa dengan kamu?"
+                  value={bookingState.solution || "Belum ada solusi"}
+                  disabled
+                  multiline
+                  rows={10}
+                />
+              </div>
             </div>
           </div>
         </div>

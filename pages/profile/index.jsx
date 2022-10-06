@@ -34,16 +34,22 @@ export default function Profile({ userInfo }) {
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState(userInfo);
   const [fullname, setFullname] = useState(user.fullname);
-  const [address, setAddress] = useState(
-    user.address == null ? "" : user.address
-  );
+  const [address, setAddress] = useState(user.address == null ? "" : user.address);
   const [city, setCity] = useState(user.city == null ? "" : user.city);
   const [phone, setPhone] = useState(user.phone == null ? "" : user.phone);
+  const [experience, setExperience] = useState(user?.experience == null ? 0 : user?.experience);
+  const [isActive, setIsActive] = useState(user?.isActive == null ? 1 : user?.isActive);
 
+  console.log(user);
   const fetchUser = async () => {
-    const cookies = nookies.get(null, "token");
+    let endpoint;
+    const cookies = nookies.get(null);
     try {
-      const endpoint = process.env.API_URL + "/users/" + userInfo.userId;
+      if (cookies.role === "USER") {
+        endpoint = process.env.API_URL + "/users/" + userInfo.userId;
+      } else {
+        endpoint = process.env.API_URL + "/consultant/" + userInfo.consultantId;
+      }
       const config = {
         method: "GET",
         headers: {
@@ -51,8 +57,13 @@ export default function Profile({ userInfo }) {
         },
       };
       const res = await axios.get(endpoint, config);
-      setUser(res.data.data.profile);
 
+      if (cookies.role === "USER") {
+        setUser(res.data.data.profile);
+      } else {
+        setUser(res.data.data.data[0]);
+      }
+      console.log(res);
       return res.data.data;
     } catch (error) {
       console.log(error);
@@ -63,11 +74,15 @@ export default function Profile({ userInfo }) {
     e.preventDefault();
     setLoading(true);
 
-    const userId = user.userId;
-    const cookies = nookies.get(null, "token");
+    let endpoint;
+    const cookies = nookies.get(null);
 
     try {
-      const endpoint = process.env.API_URL + "/users/" + userId;
+      if (cookies.role === "USER") {
+        endpoint = process.env.API_URL + "/users/" + user.userId;
+      } else {
+        endpoint = process.env.API_URL + "/consultant/" + user.consultantId;
+      }
 
       const config = {
         headers: {
@@ -75,17 +90,37 @@ export default function Profile({ userInfo }) {
         },
       };
 
-      const req = await axios.put(
-        endpoint,
-        { fullname, address, city, phone },
-        config
-      );
+      let data;
+      if (cookies.role === "USER") {
+        data = { fullname, address, city, phone };
+      } else {
+        data = { fullname, address, city, phone, experience: parseInt(experience), isActive };
+      }
+
+      const req = await axios.put(endpoint, data, config);
 
       if (req.status == 200) {
+        let userData;
         const newData = await fetchUser();
 
+        if (cookies.role === "USER") {
+          userData = {
+            userId: newData.profile.userId,
+            email: newData.profile.email,
+            fullname: newData.profile.fullname,
+            address: newData.profile.address,
+            city: newData.profile.city,
+            phone: newData.profile.phone,
+            role: newData.profile.role,
+            isVerified: newData.profile.isVerified,
+            isPrivate: newData.profile.isPrivate,
+          };
+        } else {
+          userData = newData.data[0];
+        }
+
         if (newData) {
-          nookies.set(null, "user", JSON.stringify(newData.profile), {
+          nookies.set(null, "user", JSON.stringify(userData), {
             maxAge: 30 * 24 * 60 * 60,
             path: "/",
             secure: process.env.NODE_ENV !== "development",
@@ -109,8 +144,15 @@ export default function Profile({ userInfo }) {
 
   const uploadPhotoProfile = async (file) => {
     setLoading(true);
-    const cookies = nookies.get(null, "token");
-    const endpoint = process.env.API_URL + "/users/" + user.userId + "/photo";
+
+    let endpoint;
+    const cookies = nookies.get(null);
+
+    if (cookies.role === "USER") {
+      endpoint = process.env.API_URL + "/users/" + user.userId + "/photo";
+    } else {
+      endpoint = process.env.API_URL + "/consultant/" + user.consultantId + "/photo";
+    }
 
     const config = {
       headers: {
@@ -126,7 +168,24 @@ export default function Profile({ userInfo }) {
       if (req.status == 200) {
         const newData = await fetchUser();
 
-        nookies.set(null, "user", JSON.stringify(newData.profile), {
+        let userData;
+        if (cookies.role === "USER") {
+          userData = {
+            userId: newData.profile.userId,
+            email: newData.profile.email,
+            fullname: newData.profile.fullname,
+            address: newData.profile.address,
+            city: newData.profile.city,
+            phone: newData.profile.phone,
+            role: newData.profile.role,
+            isVerified: newData.profile.isVerified,
+            isPrivate: newData.profile.isPrivate,
+          };
+        } else {
+          userData = newData.data[0];
+        }
+
+        nookies.set(null, "user", JSON.stringify(userData), {
           maxAge: 30 * 24 * 60 * 60,
           path: "/",
           secure: process.env.NODE_ENV !== "development",
@@ -152,27 +211,17 @@ export default function Profile({ userInfo }) {
       </Head>
       <div className="container-lg rounded-xl shadow-md border mb-10 h-auto mx-auto w-4/5 mt-10 relative scrollbar-hide">
         <div className="w-full relative">
-          <img
-            src="/banner.png"
-            className="w-full rounded-t-xl h-50 object-cover object-bottom"
-          />
+          <img src="/banner.png" className="w-full rounded-t-xl h-50 object-cover object-bottom" />
           <div className="absolute left-20 shadow-sm -bottom-20 object-cover object-center w-40 h-48 rounded-xl bg-white z-10"></div>
           <img
-            src={
-              `http://203.6.149.156:8480/public/${user.photo}` ||
-              "https://links.papareact.com/gll"
-            }
+            src={`http://203.6.149.156:8480/public/${user.photo}` || "https://links.papareact.com/gll"}
             className="absolute left-20 -bottom-20 object-cover object-center z-20 w-40 h-48 rounded-xl"
           />
           <div
             onClick={() => setShowModal(true)}
             className="absolute z-40 group cursor-pointer left-20 flex justify-center items-center -bottom-20 duration-150 hover:bg-black/30 w-40 h-48 rounded-xl"
           >
-            <Edit2
-              className="hidden group-hover:block duration-150"
-              size="64"
-              color="#FFFFFF"
-            />
+            <Edit2 className="hidden group-hover:block duration-150" size="64" color="#FFFFFF" />
           </div>
         </div>
 
@@ -181,6 +230,7 @@ export default function Profile({ userInfo }) {
             <div className="w-1/2 mx-2">
               <FormInput
                 type="text"
+                required
                 label="Full Name"
                 handleChange={(e) => setFullname(e.target.value)}
                 value={fullname}
@@ -221,10 +271,35 @@ export default function Profile({ userInfo }) {
 
           <div className="w-full flex mb-10">
             <div className="w-1/2 mx-2">
+              <FormInput
+                type="number"
+                label="Pengalaman (Tahun)"
+                handleChange={(e) => setExperience(parseInt(e.target.value))}
+                value={experience}
+                icon={<User className="text-gray-400 w-4" />}
+              />
+            </div>
+            <div className="w-1/2 mx-2">
+              <select
+                onChange={(e) => setIsActive(parseInt(e.target.value))}
+                s
+                className="w-full h-full text-sm px-2 border border-gray-300 active:border-primary focus:border-primary rounded-md focus:outline-primary"
+                name=""
+                id=""
+              >
+                <option value="" selected disabled hidden>
+                  is Active
+                </option>
+                <option value="0">0</option>
+                <option value="1">1</option>
+              </select>
+            </div>
+          </div>
+
+          <div className="w-full flex mb-10">
+            <div className="w-1/2 mx-2">
               <span className="flex">
-                <p style={{ marginBottom: 0, marginRight: "10px" }}>
-                  Private Profile
-                </p>
+                <p style={{ marginBottom: 0, marginRight: "10px" }}>Private Profile</p>
                 <IOSSwitch />
               </span>
             </div>

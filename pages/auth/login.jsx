@@ -49,6 +49,26 @@ export default function Login() {
       const req = await axios.post(endpoint, { email, password }, config);
       const user = req.data.data;
 
+      console.log(user);
+
+      let userData;
+      if (user.role === "USER") {
+        userData = {
+          userId: user.profile.userId,
+          fullname: user.profile.fullname,
+          email: user.profile.email,
+          role: user.profile.role,
+          photo: user.profile.photo,
+          address: user.profile.address,
+          phone: user.profile.phone,
+          city: user.profile.city,
+          isVerified: user.profile.isVerified,
+          isPrivate: user.profile.isPrivate,
+        };
+      } else {
+        userData = user.profile;
+      }
+
       if (user.token) {
         const role = user.profile.role;
 
@@ -69,7 +89,7 @@ export default function Login() {
         });
 
         // save authenticated user to cookies
-        nookies.set(null, "user", JSON.stringify(user.profile), {
+        nookies.set(null, "user", JSON.stringify(userData), {
           maxAge: 30 * 24 * 60 * 60,
           path: "/",
           secure: process.env.NODE_ENV !== "development",

@@ -49,9 +49,27 @@ export default function Verify() {
 
           const newUser = getUser.data.data;
 
+          let userData;
+          if (newUser.role === "USER") {
+            userData = {
+              userId: newUser.profile.userId,
+              fullname: newUser.profile.fullname,
+              email: newUser.profile.email,
+              role: newUser.profile.role,
+              photo: newUser.profile.photo,
+              address: newUser.profile.address,
+              phone: newUser.profile.phone,
+              city: newUser.profile.city,
+              isVerified: newUser.profile.isVerified,
+              isPrivate: newUser.profile.isPrivate,
+            };
+          } else {
+            userData = newUser.profile;
+          }
+
           if (getUser) {
             setSuccess(true);
-            nookies.set(null, "user", JSON.stringify(newUser.profile), {
+            nookies.set(null, "user", JSON.stringify(userData), {
               maxAge: 30 * 24 * 60 * 60,
               path: "/",
               secure: process.env.NODE_ENV !== "development",
