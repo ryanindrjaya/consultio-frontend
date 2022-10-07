@@ -7,6 +7,26 @@ import { Gallery } from "iconsax-react";
 // components
 import { IOSSwitch } from "../Switch";
 import toast from "react-hot-toast";
+import "react-quill/dist/quill.snow.css";
+import dynamic from "next/dynamic";
+
+const QuillNoSSRWrapper = dynamic(import("react-quill"), {
+  ssr: false,
+  loading: () => <p>Loading ...</p>,
+});
+
+const modules = {
+  toolbar: [["bold", "italic", "underline", "strike"], ["link"]],
+  clipboard: {
+    // toggle to add extra line breaks when pasting HTML:
+    matchVisual: false,
+  },
+};
+/*
+ * Quill editor formats
+ * See https://quilljs.com/docs/formats/
+ */
+const formats = ["bold", "italic", "underline", "strike", "link"];
 
 function InputPost({ userInfo, handlePost }) {
   const [story, setStory] = useState("");
@@ -67,21 +87,33 @@ function InputPost({ userInfo, handlePost }) {
 
   return (
     <form encType="mutipart/form-data" onSubmit={onSubmitPost} className="mt-5 mb-7 border-t rounded-lg shadow-lg px-3 lg:px-7 py-3">
-      <div className="flex gap-x-5 pb-5 border-b">
+      <div className="flex gap-x-5 pb-20 border-b">
         <img
           src={`http://203.6.149.156:8480/public/${userInfo.photo}` || "https://links.papareact.com/gll"}
           className="h-12 w-12 object-cover rounded-lg"
           alt=""
         />
 
-        <div className="bg-gray-100 rounded-xl flex flex-1 items-center h-12 px-6">
-          <input
+        <div className="rounded-xl w-full flex items-center h-auto pr-5">
+          <QuillNoSSRWrapper
+            className="w-full h-full"
+            placeholder={userInfo ? `Apa yang mau kamu ceritakan, ${firstName}?` : ""}
+            value={story}
+            onChange={(e) => {
+              console.log(e);
+              setStory(e);
+            }}
+            modules={modules}
+            formats={formats}
+            theme="snow"
+          />
+          {/* <textarea
             type="text"
             onChange={(e) => setStory(e.target.value)}
             value={story}
-            className="outline-none bg-transparent flex-1 font-inter font-normal text-base"
+            className="outline-none bg-gray-100 flex-1 font-inter font-normal text-base"
             placeholder={userInfo ? `Apa yang mau kamu ceritakan, ${firstName}?` : ""}
-          />
+          /> */}
         </div>
       </div>
       {imagePreview && (

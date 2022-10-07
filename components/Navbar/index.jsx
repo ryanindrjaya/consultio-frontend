@@ -28,8 +28,8 @@ function Navbar() {
     const config = {
       headers: {
         "Content-Type": "application/json",
-        Authorization: cookies.token
-      }
+        Authorization: cookies.token,
+      },
     };
 
     try {
@@ -46,28 +46,24 @@ function Navbar() {
 
   function handleLogout() {
     nookies.destroy(null, "token", {
-      path: "/"
+      path: "/",
     });
     nookies.destroy(null, "role", {
-      path: "/"
+      path: "/",
     });
     nookies.destroy(null, "user", {
-      path: "/"
+      path: "/",
     });
 
     router.replace("/auth/login");
   }
 
   return (
-    <div className="col-span-2 h-screen border-x flex flex-col justify-between max-h-screen p-3 lg:p-7 overflow-y-hidden scrollbar-hide">
+    <div className="col-span-2 h-screen border-x flex flex-col justify-between max-h-screen p-3 lg:p-7 scrollbar-hide">
       <div className="max-w-full">
         <div className="flex justify-center">
           <Link href={"/"}>
-            <img
-              src="/consultio.svg"
-              className="text-center cursor-pointer"
-              alt="logo consultio"
-            />
+            <img src="/consultio.svg" className="text-center cursor-pointer" alt="logo consultio" />
           </Link>
         </div>
 
@@ -76,26 +72,15 @@ function Navbar() {
 
       {/* User profile */}
       <div>
-        {userInfo && (
-          <p className="text-sm text-center lg:text-left font-medium mb-5 text-black text-opacity-30">
-            Profile
-          </p>
-        )}
-        <div
-          className={`h-32 flex flex-col ${
-            userInfo ? "justify-around lg:justify-between" : "justify-end"
-          }`}
-        >
+        {userInfo && <p className="text-sm text-center lg:text-left font-medium mb-5 text-black text-opacity-30">Profile</p>}
+        <div className={`h-32 flex flex-col ${userInfo ? "justify-around lg:justify-between" : "justify-end"}`}>
           {userInfo && (
-            <div className="flex justify-center lg:justify-between items-center h-12">
+            <div className="flex justify-center lg:justify-between items-center h-12 relative">
               <div className="flex justify-between">
                 <img
                   onClick={() => setShowUserOption(!showUserOption)}
                   className="h-12 cursor-pointer relative w-12 object-cover rounded-full"
-                  src={
-                    `http://203.6.149.156:8480/public/${userInfo.photo}` ||
-                    "https://links.papareact.com/gll"
-                  }
+                  src={`http://203.6.149.156:8480/public/${userInfo.photo}` || "https://links.papareact.com/gll"}
                   alt=""
                 />
                 <div className="h-full hidden ml-4 lg:flex flex-col justify-between">
@@ -103,15 +88,12 @@ function Navbar() {
                   <p className="font-normal text-sm">{userInfo?.role}</p>
                 </div>
               </div>
-              <div
-                onClick={() => setShowUserOption(!showUserOption)}
-                className="relative"
-              >
-                <MoreHorizIcon className="sm:hidden lg:block cursor-pointer" />
+              <div onClick={() => setShowUserOption(!showUserOption)} className="">
+                {/* <MoreHorizIcon className="sm:hidden lg:block cursor-pointer" /> */}
                 {showUserOption && (
                   <Link href={"/profile"}>
                     <div
-                      className="w-40 h-10 bg-white rounded-tl-lg rounded-br-lg rounded-bl-lg border absolute right-3 top-5 z-10"
+                      className="w-40 h-10 bg-white rounded-tr-lg rounded-br-lg rounded-bl-lg border absolute left-7 lg:left-5 top-10 z-50"
                       style={{ borderColor: "black" }}
                     >
                       <div
@@ -132,9 +114,7 @@ function Navbar() {
               className="lg:w-full py-2 mx-2 lg:max-0 lg:px-5 lg:py-3 cursor-pointer rounded-lg duration-150 text-white bg-blue-500 hover:bg-blue-600 flex justify-center items-center"
             >
               <Logout size={24} variant={"Bold"} className="text-white" />
-              <p className="font-normal hidden lg:block text-base font-inter ml-4">
-                Logout
-              </p>
+              <p className="font-normal hidden lg:block text-base font-inter ml-4">Logout</p>
             </div>
           ) : (
             <Link href={"/auth/login"}>

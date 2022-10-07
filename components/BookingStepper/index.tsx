@@ -10,6 +10,7 @@ import CheckIcon from '@mui/icons-material/Check';
 import GradeIcon from '@mui/icons-material/Grade';
 import StepConnector, { stepConnectorClasses } from '@mui/material/StepConnector';
 import { StepIconProps } from '@mui/material/StepIcon';
+import nookies from 'nookies';
 
 const ColorlibConnector = styled(StepConnector)(({ theme }) => ({
   [`&.${stepConnectorClasses.alternativeLabel}`]: {
@@ -62,7 +63,7 @@ const ColorlibStepIconRoot = styled('div')<{
 
 function ColorlibStepIcon(props: StepIconProps) {
   const { active, completed, className } = props;
-
+  
   const icons: { [index: string]: React.ReactElement } = {
     1: <SupportAgentIcon fontSize={'large'}/>,
     2: <EmojiObjectsIcon fontSize={'large'} />,
@@ -76,7 +77,14 @@ function ColorlibStepIcon(props: StepIconProps) {
   );
 }
 
-const steps = ['Konsultan dan Masalahmu', 'Kesimpulan dan Review', 'Selesai'];
+const cookies = nookies.get(null)
+let steps: String[];
+
+if (cookies.role === 'USER') {
+  steps = ['Konsultan dan Masalahmu', 'Kesimpulan dan Review', 'Selesai'];
+} else {
+  steps = ['Pasien dan Masalah', 'Kesimpulan dan Review', 'Selesai'];
+}
 
 export default function CustomizedSteppers({status}: {status: String}) {
 
@@ -96,8 +104,8 @@ export default function CustomizedSteppers({status}: {status: String}) {
   return (
     <Stack sx={{ width: '100%' }} spacing={4}>
       <Stepper alternativeLabel activeStep={classifyStatus(status)} connector={<ColorlibConnector />}>
-        {steps.map((label) => (
-          <Step key={label}>
+        {steps.map((label: String, idx) => (
+          <Step key={idx}>
             <StepLabel StepIconComponent={ColorlibStepIcon}>
               <p className='font-poppins font-bold text-lg'>{label}</p>
             </StepLabel>

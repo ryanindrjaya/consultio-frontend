@@ -6,3 +6,30 @@ p,
 span {
   font-family: "DM Sans", sans-serif;
 }
+
+.ql-editor:focus {
+  border: 1px solid #437EEB !important;
+  animation-duration: 75ms;
+}
+
+.ql-editor {
+  border-radius: 12px;
+  margin-top: 12px;
+  border: 1px solid #ccc;
+  transition: all;
+  animation-duration: 75ms;
+  font-size: 18px
+}
+
+.ql-container.ql-snow {
+  border: none !important;
+}
+
+.ql-toolbar {
+  border-radius: 28px;
+}
+
+.link a {
+  color: #437EEB;
+  text-decoration: none;
+}
