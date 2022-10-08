@@ -1,22 +1,11 @@
 import { Toaster } from "react-hot-toast";
 import { Router } from "next/router";
-import ReactDOM from "react-dom";
 import { useState } from "react";
 
 import PageChange from "../components/pageChange/PageChange.js";
 import "../styles/globals.css";
 
 import { AppContext, socket } from "../context/appContext";
-
-Router.events.on("routeChangeStart", () => {
-  ReactDOM.render(<PageChange />, document.getElementById("page-transition"));
-});
-Router.events.on("routeChangeComplete", () => {
-  ReactDOM.unmountComponentAtNode(document.getElementById("page-transition"));
-});
-Router.events.on("routeChangeError", () => {
-  ReactDOM.unmountComponentAtNode(document.getElementById("page-transition"));
-});
 
 function MyApp({ Component, pageProps }) {
   const [rooms, setRooms] = useState([]);
@@ -26,8 +15,19 @@ function MyApp({ Component, pageProps }) {
   const [messages, setMessages] = useState([]);
   const [privateMemberMsg, setPrivateMemberMsg] = useState({});
   const [newMessages, setNewMessages] = useState({});
+  const [loading, setLoading] = useState(false);
 
   const Layout = Component.layout || ((page) => page);
+
+  Router.events.on("routeChangeStart", () => {
+    setLoading(true);
+  });
+  Router.events.on("routeChangeComplete", () => {
+    setLoading(false);
+  });
+  Router.events.on("routeChangeError", () => {
+    setLoading(false);
+  });
 
   return (
     <AppContext.Provider
@@ -49,10 +49,14 @@ function MyApp({ Component, pageProps }) {
         setCurrentRoom,
       }}
     >
-      <Layout>
-        <Component {...pageProps} />
-        <Toaster />
-      </Layout>
+      {loading ? (
+        <PageChange />
+      ) : (
+        <Layout>
+          <Component {...pageProps} />
+          <Toaster />
+        </Layout>
+      )}
     </AppContext.Provider>
   );
 }
