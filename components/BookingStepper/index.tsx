@@ -107,7 +107,7 @@ export default function CustomizedSteppers({status}: {status: String}) {
         {steps.map((label: String, idx) => (
           <Step key={idx}>
             <StepLabel StepIconComponent={ColorlibStepIcon}>
-              <p className='font-poppins font-bold text-lg'>{label}</p>
+              <p className='font-poppins font-bold text-md lg:text-lg'>{label}</p>
             </StepLabel>
           </Step>
         ))}

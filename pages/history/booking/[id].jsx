@@ -66,7 +66,7 @@ export default function History({ data }) {
       <div className="w-full">
         <div className="w-full flex flex-col gap-y-3 items-center">
           <img
-            className="w-1/6 h-1/6 object-cover rounded-xl"
+            className="w-2/3 h-2/3 lg:w-1/6 lg:h-1/6 object-cover rounded-xl"
             src={`http://203.6.149.156:8480/public/${cookies.role === "USER" ? bookingState?.consultantPhoto : bookingState?.customerPhoto}`}
             alt={cookies.role === "USER" ? "Consultant photo" : "Customer photo"}
           />
@@ -240,7 +240,7 @@ export default function History({ data }) {
   // }
 
   return (
-    <div className="w-full px-8 py-6">
+    <div className="w-full px-3 lg:px-8 py-6">
       <BookingStepper status={bookingState.status} />
 
       <div className="w-full mt-12">

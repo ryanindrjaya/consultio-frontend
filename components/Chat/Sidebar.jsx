@@ -9,11 +9,7 @@ import { useState } from "react";
 import { MessageProgramming } from "iconsax-react";
 
 function filterByValue(array, string) {
-  return array.filter((o) =>
-    Object.keys(o).some((k) =>
-      o[k].toLowerCase().includes(string.toLowerCase())
-    )
-  );
+  return array.filter((o) => Object.keys(o).some((k) => o[k].toLowerCase().includes(string.toLowerCase())));
 }
 
 function sortDate(array) {
@@ -26,14 +22,7 @@ function Sidebar({ user, dataRoom, role }) {
   moment.locale("id");
   const cookies = nookies.get(null);
 
-  const {
-    socket,
-    setCurrentRoom,
-    setRooms,
-    setJoinedRoom,
-    currentRoom,
-    messages
-  } = useContext(AppContext);
+  const { socket, setCurrentRoom, setRooms, setJoinedRoom, currentRoom, messages } = useContext(AppContext);
 
   const [joinedRoom, setjoinedRoom] = useState(false);
   const [status, setStatus] = useState(false);
@@ -62,7 +51,7 @@ function Sidebar({ user, dataRoom, role }) {
       socket.emit("chat-history", {
         userId: user.userId,
         consultantId: consultantId,
-        status: status
+        status: status,
       });
     } else {
       socket.emit("chat-history", { userId: user.userId, status: status });
@@ -73,7 +62,7 @@ function Sidebar({ user, dataRoom, role }) {
     if (selectedChatId) {
       socket.emit("chat-detail", {
         userId: user.userId,
-        chatId: selectedChatId
+        chatId: selectedChatId,
       });
     }
   }, [selectedChatId]);
@@ -99,15 +88,13 @@ function Sidebar({ user, dataRoom, role }) {
     setJoinedRoom(true);
     nookies.set(null, "currentRoom", JSON.stringify(room), {
       path: "/",
-      maxAge: 30 * 24 * 60 * 60
+      maxAge: 30 * 24 * 60 * 60,
     });
     socket.emit("join-room", { userId: user.userId, chatId: room.chatId });
   };
 
-  const activeRoom =
-    "profile-chat flex ml-4 mt-2 duration-100 bg-primary rounded-lg p-4 text-white mr-4 cursor-pointer";
-  const normalRoom =
-    "profile-chat duration-100 flex ml-4 mt-2 p-4 mr-4 cursor-pointer";
+  const activeRoom = "profile-chat flex ml-4 mt-2 duration-100 bg-primary rounded-lg p-4 text-white mr-4 cursor-pointer";
+  const normalRoom = "profile-chat duration-100 flex ml-4 mt-2 p-4 mr-4 cursor-pointer";
 
   return (
     <div className="sideleft h-screen w-2/5 border-r scrollbar-hide">
@@ -134,47 +121,27 @@ function Sidebar({ user, dataRoom, role }) {
         <div className="profile-list mt-3 pb-24 h-screen overflow-y-scroll scrollbar-hide">
           {newMessage?.length > 0 ? (
             newMessage.map((msg, idx) => (
-              <>
-                <div
-                  key={idx}
-                  onClick={() => joinRoom(msg)}
-                  className={
-                    currentRoom.chatId === msg.chatId ? activeRoom : normalRoom
-                  }
-                >
-                  <img
-                    src={`http://203.6.149.156:8480/public/${
-                      msg.sender === user.userId
-                        ? msg.receiverPhoto
-                        : msg.senderPhoto
-                    }`}
-                    className="rounded-full object-cover object-center border w-16 h-16 mr-5"
-                  />
-                  <div className="flex w-3/4  flex-col justify-between">
-                    <div className="flex w-full justify-between">
-                      <h5 style={{ fontSize: "16px", fontWeight: "bold" }}>
-                        {msg.sender === user.userId
-                          ? msg.receiverName
-                          : msg.senderName}
-                      </h5>
-                      <p style={{ fontWeight: "medium", fontSize: "14px" }}>
-                        {moment(msg.createdAt).format("LT")}
-                      </p>
-                    </div>
-
-                    <p className="w-full truncate" style={{ fontSize: "14px" }}>
-                      {msg.message}
-                    </p>
+              <div key={idx} onClick={() => joinRoom(msg)} className={currentRoom.chatId === msg.chatId ? activeRoom : normalRoom}>
+                <img
+                  src={`http://203.6.149.156:8480/public/${msg.sender === user.userId ? msg.receiverPhoto : msg.senderPhoto}`}
+                  className="rounded-full object-cover object-center border w-16 h-16 mr-5"
+                />
+                <div className="flex w-3/4  flex-col justify-between">
+                  <div className="flex w-full justify-between">
+                    <h5 style={{ fontSize: "16px", fontWeight: "bold" }}>{msg.sender === user.userId ? msg.receiverName : msg.senderName}</h5>
+                    <p style={{ fontWeight: "medium", fontSize: "14px" }}>{moment(msg.createdAt).format("LT")}</p>
                   </div>
+
+                  <p className="w-full truncate" style={{ fontSize: "14px" }}>
+                    {msg.message}
+                  </p>
                 </div>
-              </>
+              </div>
             ))
           ) : (
             <div className="h-full flex flex-col justify-center items-center">
               <h1 className="font-poppins text-2xl font-bold text-gray-600">
-                {role === "USER"
-                  ? "Anda belum melakukan konsultasi"
-                  : "Anda belum memiliki konsultasi"}
+                {role === "USER" ? "Anda belum melakukan konsultasi" : "Anda belum memiliki konsultasi"}
               </h1>
               {role === "USER" && (
                 <>
