@@ -1,5 +1,5 @@
 import React from "react";
-
+import { motion } from "framer-motion";
 // components
 import NavbarSkeleton from "../Navbar/NavbarSkeleton";
 import Searchbar from "../Searchbar/Skeleton";
@@ -8,7 +8,22 @@ import Loading from "../../public/lottie/skeleton.json";
 
 export default function PageChange() {
   return (
-    <div className="grid grid-cols-9 ">
+    <motion.div
+      className="grid grid-cols-9"
+      initial="hidden"
+      animate="visible"
+      variants={{
+        hidden: {
+          opacity: 0,
+        },
+        visible: {
+          opacity: 1,
+          transition: {
+            delay: 0.1,
+          },
+        },
+      }}
+    >
       <NavbarSkeleton />
       <div className="col-span-7 relative">
         <div className="max-h-screen overflow-hidden scrollbar-hide">
@@ -19,6 +34,6 @@ export default function PageChange() {
           </div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }
