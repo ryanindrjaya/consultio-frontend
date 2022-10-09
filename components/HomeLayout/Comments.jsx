@@ -11,6 +11,8 @@ function Comments({ commentCount, id, userInfo }) {
   const [comments, setComments] = useState([]);
   const [loading, setLoading] = useState(false);
 
+  console.log(comments);
+
   useEffect(() => {
     getComment(id);
   }, [handleSubmit]);
@@ -63,6 +65,29 @@ function Comments({ commentCount, id, userInfo }) {
     }
   };
 
+  const classifyConsultant = async (id) => {
+    const cookies = nookies.get(null);
+
+    const endpoint = process.env.API_URL + "/consultant/" + id;
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: cookies.token,
+      },
+    };
+
+    const res = await fetch(endpoint, config);
+    const data = await res.json();
+
+    console.log("data dari classify consultant", data);
+
+    if (data.status !== "failed") {
+      return false;
+    } else {
+      return true;
+    }
+  };
+
   return (
     <>
       <form onSubmit={handleSubmit} className="w-full pt-4 mb-4 flex gap-x-3 justify-between items-center">
@@ -97,9 +122,18 @@ function Comments({ commentCount, id, userInfo }) {
                 alt=""
               />
               <div>
-                <p style={{ color: "#023047" }} className="font-inter font-medium text-base">
-                  {comment.fullname}
-                </p>
+                <div className="flex items-center mb-2">
+                  <p style={{ color: "#023047" }} className="font-inter font-medium text-base flex">
+                    {comment.fullname}
+                  </p>
+                  {classifyConsultant(comment.userId) ? (
+                    <div class="ml-1 bg-primary text-blue-100 w-4 h-4 rounded-full text-xs flex justify-center items-center">
+                      <span>✔</span>
+                    </div>
+                  ) : (
+                    ""
+                  )}
+                </div>
                 <p style={{ backgroundColor: "#F7F7F7" }} className="font-inter font-normal rounded-tr-md rounded-br-md rounded-bl-md text-base p-2">
                   {comment.message}
                 </p>
