@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import nookies from "nookies";
 
 import Home from "../../layouts/Home";
@@ -21,28 +21,28 @@ export async function getServerSideProps(context) {
     return {
       props: {
         data: posts,
-        userInfo: JSON.parse(user)
-      }
+        userInfo: JSON.parse(user),
+      },
     };
   } else {
     return {
       redirect: {
         destination: "/auth/login",
-        permanent: false
-      }
+        permanent: false,
+      },
     };
   }
 }
 
 const fetchData = async (cookies) => {
   try {
-    const endpoint = process.env.API_URL + "/posts";
+    const endpoint = process.env.API_URL + "/posts?limit=10&page=1";
 
     const config = {
       method: "GET",
       headers: {
-        Authorization: cookies.token
-      }
+        Authorization: cookies.token,
+      },
     };
 
     const req = await fetch(endpoint, config);
@@ -64,8 +64,8 @@ export default function Index({ data, userInfo }) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: cookies.token
-      }
+        Authorization: cookies.token,
+      },
     };
     const res = await fetch(endpoint, config);
 
@@ -84,8 +84,8 @@ export default function Index({ data, userInfo }) {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
-        Authorization: cookies.token
-      }
+        Authorization: cookies.token,
+      },
     };
     const res = await fetch(endpoint, config);
 
@@ -102,8 +102,8 @@ export default function Index({ data, userInfo }) {
     try {
       const config = {
         headers: {
-          Authorization: cookies.token
-        }
+          Authorization: cookies.token,
+        },
       };
 
       const endpoint = process.env.API_URL + "/posts";
@@ -131,13 +131,7 @@ export default function Index({ data, userInfo }) {
       </Head>
       <div className="flex lg:justify-center overflow-y-scroll max-h-screen w-full scrollbar-hide pb-16">
         {/* feeds */}
-        <Feeds
-          data={posts}
-          userInfo={userInfo}
-          onLike={handleLike}
-          onUnlike={handleUnlike}
-          handleSubmit={handlePost}
-        />
+        <Feeds data={posts} userInfo={userInfo} onLike={handleLike} onUnlike={handleUnlike} handleSubmit={handlePost} />
 
         <Toaster />
       </div>
