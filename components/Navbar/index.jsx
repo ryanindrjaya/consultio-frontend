@@ -110,6 +110,7 @@ function Navbar() {
           )}
           {userInfo ? (
             <div
+              title="Logout"
               onClick={handleLogout}
               className="lg:w-full py-2 mx-2 lg:max-0 lg:px-5 lg:py-3 cursor-pointer rounded-lg duration-150 text-white bg-blue-500 hover:bg-blue-600 flex justify-center items-center"
             >
@@ -118,7 +119,10 @@ function Navbar() {
             </div>
           ) : (
             <Link href={"/auth/login"}>
-              <div className="w-full px-5 py-3 cursor-pointer rounded-lg duration-150 text-white bg-blue-500 hover:bg-blue-600 flex items-center">
+              <div
+                title="Login"
+                className="w-full px-5 py-3 cursor-pointer rounded-lg duration-150 text-white bg-blue-500 hover:bg-blue-600 flex items-center"
+              >
                 <Login size={24} variant={"Bold"} className="text-white" />
                 <p className="font-normal text-base font-inter ml-4">Login</p>
               </div>

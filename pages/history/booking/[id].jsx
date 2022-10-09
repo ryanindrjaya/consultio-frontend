@@ -10,6 +10,7 @@ import styled from "@emotion/styled";
 import StarRatings from "react-star-ratings";
 import toast from "react-hot-toast";
 import axios from "axios";
+import Head from "next/head";
 
 export async function getServerSideProps(ctx) {
   const cookies = nookies.get(ctx);
@@ -240,19 +241,24 @@ export default function History({ data }) {
   // }
 
   return (
-    <div className="w-full px-3 lg:px-8 py-6">
-      <BookingStepper status={bookingState.status} />
+    <>
+      <Head>
+        <title>Detail Konsultasi - Consultio</title>
+      </Head>
+      <div className="w-full px-3 lg:px-8 py-6">
+        <BookingStepper status={bookingState.status} />
 
-      <div className="w-full mt-12">
-        {bookingState.status === "Active" ? (
-          <ConsultComponent />
-        ) : bookingState.status === "Waiting for review" ? (
-          <SolutionComponent />
-        ) : (
-          <CompletedComponent />
-        )}
+        <div className="w-full mt-12">
+          {bookingState.status === "Active" ? (
+            <ConsultComponent />
+          ) : bookingState.status === "Waiting for review" ? (
+            <SolutionComponent />
+          ) : (
+            <CompletedComponent />
+          )}
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 
