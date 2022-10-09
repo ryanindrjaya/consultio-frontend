@@ -10,7 +10,6 @@ import styles from "./Posts.module.css";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import Comments from "./Comments";
 import dynamic from "next/dynamic";
-import InfiniteScroll from "react-infinite-scroll-component";
 
 function Posts({ posts, like, unlike, userInfo }) {
   const [openComment, setOpenComment] = useState(undefined);
@@ -19,11 +18,56 @@ function Posts({ posts, like, unlike, userInfo }) {
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
 
-  const handleLike = (id, isLiked) => {
-    if (isLiked !== 0) {
-      unlike(id);
+  console.log(data);
+
+  const handleLike = async (id, isLiked) => {
+    if (isLiked === 0) {
+      const endpoint = process.env.API_URL + "/like/" + id;
+      const cookies = nookies.get(null);
+
+      const config = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: cookies.token,
+        },
+      };
+      const res = await fetch(endpoint, config);
+
+      if (res) {
+        const selectedPost = data.find((post) => post.postId === id);
+        const index = data.indexOf(selectedPost);
+        console.log("index", index);
+
+        const newData = [...data];
+        newData[index].isLiked = 1;
+        newData[index].likesCount = newData[index].likesCount + 1;
+        setData(newData);
+      }
     } else {
-      like(id);
+      const endpoint = process.env.API_URL + "/like/" + id;
+      const cookies = nookies.get(null);
+
+      const config = {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: cookies.token,
+        },
+      };
+      const res = await fetch(endpoint, config);
+
+      if (res) {
+        const selectedPost = data.find((post) => post.postId === id);
+        const index = data.indexOf(selectedPost);
+
+        console.log("index", index);
+
+        const newData = [...data];
+        newData[index].isLiked = 0;
+        newData[index].likesCount = newData[index].likesCount - 1;
+        setData(newData);
+      }
     }
   };
 
