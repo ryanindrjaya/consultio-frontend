@@ -2,19 +2,13 @@ import React from "react";
 import { TextField } from "@mui/material";
 import { TextBlock } from "iconsax-react";
 
-export default function Modal({
-  closeModal,
-  loading,
-  message,
-  onChange,
-  onSubmit
-}) {
+export default function Modal({ closeModal, loading, message, onChange, onSubmit }) {
   return (
     <>
       <div className="justify-center h-screen items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
         <div
           style={{
-            width: "60vw"
+            width: "60vw",
           }}
           className="relative my-6 mx-auto max-w-3xl"
         >
@@ -22,17 +16,12 @@ export default function Modal({
           <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
             {/*header*/}
             <div className="flex relative items-start justify-center p-5  rounded-t">
-              <h3 className="text-2xl font-medium text-center font-poppins">
-                Masukan solusi yang bisa anda berikan
-              </h3>
+              <h3 className="text-2xl font-medium text-center font-poppins">Masukan solusi yang bisa anda berikan</h3>
               <button
                 className="absolute top-3 right-3 p-1 ml-auto bg-transparent border-0 text-black opacity-20 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
                 onClick={closeModal}
               >
-                <span
-                  title="Cancel"
-                  className=" text-black h-6 w-6 text-2xl block outline-none focus:outline-none"
-                >
+                <span title="Cancel" className=" text-black h-6 w-6 text-2xl block outline-none focus:outline-none">
                   x
                 </span>
               </button>
@@ -42,17 +31,13 @@ export default function Modal({
               <TextField
                 label="Solusi Permasalahan"
                 className="w-full"
-                placeholder="Ada apa dengan kamu?"
+                placeholder="Solusi anda..."
                 onChange={onChange}
                 value={message}
                 multiline
                 rows={6}
               />
-              <TextBlock
-                size={24}
-                color="#437EEB"
-                className="absolute top-9 right-9"
-              />
+              <TextBlock size={24} color="#437EEB" className="absolute top-9 right-9" />
             </div>
             {/*footer*/}
             <div className="flex items-center justify-center p-6 border-solid border-slate-200 rounded-b">

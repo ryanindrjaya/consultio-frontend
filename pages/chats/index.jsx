@@ -9,6 +9,7 @@ import axios from "axios";
 import Modal from "../../components/Modal/endChatForm";
 import { AppContext } from "../../context/appContext";
 import { useRouter } from "next/router";
+import toast from "react-hot-toast";
 
 export async function getServerSideProps(context) {
   const cookies = nookies.get(context);
@@ -21,15 +22,15 @@ export async function getServerSideProps(context) {
       props: {
         userInfo: JSON.parse(user),
         rooms,
-        role: cookies.role
-      }
+        role: cookies.role,
+      },
     };
   } else {
     return {
       redirect: {
         destination: "/auth/login",
-        permanent: false
-      }
+        permanent: false,
+      },
     };
   }
 }
@@ -40,8 +41,8 @@ async function getRooms(cookies) {
   const endpoint = `${process.env.API_URL}/booking`;
   const options = {
     headers: {
-      Authorization: token
-    }
+      Authorization: token,
+    },
   };
 
   const req = await axios.get(endpoint, options);
@@ -74,23 +75,28 @@ export default function Chats({ userInfo, rooms, role }) {
     const endpoint = `${process.env.API_URL}/booking/${bookingId}`;
     const options = {
       headers: {
-        Authorization: token
-      }
+        Authorization: token,
+      },
     };
     const data = {
-      solution
+      solution,
     };
-    const req = await axios.put(endpoint, data, options);
-    const res = req.data;
-    if (res.status == 200) {
-      router.push("/chats");
+
+    try {
+      const req = await axios.put(endpoint, data, options);
+      const res = req.data;
+
+      if (res.status == 200) {
+        router.push("/chats");
+      }
+      handleCloseModalEndChat();
+
+      nookies.destroy(null, "currentRoom");
+
+      router.reload();
+    } catch (error) {
+      toast.error(error.response.data.message);
     }
-
-    handleCloseModalEndChat();
-
-    nookies.destroy(null, "currentRoom");
-
-    router.reload();
   };
 
   const handleOnChangeSolution = (e) => {
@@ -102,16 +108,9 @@ export default function Chats({ userInfo, rooms, role }) {
       <Head>
         <title>Pesan - Consultio</title>
       </Head>
-      <div
-        style={{ height: "100vh" }}
-        className="container flex w-full h-6/12 overflow-hidden scrollbar-hide"
-      >
+      <div style={{ height: "100vh" }} className="container flex w-full h-6/12 overflow-hidden scrollbar-hide">
         {showModalEndChat && (
-          <Modal
-            closeModal={() => handleCloseModalEndChat()}
-            onChange={(e) => handleOnChangeSolution(e)}
-            onSubmit={(e) => handleSubmitEndChat(e)}
-          />
+          <Modal closeModal={() => handleCloseModalEndChat()} onChange={(e) => handleOnChangeSolution(e)} onSubmit={(e) => handleSubmitEndChat(e)} />
         )}
 
         <Sidebar user={userInfo} dataRoom={rooms} role={role} />

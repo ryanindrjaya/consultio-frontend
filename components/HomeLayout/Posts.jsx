@@ -10,6 +10,7 @@ import styles from "./Posts.module.css";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import Comments from "./Comments";
 import dynamic from "next/dynamic";
+import toast from "react-hot-toast";
 
 function Posts({ posts, like, unlike, userInfo }) {
   const [openComment, setOpenComment] = useState(undefined);
@@ -33,8 +34,9 @@ function Posts({ posts, like, unlike, userInfo }) {
         },
       };
       const res = await fetch(endpoint, config);
+      console.log(res);
 
-      if (res) {
+      if (res.status === 200) {
         const selectedPost = data.find((post) => post.postId === id);
         const index = data.indexOf(selectedPost);
         console.log("index", index);
@@ -43,6 +45,8 @@ function Posts({ posts, like, unlike, userInfo }) {
         newData[index].isLiked = 1;
         newData[index].likesCount = newData[index].likesCount + 1;
         setData(newData);
+      } else {
+        toast.error("Something went wrong");
       }
     } else {
       const endpoint = process.env.API_URL + "/like/" + id;
@@ -56,8 +60,9 @@ function Posts({ posts, like, unlike, userInfo }) {
         },
       };
       const res = await fetch(endpoint, config);
+      console.log(res);
 
-      if (res) {
+      if (res.status === 200) {
         const selectedPost = data.find((post) => post.postId === id);
         const index = data.indexOf(selectedPost);
 
@@ -67,6 +72,8 @@ function Posts({ posts, like, unlike, userInfo }) {
         newData[index].isLiked = 0;
         newData[index].likesCount = newData[index].likesCount - 1;
         setData(newData);
+      } else {
+        toast.error("Something went wrong");
       }
     }
   };
