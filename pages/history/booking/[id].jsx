@@ -67,12 +67,12 @@ export default function History({ data }) {
       <div className="w-full">
         <div className="w-full flex flex-col gap-y-3 items-center">
           <img
-            className="w-2/3 h-2/3 lg:w-1/6 lg:h-1/6 object-cover rounded-xl"
+            className="w-52 h-52 object-cover rounded-xl"
             src={`http://203.6.149.156:8480/public/${cookies.role === "USER" ? bookingState?.consultantPhoto : bookingState?.customerPhoto}`}
             alt={cookies.role === "USER" ? "Consultant photo" : "Customer photo"}
           />
           <h1 className="font-poppins font-medium text-2xl">{cookies.role === "USER" ? bookingState.consultantName : bookingState.customerName}</h1>
-          <div className="flex align-baseline gap-x-3">
+          <div className="flex items-center gap-x-3">
             <Building4 size="32" color="rgba(41, 45, 50,0.6)" />
             <p className="inline" style={{ color: "rgba(41, 45, 50,0.6)" }}>
               {cookies.role === "USER" ? bookingState?.consultantCity : bookingState?.customerCity || "-"}
@@ -162,7 +162,7 @@ export default function History({ data }) {
           <div className="w-full lg:w-3/4">
             <div className="w-full flex flex-col items-center lg:items-start">
               <h1 className="font-poppins font-medium text-2xl">{bookingState.consultantName}</h1>
-              <div className="flex mt-2 align-baseline gap-x-3">
+              <div className="flex mt-2 items-center gap-x-3">
                 <Building4 size="32" color="rgba(41, 45, 50,0.6)" />
                 <p className="inline" style={{ color: "rgba(41, 45, 50,0.6)" }}>
                   {bookingState.consultantCity || "-"}
@@ -226,7 +226,61 @@ export default function History({ data }) {
   };
 
   const CompletedComponent = () => {
-    return <h1>Hi ini halaman selesai</h1>;
+    const starIcon =
+      "M19.45 4.97273L21.9433 9.9594C22.2833 10.6536 23.19 11.3194 23.955 11.4469L28.4741 12.1977C31.3641 12.6794 32.0441 14.7761 29.9616 16.8444L26.4483 20.3577C25.8533 20.9527 25.5275 22.1002 25.7116 22.9219L26.7175 27.2711C27.5108 30.7136 25.6833 32.0452 22.6375 30.2461L18.4016 27.7386C17.6366 27.2852 16.3758 27.2852 15.5966 27.7386L11.3608 30.2461C8.32914 32.0452 6.48747 30.6994 7.28081 27.2711L8.28664 22.9219C8.47081 22.1002 8.14497 20.9527 7.54997 20.3577L4.03664 16.8444C1.96831 14.7761 2.63414 12.6794 5.52414 12.1977L10.0433 11.4469C10.7941 11.3194 11.7008 10.6536 12.0408 9.9594L14.5341 4.97273C15.8941 2.2669 18.1041 2.2669 19.45 4.97273Z";
+
+    return (
+      <div className="w-full flex gap-x-14">
+        <div className="w-1/4 flex flex-col items-center">
+          <img
+            className="w-52 h-52 object-cover rounded-xl mb-7"
+            src={`http://203.6.149.156:8480/public/${bookingState?.consultantPhoto}`}
+            alt="Foto konsultan"
+          />
+          <h1 className="font-poppins text-2xl font-medium text-center">{bookingState.consultantName}</h1>
+          <div className="flex mt-2 items-center gap-x-3">
+            <Building4 size="32" color="rgba(41, 45, 50,0.6)" />
+            <p className="inline" style={{ color: "rgba(41, 45, 50,0.6)" }}>
+              {bookingState.consultantCity || "-"}
+            </p>
+          </div>
+          <div className="w-full mt-5 flex flex-col items-center justify-center border border-primary rounded-lg py-5 px-9">
+            <h1 className="mb-3 font-bold font-poppins text-xl">Review</h1>
+            <StarRatings
+              disabled
+              starDimension="40px"
+              rating={bookingState.rating !== null ? bookingState.rating : rating}
+              starRatedColor="#437EEB"
+              starHoverColor="#437EEB"
+              numberOfStars={5}
+              svgIconPath={starIcon}
+              name="rating"
+            />
+          </div>
+        </div>
+        <div className="w-3/4 flex flex-col gap-y-10">
+          <CustomTextField
+            label="Kesimpulan"
+            className="w-full lg:w-11/12 outline-none"
+            placeholder="Ada apa dengan kamu?"
+            value={bookingState.solution || "Belum ada solusi"}
+            disabled
+            multiline
+            rows={10}
+          />
+
+          <CustomTextField
+            label="Review"
+            className="w-full lg:w-11/12 outline-none"
+            placeholder="Ada apa dengan kamu?"
+            value={bookingState.review || "Belum ada review"}
+            disabled
+            multiline
+            rows={5}
+          />
+        </div>
+      </div>
+    );
   };
 
   // function renderBasedOnStatus() {

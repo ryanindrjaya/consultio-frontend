@@ -126,7 +126,7 @@ function Comments({ commentCount, id, userInfo }) {
                   <p style={{ color: "#023047" }} className="font-inter font-medium text-base flex">
                     {comment.fullname}
                   </p>
-                  {classifyConsultant(comment.userId) ? (
+                  {comment.roleId == 3 || comment.roleId == 4 ? (
                     <div class="ml-1 bg-primary text-blue-100 w-4 h-4 rounded-full text-xs flex justify-center items-center">
                       <span>✔</span>
                     </div>

@@ -7,6 +7,8 @@ import LandingPage from "../layouts/LandingPage";
 import { useEffect, useState } from "react";
 import { ArrowLeft2, ArrowRight2 } from "iconsax-react";
 
+import {motion, AnimatePresence} from "framer-motion"
+
 export default function Home() {
   const testimoni = [
     {
@@ -77,10 +79,13 @@ export default function Home() {
               >
                 Consultio
               </h2>
-              <div
+              <motion.div
+              layout
+                initial={{ opacity: 0, width: 0 }}
+                animate={{ opacity: 0.6, width: "100%" }}
                 style={{ zIndex: 0 }}
-                className="z-20 absolute bottom-1 w-full h-2 bg-primary opacity-60"
-              ></div>
+                className="z-20 absolute bottom-1 h-2 bg-primary opacity-60"
+              ></motion.div>
             </div>
             <p className="mb-5 font-inter text-xl font-normal">
               Bicarakan keluh kesahmu disini agar ketenangan menghampirimu!

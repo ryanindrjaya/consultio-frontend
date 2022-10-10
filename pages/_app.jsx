@@ -50,7 +50,10 @@ function MyApp({ Component, pageProps }) {
       }}
     >
       {loading ? (
-        <PageChange />
+        <>
+          <PageChange />
+          <Toaster />
+        </>
       ) : (
         <Layout>
           <Component {...pageProps} />
