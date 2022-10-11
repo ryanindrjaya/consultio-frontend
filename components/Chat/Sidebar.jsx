@@ -6,7 +6,9 @@ import moment from "moment";
 import "moment/locale/id";
 import Link from "next/link";
 import { useState } from "react";
-import { MessageProgramming } from "iconsax-react";
+import { ArchiveTick, ArrangeHorizontal, ArrowLeft3, ArrowRight3, CloseCircle, MessageProgramming } from "iconsax-react";
+
+import { motion } from "framer-motion";
 
 function filterByValue(array, string) {
   return array.filter((o) => Object.keys(o).some((k) => o[k].toLowerCase().includes(string.toLowerCase())));
@@ -22,10 +24,10 @@ function Sidebar({ user, dataRoom, role }) {
   moment.locale("id");
   const cookies = nookies.get(null);
 
-  const { socket, setCurrentRoom, setRooms, setJoinedRoom, currentRoom, messages } = useContext(AppContext);
+  const { socket, setCurrentRoom, setRooms, setJoinedRoom, currentRoom, messages, sidebarChat, setSidebarChat } = useContext(AppContext);
 
   const [joinedRoom, setjoinedRoom] = useState(false);
-  const [status, setStatus] = useState(false);
+  const [status, setStatus] = useState(true);
   const [selectedChatId, setSelectedChatId] = useState(null);
   const [newMessage, setNewMessage] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -96,8 +98,18 @@ function Sidebar({ user, dataRoom, role }) {
   const activeRoom = "profile-chat flex ml-4 mt-2 duration-100 bg-primary rounded-lg p-4 text-white mr-4 cursor-pointer";
   const normalRoom = "profile-chat duration-100 flex ml-4 mt-2 p-4 mr-4 cursor-pointer";
 
+  const spring = {
+    type: "spring",
+    stiffness: 300,
+    damping: 40,
+  };
+
   return (
-    <div className="sideleft h-screen w-2/5 border-r scrollbar-hide">
+    <motion.div
+      layout
+      transition={spring}
+      className={`sideleft absolute lg:static h-screen ${sidebarChat ? "left-0" : "-left-96"} w-3/4 lg:w-2/5 border-r scrollbar-hide bg-white z-50`}
+    >
       {loading ? (
         <div className="flex justify-center items-center h-screen">
           <svg
@@ -119,6 +131,23 @@ function Sidebar({ user, dataRoom, role }) {
         </div>
       ) : (
         <div className="profile-list mt-3 pb-24 h-screen overflow-y-scroll scrollbar-hide">
+          {sidebarChat && (
+            <div className="lg:hidden flex w-full justify-end px-4 cursor-pointer">
+              <CloseCircle size={32} onClick={() => setSidebarChat(false)} className="text-primary" />
+            </div>
+          )}
+          <div className="lg:w-2/5 w-3/4 ml-4 p-4 flex">
+            {status ? <ArrangeHorizontal size="24" color="#487EEB" /> : <ArchiveTick size="24" color="#487EEB" />}
+
+            <select onChange={() => setStatus(!status)} className="w-full outline-none ml-2">
+              <option className="font-poppins" selected={status} value={status}>
+                Ongoing Booking
+              </option>
+              <option className="font-poppins" selected={!status} value={!status}>
+                Completed Booking
+              </option>
+            </select>
+          </div>
           {newMessage?.length > 0 ? (
             newMessage.map((msg, idx) => (
               <div key={idx} onClick={() => joinRoom(msg)} className={currentRoom.chatId === msg.chatId ? activeRoom : normalRoom}>
@@ -141,7 +170,7 @@ function Sidebar({ user, dataRoom, role }) {
           ) : (
             <div className="h-full flex flex-col justify-center items-center">
               <h1 className="font-poppins text-2xl font-bold text-gray-600">
-                {role === "USER" ? "Anda belum melakukan konsultasi" : "Anda belum memiliki konsultasi"}
+                {status ? "You don't have any ongoing booking" : "You don't have any completed booking"}
               </h1>
               {role === "USER" && (
                 <>
@@ -161,7 +190,7 @@ function Sidebar({ user, dataRoom, role }) {
           )}
         </div>
       )}
-    </div>
+    </motion.div>
   );
 }
 

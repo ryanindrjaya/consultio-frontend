@@ -16,15 +16,15 @@ export async function getServerSideProps(context) {
   if (cookies.user) {
     return {
       props: {
-        userInfo: JSON.parse(cookies.user)
-      }
+        userInfo: JSON.parse(cookies.user),
+      },
     };
   } else {
     return {
       redirect: {
         destination: "/auth/login",
-        permanent: false
-      }
+        permanent: false,
+      },
     };
   }
 }
@@ -53,8 +53,8 @@ export default function Profile({ userInfo }) {
       const config = {
         method: "GET",
         headers: {
-          Authorization: cookies.token
-        }
+          Authorization: cookies.token,
+        },
       };
       const res = await axios.get(endpoint, config);
 
@@ -86,8 +86,8 @@ export default function Profile({ userInfo }) {
 
       const config = {
         headers: {
-          Authorization: cookies.token
-        }
+          Authorization: cookies.token,
+        },
       };
 
       let data;
@@ -124,7 +124,7 @@ export default function Profile({ userInfo }) {
             maxAge: 30 * 24 * 60 * 60,
             path: "/",
             secure: process.env.NODE_ENV !== "development",
-            sameSite: "strict"
+            sameSite: "strict",
           });
 
           setLoading(false);
@@ -155,8 +155,8 @@ export default function Profile({ userInfo }) {
 
     const config = {
       headers: {
-        Authorization: cookies.token
-      }
+        Authorization: cookies.token,
+      },
     };
 
     const formData = new FormData();
@@ -188,7 +188,7 @@ export default function Profile({ userInfo }) {
           maxAge: 30 * 24 * 60 * 60,
           path: "/",
           secure: process.env.NODE_ENV !== "development",
-          sameSite: "strict"
+          sameSite: "strict",
         });
         toast.success("Update foto berhasil");
       } else {
@@ -223,8 +223,8 @@ export default function Profile({ userInfo }) {
         </div>
 
         <div className="mt-28 p-5">
-          <div className="w-full flex mb-10">
-            <div className="w-1/2 mx-2">
+          <div className="w-full block lg:flex lg:mb-10">
+            <div className="w-full my-6 lg:my-0 lg:w-1/2 mx-2">
               <FormInput
                 type="text"
                 required
@@ -234,7 +234,7 @@ export default function Profile({ userInfo }) {
                 icon={<User className="text-gray-400 w-4" />}
               />
             </div>
-            <div className="w-1/2 mx-2">
+            <div className="w-full my-6 lg:my-0 lg:w-1/2 mx-2">
               <FormInput
                 type="text"
                 label="City"
@@ -245,8 +245,8 @@ export default function Profile({ userInfo }) {
             </div>
           </div>
 
-          <div className="w-full flex mb-10">
-            <div className="w-1/2 mx-2">
+          <div className="w-full block lg:flex lg:mb-10">
+            <div className="w-full my-6 lg:my-0 lg:w-1/2 mx-2">
               <FormInput
                 type="text"
                 label="Address"
@@ -255,7 +255,7 @@ export default function Profile({ userInfo }) {
                 icon={<User className="text-gray-400 w-4" />}
               />
             </div>
-            <div className="w-1/2 mx-2">
+            <div className="w-full my-6 lg:my-0 lg:w-1/2 mx-2">
               <FormInput
                 type="text"
                 label="Phone"
@@ -266,37 +266,41 @@ export default function Profile({ userInfo }) {
             </div>
           </div>
 
-          <div className="w-full flex mb-10">
-            <div className="w-1/2 mx-2">
-              <FormInput
-                type="number"
-                label="Pengalaman (Tahun)"
-                handleChange={(e) => setExperience(parseInt(e.target.value))}
-                value={experience}
-                icon={<User className="text-gray-400 w-4" />}
-              />
+          {user.role !== "USER" && (
+            <div className="w-full flex mb-10">
+              <div className="w-1/2 mx-2">
+                <FormInput
+                  type="number"
+                  label="Pengalaman (Tahun)"
+                  handleChange={(e) => setExperience(parseInt(e.target.value))}
+                  value={experience}
+                  icon={<User className="text-gray-400 w-4" />}
+                />
+              </div>
+              <div className="w-1/2 mx-2">
+                <select
+                  onChange={(e) => setIsActive(parseInt(e.target.value))}
+                  s
+                  className="w-full h-full text-sm px-2 border border-gray-300 active:border-primary focus:border-primary rounded-md focus:outline-primary"
+                  name=""
+                  id=""
+                >
+                  <option value="" selected disabled hidden>
+                    is Active
+                  </option>
+                  <option value="0">0</option>
+                  <option value="1">1</option>
+                </select>
+              </div>
             </div>
-            <div className="w-1/2 mx-2">
-              <select
-                onChange={(e) => setIsActive(parseInt(e.target.value))}
-                s
-                className="w-full h-full text-sm px-2 border border-gray-300 active:border-primary focus:border-primary rounded-md focus:outline-primary"
-                name=""
-                id=""
-              >
-                <option value="" selected disabled hidden>
-                  is Active
-                </option>
-                <option value="0">0</option>
-                <option value="1">1</option>
-              </select>
-            </div>
-          </div>
+          )}
 
           <div className="w-full flex mb-10">
-            <div className="w-1/2 mx-2">
-              <span className="flex">
-                <p style={{ marginBottom: 0, marginRight: "10px" }}>Private Profile</p>
+            <div className="w-7/12 lg:w-1/2 mx-2">
+              <span className="flex items-center">
+                <p className="text-sm lg:text-lg" style={{ marginBottom: 0, marginRight: "10px" }}>
+                  Private Profile
+                </p>
                 <IOSSwitch />
               </span>
             </div>
@@ -331,7 +335,7 @@ export default function Profile({ userInfo }) {
             <button
               onClick={handleSubmit}
               type="submit"
-              className="bg-primary w-2/12 text-white font-normal mt-2 py-3 text-sm rounded-lg text-center"
+              className="bg-primary w-5/12 lg:w-2/12 text-white font-normal mt-2 py-3 text-sm rounded-lg text-center"
             >
               Simpan
             </button>

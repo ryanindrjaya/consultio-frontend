@@ -1,9 +1,10 @@
 import { Toaster } from "react-hot-toast";
 import { Router } from "next/router";
 import { useState } from "react";
+import dynamic from "next/dynamic";
 
-import PageChange from "../components/pageChange/PageChange.js";
 import "../styles/globals.css";
+const PageChange = dynamic(() => import("../components/pageChange/PageChange.js"), { ssr: false });
 
 import { AppContext, socket } from "../context/appContext";
 
@@ -15,6 +16,7 @@ function MyApp({ Component, pageProps }) {
   const [messages, setMessages] = useState([]);
   const [privateMemberMsg, setPrivateMemberMsg] = useState({});
   const [newMessages, setNewMessages] = useState({});
+  const [sidebarChat, setSidebarChat] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const Layout = Component.layout || ((page) => page);
@@ -47,6 +49,8 @@ function MyApp({ Component, pageProps }) {
         setRooms,
         currentRoom,
         setCurrentRoom,
+        sidebarChat,
+        setSidebarChat,
       }}
     >
       {loading ? (

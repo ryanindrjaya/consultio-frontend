@@ -54,6 +54,9 @@ function Navbar() {
     nookies.destroy(null, "user", {
       path: "/",
     });
+    nookies.destroy(null, "currentRoom", {
+      path: "/",
+    });
 
     router.replace("/auth/login");
   }

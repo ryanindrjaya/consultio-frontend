@@ -1,4 +1,4 @@
-import { Send2 } from "iconsax-react";
+import { ArrowLeft3, ArrowRight3, HambergerMenu, Send2 } from "iconsax-react";
 import React, { useContext, useState } from "react";
 import { AppContext } from "../../context/appContext";
 import { useEffect } from "react";
@@ -12,19 +12,12 @@ function MessageForm({ user, showModal }) {
   const cookies = nookies.get(null);
   const { role } = cookies;
 
-  const {
-    socket,
-    currentRoom,
-    setMessages,
-    joinedRoom,
-    messages,
-    setCurrentRoom
-  } = useContext(AppContext);
+  const { socket, currentRoom, setMessages, joinedRoom, messages, setCurrentRoom, sidebarChat, setSidebarChat } = useContext(AppContext);
 
   useEffect(() => {
     socket.emit("chat-detail", {
       userId: user.userId,
-      chatId: currentRoom.chatId
+      chatId: currentRoom.chatId,
     });
     // messageEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [setCurrentRoom]);
@@ -32,7 +25,7 @@ function MessageForm({ user, showModal }) {
   useEffect(() => {
     socket.emit("chat-detail", {
       userId: user.userId,
-      chatId: currentRoom.chatId
+      chatId: currentRoom.chatId,
     });
     inputRef.current.focus();
   }, [currentRoom]);
@@ -55,49 +48,42 @@ function MessageForm({ user, showModal }) {
 
     const chatId = currentRoom.chatId;
     const userId = user.userId;
-    const receiver =
-      currentRoom.sender === userId ? currentRoom.receiver : currentRoom.sender;
+    const receiver = currentRoom.sender === userId ? currentRoom.receiver : currentRoom.sender;
 
     socket.emit("send-message", {
       chatId,
       sender: userId,
       receiver,
-      message
+      message,
     });
 
-    setMessages((prev) => [
-      ...prev,
-      { message, sender: userId, receiver: receiver }
-    ]);
+    setMessages((prev) => [...prev, { message, sender: userId, receiver: receiver }]);
     setMessage("");
   }
 
   return joinedRoom ? (
-    <div className="sideright flex flex-col justify-between h-full overflow-y-hidden w-3/5 scrollbar-hide border-r">
-      <div className="w-full ">
+    <div className="sideright flex flex-col justify-between h-full overflow-y-hidden w-full lg:w-3/5 scrollbar-hide border-r">
+      <div className="w-full bg-primary">
         <div
           className="w-full flex items-center"
           style={{
             backgroundColor: "#437EEB",
             height: "20%",
-            minHeight: "104px"
+            minHeight: "104px",
           }}
         >
           <div className="flex w-full justify-between items-center">
             <div className="flex items-center">
+              <div className="lg:hidden block bg-white p-1 rounded-md cursor-pointer ml-4">
+                <HambergerMenu onClick={() => setSidebarChat(true)} className="text-primary" />
+              </div>
               <img
-                src={`http://203.6.149.156:8480/public/${
-                  currentRoom.sender === user.userId
-                    ? currentRoom.receiverPhoto
-                    : currentRoom.senderPhoto
-                }`}
-                className="rounded-full h-16 w-16 object-cover object-center mx-6 border"
+                src={`http://203.6.149.156:8480/public/${currentRoom.sender === user.userId ? currentRoom.receiverPhoto : currentRoom.senderPhoto}`}
+                className="rounded-full h-12 w-12 lg:h-16 lg:w-16 object-cover object-center mx-6 border"
               />
 
-              <h5 className="text-lg font-medium text-white font-inter">
-                {currentRoom.sender === user.userId
-                  ? currentRoom.receiverName
-                  : currentRoom.senderName}
+              <h5 className="text-md lg:text-lg font-medium text-white font-inter">
+                {currentRoom.sender === user.userId ? currentRoom.receiverName : currentRoom.senderName}
               </h5>
             </div>
             {role !== "USER" && (
@@ -120,27 +106,13 @@ function MessageForm({ user, showModal }) {
         {messages.length > 0 && (
           <>
             {messages.map((msg, idx) => (
-              <div
-                key={idx}
-                className={`chat flex ${
-                  user.userId !== msg.sender ? "justify-start" : "justify-end"
-                }`}
-                style={{ minHeight: "64px" }}
-              >
+              <div key={idx} className={`chat flex ${user.userId !== msg.sender ? "justify-start" : "justify-end"}`} style={{ minHeight: "64px" }}>
                 <div
-                  className={`inline-block break-words ${
-                    user.userId === msg.sender ? "text-white" : "text-gray-800"
-                  } m-2 p-5`}
+                  className={`inline-block break-words ${user.userId === msg.sender ? "text-white" : "text-gray-800"} m-2 p-5`}
                   style={{
-                    backgroundColor:
-                      user.userId !== msg.sender
-                        ? "rgba(0, 0, 0, 0.1)"
-                        : "#437EEB",
-                    borderRadius:
-                      user.userId !== msg.sender
-                        ? "0 15px 15px 15px"
-                        : "15px 0 15px 15px",
-                    maxWidth: "60%"
+                    backgroundColor: user.userId !== msg.sender ? "rgba(0, 0, 0, 0.1)" : "#437EEB",
+                    borderRadius: user.userId !== msg.sender ? "0 15px 15px 15px" : "15px 0 15px 15px",
+                    maxWidth: "60%",
                   }}
                 >
                   <p>{msg.message}</p>
@@ -160,7 +132,7 @@ function MessageForm({ user, showModal }) {
           onChange={(e) => setMessage(e.target.value)}
           className="w-full h-full pl-8 pr-20 relative rounded-full outline-none focus:outline-primary duration-300"
           style={{
-            backgroundColor: "rgba(0, 0, 0, 0.1)"
+            backgroundColor: "rgba(0, 0, 0, 0.1)",
           }}
         />
 

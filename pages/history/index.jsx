@@ -95,7 +95,7 @@ export default function History({ data }) {
         </div>
 
         {/* History Card */}
-        <div className="w-full grid grid-cols-1 lg:grid-cols-2 mt-9 gap-x-5 gap-y-5">
+        <div className="w-full grid grid-cols-1 mt-9 gap-x-5 gap-y-5">
           {bookings?.length > 0 ? (
             bookings?.map((booking, idx) => (
               <div key={idx} style={{ borderColor: "#437EEB" }} className="w-full col-span-1 flex justify-between items-center  border-2 rounded-lg">
@@ -118,7 +118,7 @@ export default function History({ data }) {
                   </div>
                 </div>
                 <Link href={`/history/booking/${booking.bookingId}`}>
-                  <div className="group cursor-pointer transition-all duration-300 w-2/6 bg-primary/0 hover:bg-primary h-full rounded-l-lg flex flex-col justify-center items-center">
+                  <div className="group cursor-pointer transition-all duration-300 w-1/6 bg-primary/0 hover:bg-primary h-full rounded-l-lg flex flex-col justify-center items-center">
                     <ArrowSquareRight size={32} className="text-primary transition-all duration-300 group-hover:text-white" />
                     <p className="hidden transition-all duration-300 group-hover:block font-poppins font-medium text-xs mt-2 text-white">
                       Lihat Riwayat

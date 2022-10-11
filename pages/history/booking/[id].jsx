@@ -105,23 +105,21 @@ export default function History({ data }) {
     async function handleSendReview(e) {
       e.preventDefault();
 
-      console.log("review", review);
-      console.log("rating", rating);
-
       const endpoint = process.env.API_URL + "/booking/" + bookingState.bookingId + "/rating";
-      const config = {
-        method: "PUT",
-        headers: {
-          Authorization: cookies.token,
-        },
-        body: JSON.stringify({
+
+      const res = await axios.put(
+        endpoint,
+        {
           rating: rating,
           review: review,
-        }),
-      };
-
-      const res = await fetch(endpoint, config);
-      const data = await res.json();
+        },
+        {
+          headers: {
+            Authorization: cookies.token,
+          },
+        }
+      );
+      const data = await res.data;
 
       console.log(data);
 

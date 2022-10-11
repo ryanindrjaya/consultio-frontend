@@ -45,7 +45,7 @@ function Fitur() {
         </div>
         <FiturRow path="/chats" title={"Pesan"} Icon={<Message variant="Bold" size={24} />} />
         <FiturRow path="/history" title={"History"} Icon={<EmptyWallet variant="Bold" size={24} />} />
-        <FiturRow path="#" title={"Setting"} Icon={<Setting2 variant="Bold" size={24} />} />
+        <FiturRow path="/profile" title={"Setting"} Icon={<Setting2 variant="Bold" size={24} />} />
       </div>
     </div>
   );
