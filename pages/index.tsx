@@ -323,6 +323,7 @@ export default function Home() {
           <div {...swipeHandlers} style={{ height: "60vh" }} className="lg:hidden block w-full relative">
             {testimoni.map((item, idx) => (
               <motion.div
+                key={idx}
                 animate={{ left: `${(idx - position) * 78}vw`, scale: idx === position ? 1 : 0.9 }}
                 transition={{ type: "spring", stiffness: 260, damping: 20, mass: 2 }}
                 style={{ height: "60vh", width: "75vw" }}
