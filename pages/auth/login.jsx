@@ -49,8 +49,6 @@ export default function Login() {
       const req = await axios.post(endpoint, { email, password }, config);
       const user = req.data.data;
 
-      console.log(user);
-
       let userData;
       if (user.role === "USER") {
         userData = {
@@ -100,7 +98,6 @@ export default function Login() {
     } catch (error) {
       setLoading(false);
       if (error?.response?.data?.message) setError(error?.response?.data?.message);
-      console.log(error);
     }
   };
 

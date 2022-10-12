@@ -25,8 +25,6 @@ export default function Verify({ id }) {
   const [success, setSuccess] = useState(false);
   const router = useRouter();
 
-  console.log("id", id);
-
   useEffect(() => {
     const cookies = nookies.get(null);
     const user = JSON.parse(cookies.user);
@@ -84,7 +82,6 @@ export default function Verify({ id }) {
       const endpoint = process.env.API_URL + "/users/verifyEmail";
 
       const res = await axios.post(endpoint, { token }, config);
-      console.log(res);
 
       if (res) {
         try {

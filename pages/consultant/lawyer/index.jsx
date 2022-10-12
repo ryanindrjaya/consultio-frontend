@@ -63,8 +63,6 @@ export default function Lawyer({ data, userInfo }) {
   const [searchName, setSearchName] = useState("");
   const [searchCity, setSearchCity] = useState("");
 
-  console.log("consultants", consultants);
-
   const { socket, setCurrentRoom, currentRoom, setMessages, messages, priverMemberMsg, setPrivateMemberMsg } = useContext(AppContext);
 
   const router = useRouter();

@@ -19,8 +19,6 @@ function Posts({ posts, like, unlike, userInfo }) {
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
 
-  console.log(data);
-
   const handleLike = async (id, isLiked) => {
     if (isLiked === 0) {
       const endpoint = process.env.API_URL + "/like/" + id;
@@ -34,12 +32,10 @@ function Posts({ posts, like, unlike, userInfo }) {
         },
       };
       const res = await fetch(endpoint, config);
-      console.log(res);
 
       if (res.status === 200) {
         const selectedPost = data.find((post) => post.postId === id);
         const index = data.indexOf(selectedPost);
-        console.log("index", index);
 
         const newData = [...data];
         newData[index].isLiked = 1;
@@ -60,13 +56,10 @@ function Posts({ posts, like, unlike, userInfo }) {
         },
       };
       const res = await fetch(endpoint, config);
-      console.log(res);
 
       if (res.status === 200) {
         const selectedPost = data.find((post) => post.postId === id);
         const index = data.indexOf(selectedPost);
-
-        console.log("index", index);
 
         const newData = [...data];
         newData[index].isLiked = 0;
@@ -92,8 +85,6 @@ function Posts({ posts, like, unlike, userInfo }) {
 
     const req = await fetch(endpoint, config);
     const res = await req.json();
-
-    console.log(res);
 
     if (res.data?.data?.length > 0) {
       setData([...data, ...res.data.data]);

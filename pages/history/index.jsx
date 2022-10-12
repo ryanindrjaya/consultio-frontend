@@ -99,15 +99,15 @@ export default function History({ data }) {
           {bookings?.length > 0 ? (
             bookings?.map((booking, idx) => (
               <div key={idx} style={{ borderColor: "#437EEB" }} className="w-full col-span-1 flex justify-between items-center  border-2 rounded-lg">
-                <div className="flex gap-x-6 px-4 py-2">
+                <div className="flex flex-col lg:flex-row gap-x-6 px-4 py-2">
                   <img
                     src="https://interclinical.com.au/wp-content/uploads/2019/11/shutterstock_580538548-scaled.jpg"
-                    className="w-32 h-32 object-cover object-center rounded-lg"
+                    className="w-20 lg:w-32 h-20 lg:h-32 object-cover object-center rounded-lg"
                     alt=""
                   />
                   <div className="flex flex-col justify-center font-poppins">
                     <h1 className="font-medium text-base">{booking.consultantName}</h1>
-                    <p className="text-xs text-black/40">{moment(booking.updatedAt).format("LL")}</p>
+                    <p className="text-xs mt-2 text-black/40">{moment(booking.updatedAt).format("LL")}</p>
                     {booking.isActive === 1 ? (
                       <h3 className="text-sm xl:text-md text-blue-700/70 mt-6">Sedang berjalan</h3>
                     ) : (
@@ -118,7 +118,7 @@ export default function History({ data }) {
                   </div>
                 </div>
                 <Link href={`/history/booking/${booking.bookingId}`}>
-                  <div className="group cursor-pointer transition-all duration-300 w-1/6 bg-primary/0 hover:bg-primary h-full rounded-l-lg flex flex-col justify-center items-center">
+                  <div className="group cursor-pointer transition-all duration-300 w-3/6 lg:w-1/6 bg-primary/0 hover:bg-primary h-full rounded-l-lg flex flex-col justify-center items-center">
                     <ArrowSquareRight size={32} className="text-primary transition-all duration-300 group-hover:text-white" />
                     <p className="hidden transition-all duration-300 group-hover:block font-poppins font-medium text-xs mt-2 text-white">
                       Lihat Riwayat

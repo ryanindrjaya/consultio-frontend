@@ -40,7 +40,6 @@ export default function Profile({ userInfo }) {
   const [experience, setExperience] = useState(user?.experience == null ? 0 : user?.experience);
   const [isActive, setIsActive] = useState(user?.isActive == null ? 1 : user?.isActive);
 
-  console.log(user);
   const fetchUser = async () => {
     let endpoint;
     const cookies = nookies.get(null);
@@ -63,7 +62,7 @@ export default function Profile({ userInfo }) {
       } else {
         setUser(res.data.data.data[0]);
       }
-      console.log(res);
+
       return res.data.data;
     } catch (error) {
       toast("Terjadi kesalahan saat mengambil data");

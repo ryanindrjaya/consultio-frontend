@@ -37,7 +37,6 @@ function InputPost({ userInfo, handlePost }) {
 
   let firstName;
   const stringArr = userInfo.fullname.split(" ");
-  console.log(stringArr);
   if (stringArr[0] === "Dr.") {
     firstName = "Dok";
   } else {
@@ -100,7 +99,6 @@ function InputPost({ userInfo, handlePost }) {
             placeholder={userInfo ? `Apa yang mau kamu ceritakan, ${firstName}?` : ""}
             value={story}
             onChange={(e) => {
-              console.log(e);
               setStory(e);
             }}
             modules={modules}

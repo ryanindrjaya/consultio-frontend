@@ -40,8 +40,6 @@ export default function History({ data }) {
   const cookies = nookies.get(null);
   const { role } = cookies;
 
-  console.log(bookingState);
-
   const CustomTextField = styled(TextField)({
     "& .MuiInputBase-root.Mui-disabled": {
       backgroundColor: "white",
@@ -120,8 +118,6 @@ export default function History({ data }) {
         }
       );
       const data = await res.data;
-
-      console.log(data);
 
       if (data.status === "success") {
         const endpoint = process.env.API_URL + "/booking/" + bookingState.bookingId;

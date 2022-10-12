@@ -11,8 +11,6 @@ function Comments({ commentCount, id, userInfo }) {
   const [comments, setComments] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  console.log(comments);
-
   useEffect(() => {
     getComment(id);
   }, [handleSubmit]);
@@ -78,8 +76,6 @@ function Comments({ commentCount, id, userInfo }) {
 
     const res = await fetch(endpoint, config);
     const data = await res.json();
-
-    console.log("data dari classify consultant", data);
 
     if (data.status !== "failed") {
       return false;

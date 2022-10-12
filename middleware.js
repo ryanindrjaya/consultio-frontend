@@ -1,34 +1,51 @@
 import { NextResponse } from "next/server";
 
 export function middleware(req) {
-  const response = new NextResponse();
   const url = req.nextUrl.clone();
-  const { value, options } = req.cookies.getWithOptions("token");
-  const role = req.cookies.get("role");
+  const token = req.cookies.get("token");
+  const twoFirstPath = url.pathname.split("/", 3).join("/");
 
-  // USER MIDDLEWARE
-  // if (req.nextUrl.pathname.startsWith("/home")) {
-  //   url.pathname = "/auth/login";
-  //   if (!value) {
-  //     return NextResponse.redirect(url.href);
-  //   } else {
-  //     if (role.includes("user") || role.includes("USER")) {
-  //       url.pathname = "/home";
-  //       return NextResponse.redirect(url.href);
-  //     }
-  //   }
-  // }
+  const whiteListPath = [
+    "/",
+    "/auth/login",
+    "/auth/register",
+    "/auth/verification",
+    "/chats",
+    "/consultant/mental-health",
+    "/consultant/lawyer",
+    "/history",
+    "/history/booking",
+    "/home",
+    "/profile",
+    "/verify",
+  ];
 
-  // DEFAULT MIDDLEWARE
-  if (req.nextUrl.pathname.startsWith("/auth/login")) {
-    const { value, options } = req.cookies.getWithOptions("role");
-    // admin
-    const urlUser = req.nextUrl.clone();
-    urlUser.pathname = "/home";
+  const authenticatedPath = [
+    "/auth/verification",
+    "/chats",
+    "/consultant/mental-health",
+    "/consultant/lawyer",
+    "/history",
+    "/history/booking",
+    "/home",
+    "/profile",
+    "/verify",
+  ];
 
-    if (role) {
-      if (role.includes("User") || role.includes("USER")) {
-        return NextResponse.redirect(urlUser.href);
+  if (whiteListPath.includes(twoFirstPath)) {
+    const isAuthenticatedPage = authenticatedPath.includes(twoFirstPath);
+
+    if (isAuthenticatedPage) {
+      if (!token) {
+        url.pathname = "/auth/login";
+        return NextResponse.redirect(url.href);
+      }
+    }
+
+    if (!isAuthenticatedPage && url.pathname !== "/") {
+      if (token) {
+        url.pathname = "/home";
+        return NextResponse.redirect(url.href);
       }
     }
   }
