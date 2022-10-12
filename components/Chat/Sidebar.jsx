@@ -136,14 +136,14 @@ function Sidebar({ user, dataRoom, role }) {
               <CloseCircle size={32} onClick={() => setSidebarChat(false)} className="text-primary" />
             </div>
           )}
-          <div className="lg:w-2/5 w-3/4 ml-4 p-4 flex">
+          <div className="lg:w-3/5 w-3/4 ml-4 p-4 flex">
             {status ? <ArrangeHorizontal size="24" color="#487EEB" /> : <ArchiveTick size="24" color="#487EEB" />}
 
             <select onChange={() => setStatus(!status)} className="w-full outline-none ml-2">
-              <option className="font-poppins" selected={status} value={status}>
+              <option className="font-poppins h-2" selected={status} value={status}>
                 Ongoing Booking
               </option>
-              <option className="font-poppins" selected={!status} value={!status}>
+              <option className="font-poppins h-2" selected={!status} value={!status}>
                 Completed Booking
               </option>
             </select>
