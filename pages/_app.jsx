@@ -4,7 +4,10 @@ import { useState } from "react";
 import dynamic from "next/dynamic";
 
 import "../styles/globals.css";
-const PageChange = dynamic(() => import("../components/pageChange/PageChange.js"), { ssr: false });
+const PageChange = dynamic(
+  () => import("../components/pageChange/PageChange.js"),
+  { ssr: false }
+);
 
 import { AppContext, socket } from "../context/appContext";
 
@@ -18,6 +21,7 @@ function MyApp({ Component, pageProps }) {
   const [newMessages, setNewMessages] = useState({});
   const [sidebarChat, setSidebarChat] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [statusChat, setStatusChat] = useState(true);
 
   const Layout = Component.layout || ((page) => page);
 
@@ -51,6 +55,8 @@ function MyApp({ Component, pageProps }) {
         setCurrentRoom,
         sidebarChat,
         setSidebarChat,
+        statusChat,
+        setStatusChat
       }}
     >
       {loading ? (

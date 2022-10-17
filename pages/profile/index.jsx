@@ -16,15 +16,15 @@ export async function getServerSideProps(context) {
   if (cookies.user) {
     return {
       props: {
-        userInfo: JSON.parse(cookies.user),
-      },
+        userInfo: JSON.parse(cookies.user)
+      }
     };
   } else {
     return {
       redirect: {
         destination: "/auth/login",
-        permanent: false,
-      },
+        permanent: false
+      }
     };
   }
 }
@@ -34,11 +34,17 @@ export default function Profile({ userInfo }) {
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState(userInfo);
   const [fullname, setFullname] = useState(user.fullname);
-  const [address, setAddress] = useState(user.address == null ? "" : user.address);
+  const [address, setAddress] = useState(
+    user.address == null ? "" : user.address
+  );
   const [city, setCity] = useState(user.city == null ? "" : user.city);
   const [phone, setPhone] = useState(user.phone == null ? "" : user.phone);
-  const [experience, setExperience] = useState(user?.experience == null ? 0 : user?.experience);
-  const [isActive, setIsActive] = useState(user?.isActive == null ? 1 : user?.isActive);
+  const [experience, setExperience] = useState(
+    user?.experience == null ? 0 : user?.experience
+  );
+  const [isActive, setIsActive] = useState(
+    user?.isActive == null ? 1 : user?.isActive
+  );
 
   const fetchUser = async () => {
     let endpoint;
@@ -52,8 +58,8 @@ export default function Profile({ userInfo }) {
       const config = {
         method: "GET",
         headers: {
-          Authorization: cookies.token,
-        },
+          Authorization: cookies.token
+        }
       };
       const res = await axios.get(endpoint, config);
 
@@ -85,15 +91,22 @@ export default function Profile({ userInfo }) {
 
       const config = {
         headers: {
-          Authorization: cookies.token,
-        },
+          Authorization: cookies.token
+        }
       };
 
       let data;
       if (cookies.role === "USER") {
         data = { fullname, address, city, phone };
       } else {
-        data = { fullname, address, city, phone, experience: parseInt(experience), isActive };
+        data = {
+          fullname,
+          address,
+          city,
+          phone,
+          experience: parseInt(experience),
+          isActive
+        };
       }
 
       const req = await axios.put(endpoint, data, config);
@@ -113,7 +126,7 @@ export default function Profile({ userInfo }) {
             phone: newData.profile.phone,
             role: newData.profile.role,
             isVerified: newData.profile.isVerified,
-            isPrivate: newData.profile.isPrivate,
+            isPrivate: newData.profile.isPrivate
           };
         } else {
           userData = newData.data[0];
@@ -124,7 +137,7 @@ export default function Profile({ userInfo }) {
             maxAge: 30 * 24 * 60 * 60,
             path: "/",
             secure: process.env.NODE_ENV !== "development",
-            sameSite: "strict",
+            sameSite: "strict"
           });
 
           setLoading(false);
@@ -150,13 +163,14 @@ export default function Profile({ userInfo }) {
     if (cookies.role === "USER") {
       endpoint = process.env.API_URL + "/users/" + user.userId + "/photo";
     } else {
-      endpoint = process.env.API_URL + "/consultant/" + user.consultantId + "/photo";
+      endpoint =
+        process.env.API_URL + "/consultant/" + user.consultantId + "/photo";
     }
 
     const config = {
       headers: {
-        Authorization: cookies.token,
-      },
+        Authorization: cookies.token
+      }
     };
 
     const formData = new FormData();
@@ -179,7 +193,7 @@ export default function Profile({ userInfo }) {
             phone: newData.profile.phone,
             role: newData.profile.role,
             isVerified: newData.profile.isVerified,
-            isPrivate: newData.profile.isPrivate,
+            isPrivate: newData.profile.isPrivate
           };
         } else {
           userData = newData.data[0];
@@ -189,7 +203,7 @@ export default function Profile({ userInfo }) {
           maxAge: 30 * 24 * 60 * 60,
           path: "/",
           secure: process.env.NODE_ENV !== "development",
-          sameSite: "strict",
+          sameSite: "strict"
         });
         toast.success("Update foto berhasil");
       } else {
@@ -209,17 +223,27 @@ export default function Profile({ userInfo }) {
       </Head>
       <div className="container-lg rounded-xl shadow-md border mb-10 h-auto mx-auto w-4/5 mt-10 relative scrollbar-hide">
         <div className="w-full relative">
-          <img src="/banner.png" className="w-full rounded-t-xl h-50 object-cover object-bottom" />
-          <div className="absolute left-20 shadow-sm -bottom-20 object-cover object-center w-40 h-48 rounded-xl bg-white z-10"></div>
           <img
-            src={`http://203.6.149.156:8480/public/${user.photo}` || "https://links.papareact.com/gll"}
-            className="absolute left-20 -bottom-20 object-cover object-center z-20 w-40 h-48 rounded-xl"
+            src="/banner.png"
+            className="w-full rounded-t-xl lg:h-50 object-cover object-bottom"
+          />
+          <div className="absolute left-10 lg:left-20 shadow-sm -bottom-20 object-cover object-center w-40 h-48 rounded-xl bg-white z-10"></div>
+          <img
+            src={
+              `http://203.6.149.156:8480/public/${user.photo}` ||
+              "https://links.papareact.com/gll"
+            }
+            className="absolute left-10 lg:left-20 -bottom-20 object-cover object-center z-20 w-40 h-48 rounded-xl"
           />
           <div
             onClick={() => setShowModal(true)}
-            className="absolute z-40 group cursor-pointer left-20 flex justify-center items-center -bottom-20 duration-150 hover:bg-black/30 w-40 h-48 rounded-xl"
+            className="absolute z-40 group cursor-pointer left-10 lg:left-20 flex justify-center items-center -bottom-20 duration-150 hover:bg-black/30 w-40 h-48 rounded-xl"
           >
-            <Edit2 className="hidden group-hover:block duration-150" size="64" color="#FFFFFF" />
+            <Edit2
+              className="hidden group-hover:block duration-150"
+              size="64"
+              color="#FFFFFF"
+            />
           </div>
         </div>
 
@@ -299,7 +323,10 @@ export default function Profile({ userInfo }) {
           <div className="w-full flex mb-10">
             <div className="w-7/12 lg:w-1/2 mx-2">
               <span className="flex items-center">
-                <p className="text-sm lg:text-lg" style={{ marginBottom: 0, marginRight: "10px" }}>
+                <p
+                  className="text-sm lg:text-lg"
+                  style={{ marginBottom: 0, marginRight: "10px" }}
+                >
                   Private Profile
                 </p>
                 <IOSSwitch />

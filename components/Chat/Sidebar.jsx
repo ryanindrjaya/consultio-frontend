@@ -6,12 +6,23 @@ import moment from "moment";
 import "moment/locale/id";
 import Link from "next/link";
 import { useState } from "react";
-import { ArchiveTick, ArrangeHorizontal, ArrowLeft3, ArrowRight3, CloseCircle, MessageProgramming } from "iconsax-react";
+import {
+  ArchiveTick,
+  ArrangeHorizontal,
+  ArrowLeft3,
+  ArrowRight3,
+  CloseCircle,
+  MessageProgramming
+} from "iconsax-react";
 
 import { motion } from "framer-motion";
 
 function filterByValue(array, string) {
-  return array.filter((o) => Object.keys(o).some((k) => o[k].toLowerCase().includes(string.toLowerCase())));
+  return array.filter((o) =>
+    Object.keys(o).some((k) =>
+      o[k].toLowerCase().includes(string.toLowerCase())
+    )
+  );
 }
 
 function sortDate(array) {
@@ -24,7 +35,17 @@ function Sidebar({ user, dataRoom, role }) {
   moment.locale("id");
   const cookies = nookies.get(null);
 
-  const { socket, setCurrentRoom, setRooms, setJoinedRoom, currentRoom, messages, sidebarChat, setSidebarChat } = useContext(AppContext);
+  const {
+    socket,
+    setCurrentRoom,
+    setRooms,
+    setJoinedRoom,
+    currentRoom,
+    messages,
+    sidebarChat,
+    setSidebarChat,
+    setStatusChat
+  } = useContext(AppContext);
 
   const [joinedRoom, setjoinedRoom] = useState(false);
   const [status, setStatus] = useState(true);
@@ -49,11 +70,12 @@ function Sidebar({ user, dataRoom, role }) {
 
   useEffect(() => {
     const consultantId = dataRoom[0]?.consultantId;
+    setStatusChat(status);
     if (role !== "USER") {
       socket.emit("chat-history", {
         userId: user.userId,
         consultantId: consultantId,
-        status: status,
+        status: status
       });
     } else {
       socket.emit("chat-history", { userId: user.userId, status: status });
@@ -64,7 +86,7 @@ function Sidebar({ user, dataRoom, role }) {
     if (selectedChatId) {
       socket.emit("chat-detail", {
         userId: user.userId,
-        chatId: selectedChatId,
+        chatId: selectedChatId
       });
     }
   }, [selectedChatId]);
@@ -90,25 +112,29 @@ function Sidebar({ user, dataRoom, role }) {
     setJoinedRoom(true);
     nookies.set(null, "currentRoom", JSON.stringify(room), {
       path: "/",
-      maxAge: 30 * 24 * 60 * 60,
+      maxAge: 30 * 24 * 60 * 60
     });
     socket.emit("join-room", { userId: user.userId, chatId: room.chatId });
   };
 
-  const activeRoom = "profile-chat flex ml-4 mt-2 duration-100 bg-primary rounded-lg p-4 text-white mr-4 cursor-pointer";
-  const normalRoom = "profile-chat duration-100 flex ml-4 mt-2 p-4 mr-4 cursor-pointer";
+  const activeRoom =
+    "profile-chat flex ml-4 mt-2 duration-100 bg-primary rounded-lg p-4 text-white mr-4 cursor-pointer";
+  const normalRoom =
+    "profile-chat duration-100 flex ml-4 mt-2 p-4 mr-4 cursor-pointer";
 
   const spring = {
     type: "spring",
     stiffness: 300,
-    damping: 40,
+    damping: 40
   };
 
   return (
     <motion.div
       layout
       transition={spring}
-      className={`sideleft absolute lg:static h-screen ${sidebarChat ? "left-0" : "-left-96"} w-3/4 lg:w-2/5 border-r scrollbar-hide bg-white z-50`}
+      className={`sideleft absolute lg:static h-screen ${
+        sidebarChat ? "left-0" : "-left-96"
+      } w-3/4 lg:w-2/5 border-r scrollbar-hide bg-white z-100`}
     >
       {loading ? (
         <div className="flex justify-center items-center h-screen">
@@ -133,32 +159,67 @@ function Sidebar({ user, dataRoom, role }) {
         <div className="profile-list mt-3 pb-24 h-screen overflow-y-scroll scrollbar-hide">
           {sidebarChat && (
             <div className="lg:hidden flex w-full justify-end px-4 cursor-pointer">
-              <CloseCircle size={32} onClick={() => setSidebarChat(false)} className="text-primary" />
+              <CloseCircle
+                size={32}
+                onClick={() => setSidebarChat(false)}
+                className="text-primary"
+              />
             </div>
           )}
-          <div className="lg:w-3/5 w-3/4 ml-4 p-4 flex">
-            {status ? <ArrangeHorizontal size="24" color="#487EEB" /> : <ArchiveTick size="24" color="#487EEB" />}
+          <div className="lg:w-3/5 w-3/4 ml-4 p-4 flex items-center">
+            {status ? (
+              <ArrangeHorizontal size="24" color="#487EEB" />
+            ) : (
+              <ArchiveTick size="24" color="#487EEB" />
+            )}
 
-            <select onChange={() => setStatus(!status)} className="w-full outline-none ml-2">
-              <option className="font-poppins h-2" selected={status} value={status}>
+            <select
+              onChange={() => setStatus(!status)}
+              className="w-full p-2 rounded-xl outline-none ml-2"
+            >
+              <option
+                className="font-poppins p-2 h-2 rounded-sm"
+                selected={status}
+                value={status}
+              >
                 Ongoing Booking
               </option>
-              <option className="font-poppins h-2" selected={!status} value={!status}>
+              <option
+                className="font-poppins p-2 h-2 rounded-sm"
+                selected={!status}
+                value={!status}
+              >
                 Completed Booking
               </option>
             </select>
           </div>
           {newMessage?.length > 0 ? (
             newMessage.map((msg, idx) => (
-              <div key={idx} onClick={() => joinRoom(msg)} className={currentRoom.chatId === msg.chatId ? activeRoom : normalRoom}>
+              <div
+                key={idx}
+                onClick={() => joinRoom(msg)}
+                className={
+                  currentRoom.chatId === msg.chatId ? activeRoom : normalRoom
+                }
+              >
                 <img
-                  src={`http://203.6.149.156:8480/public/${msg.sender === user.userId ? msg.receiverPhoto : msg.senderPhoto}`}
+                  src={`http://203.6.149.156:8480/public/${
+                    msg.sender === user.userId
+                      ? msg.receiverPhoto
+                      : msg.senderPhoto
+                  }`}
                   className="rounded-full object-cover object-center border w-16 h-16 mr-5"
                 />
                 <div className="flex w-3/4  flex-col justify-between">
                   <div className="flex w-full justify-between">
-                    <h5 style={{ fontSize: "16px", fontWeight: "bold" }}>{msg.sender === user.userId ? msg.receiverName : msg.senderName}</h5>
-                    <p style={{ fontWeight: "medium", fontSize: "14px" }}>{moment(msg.createdAt).format("LT")}</p>
+                    <h5 style={{ fontSize: "16px", fontWeight: "bold" }}>
+                      {msg.sender === user.userId
+                        ? msg.receiverName
+                        : msg.senderName}
+                    </h5>
+                    <p style={{ fontWeight: "medium", fontSize: "14px" }}>
+                      {moment(msg.createdAt).format("LT")}
+                    </p>
                   </div>
 
                   <p className="w-full truncate" style={{ fontSize: "14px" }}>
@@ -170,7 +231,9 @@ function Sidebar({ user, dataRoom, role }) {
           ) : (
             <div className="h-full flex flex-col justify-center items-center">
               <h1 className="font-poppins text-2xl font-bold text-gray-600">
-                {status ? "You don't have any ongoing booking" : "You don't have any completed booking"}
+                {status
+                  ? "You don't have any ongoing booking"
+                  : "You don't have any completed booking"}
               </h1>
               {role === "USER" && (
                 <>

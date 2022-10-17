@@ -12,14 +12,14 @@ export default function Home({ children }) {
       animate="visible"
       variants={{
         hidden: {
-          opacity: 0,
+          opacity: 0
         },
         visible: {
           opacity: 1,
           transition: {
-            delay: 0.2,
-          },
-        },
+            delay: 0.2
+          }
+        }
       }}
       className="grid grid-cols-12 lg:grid-cols-9"
     >

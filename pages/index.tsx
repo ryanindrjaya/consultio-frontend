@@ -82,7 +82,7 @@ export default function Home() {
     <div className="scroll-smooth overflow-hidden">
       <Head>
         <title>Consultio</title>
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/logo_small.png" />
       </Head>
 
       <main>
